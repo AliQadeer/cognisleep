@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+
+    <section class="provider_login_sec">
+        <div class="container">
+            <div class="row">
+                <div class="provider_login_form">
+                    <h1 class="hilight_text">Blogs</h1>
+                    <h2>Blogs</h2>
+                </div>
+                <div class="col-sm-8 col-md-8">
+                    <div class="blog-box">
+                        <div class="box-txt">
+                            <h5>Do You Have Sleeping Problem?</h5>
+                            <ul>
+                                <li>Author admin</li>
+                                <li>Posted on November 8, 2018</li>
+                                <!--                     <li>Leave a comment</li> -->
+                            </ul>
+                            <p>Lorem ipsum, or&nbsp;lipsum&nbsp;as it is sometimes known, is dummy text used in laying
+                                out print, graphic or web designs. The passage is attributed to an unknown typesetter in
+                                the 15th...</p>
+
+                            <a href="/do-you-have-sleeping-problem">Read more</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-4 col-md-4">
+
+                    <form role="search" method="get" id="searchform" action="http://localhost/" class="search">
+                        <input type="text" value="" name="s" id="s" required="" placeholder="Search">
+                        <input type="hidden" value="blog" name="post_type" id="post_type">
+                    </form>
+
+
+                    <div class="side-border">
+                        <h4>recent posts</h4>
+
+                        <p><a href="/do-you-have-sleeping-problem">Do You Have Sleeping
+                            Problem?</a>
+                            <a href="/do-you-have-sleeping-problem"><span><i
+                                    class="fa fa-calendar" aria-hidden="true"></i> November 8, 2018</span></a>
+                        </p>
+
+                    </div>
+
+                    <div class="side-border">
+                        <h4>recent posts</h4>
+                        <ul>
+                            <li><a href="/blog">November 2018</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

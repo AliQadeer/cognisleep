@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+    <section class="provider_login_sec">
+        <div class="container">
+            <div class="row">
+                <div class="provider_login_form">
+                    <h1 class="hilight_text">PROVIDER LOGIN</h1>
+                    <h2>PROVIDER LOGIN</h2>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="provider_registeration">
+                        <h4>REGISTER NOW</h4>
+                        <p>We are pleased to see you are taking the first steps into treating your insomnia. Please fill
+                            out all the information so we can provide you with the best results in beating insomnia.</p>
+                        <div class="create_account_button">
+                            <a href="#">Create Account</a>
+                        </div>
+                        <input type="checkbox" value="" name="ref">
+                        <p>I was referred to Cognisleep by my medical professional</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="provider_registeration_form">
+                        <div class="provider_registeration">
+                            <h4>LOGIN</h4>
+                            <h5>Registered Customer? Please log in</h5>
+                            
+
+                            <form method="POST">
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags}}">{{ message }}</div>
+                                    {% endfor %}
+                                 {% endif %}
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ next }}">
+
+                                {{ form|crispy }}
+
+                                <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

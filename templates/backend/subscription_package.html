@@ -1,0 +1,439 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+.form-row.align-items-center input.btn.btn-primary.mb-2 {
+    margin: 22px 0 0;
+}
+    .popUpBtn.craeteNewPackage {
+    position: absolute;
+    overflow: hidden;
+    background: #6bdb2d;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    display: block;
+    right: 0;
+    margin: 27px 0 0;
+    cursor: pointer;
+}
+.modal-content {
+    width: 50%;
+    margin: 0 auto;
+}
+.modal-header {
+    background: #6bdb2d;
+    color: #fff;
+    text-align: CENTER;
+}
+.modal-header H2 {
+    color: #fff;
+    text-align: CENTER;
+    DISPLAY: BLOCK;
+    WIDTH: 100%;
+}
+.modal-header .close {
+    top: 23px;
+    right: 24px;
+    float: right;
+    text-align: right;
+    display: block;
+    color: #fff;
+    opacity: 1;
+    position: absolute;
+}
+textarea {
+    overflow: auto;
+    resize: vertical;
+    width: 72%;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    float: right;
+}
+.modal-body {
+    padding: 30px 50px;
+}
+ form label {
+    max-width: 165px !important;
+    float: left;
+    margin-top: 10px;
+}
+.form-group input.form-control {
+    width: 72%;
+    float: right;
+}
+.form-group {
+    margin: 0 0 10px;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+div#myModal1 input.btn.btn-primary {
+    float: right;
+    margin: 0 4px;
+    width: 110px;
+    text-align: center;
+}
+.modal-body span.close.btn.btn-primary {
+    background: #6bdb2d !important;
+    opacity: 1;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 11px 31px;
+}
+.modal-body span.close.btn.btn-primary:hover {
+    background:#5eb82d !important;
+    color:#fff;
+}
+div#myModal1 input.btn.btn-primary{
+    background: #6bdb2d !important;
+}
+div#myModal1 input.btn.btn-primary:hover{
+    background: #5eb82d !important;
+}
+</style>
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8 p-r-0 title-margin-right">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Subscription Packages</h1>
+                               {% if messages %}
+                                {% for message in messages %}
+                                    <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- /# column -->
+
+                <!-- /# column -->
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view">
+
+                    <div class="row col-sm-12">
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="form-row align-items-center">
+
+                                <div class="col-sm-9">
+                                    <label for="mysearch">Name / Email / Referral ID </label>
+                                    <input type="text" class="form-control" id="mysearch" name="mysearch"
+                                           placeholder="Search"
+                                           value="{{ mysearch }}">
+
+                                    <div id="myModal1" class="modal" style="display: none;
+                                        position: fixed;
+                                        z-index: 1;
+                                        padding-top: 100px;
+                                        left: 0;
+                                        top: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                        overflow: auto;
+                                        background-color: rgb(0,0,0);
+                                        background-color: rgba(0,0,0,0.4);">
+                                      <!-- Modal content -->
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <span class="close">×</span>
+                                          <h2>Create New Package</h2>
+                                        </div>
+                                        <div class="modal-body">
+                                          <form action="" method="POST">
+                                              {% csrf_token %}
+                                            <div class="form-group">
+                                              <label for="">Package Name:</label>
+                                              <input type="text" class="form-control" id="package_name" placeholder="package name" name="package_name">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="">No. of Free Months:</label>
+                                              <input type="number" class="form-control" id="free_month" placeholder="No. of Free Months" name="free_month">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="">No of Discounted Months:</label>
+                                              <input type="number" class="form-control" id="discount_month" placeholder="No of Discounted Months" name="discount_month">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="">Discounted Price:</label>
+                                              <input type="number" class="form-control" id="discount_price" placeholder="$" name="discount_price">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="">Base Price:</label>
+                                              <input type="number" class="form-control" id="base_price" placeholder="$" name="base_price">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="">Date:</label>
+                                              <input type="date" class="form-control" id="entry_date" placeholder="Date" name="entry_date">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="">Package Details:</label>
+                                                <textarea name="package_details" id="package_details" cols="30" rows="5"></textarea>
+                                            </div>
+                                              <span class="close btn btn-primary">Cancel</span>
+                                            <input type="submit" class="btn btn-primary " value="Save">
+
+                                          </form>
+                                        </div>
+
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <div class="popUpBtn craeteNewPackage" data-modal="myModal1">Create New Packege</div>
+                                <div class="col-sm-1">
+                                    <br>
+                                    <input type="submit" class="btn btn-primary mb-2" value="Search">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Modal -->
+
+
+                    <table class="table table-striped table-bordered" id="table_rows">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Package Name</th>
+                            <th scope="col">No. of Free Months </th>
+                            <th scope="col">No of Discounted Months</th>
+                            <th scope="col">Discounted Month Price</th>
+                            <th scope="col">Base Price </th>
+                            <th scope="col">Date</th>
+                        </tr>
+                        </thead>
+                        {% for current_user in all_current_active_patients %}
+
+                        <tr class="tr">
+                            <td>{{ current_user.package_name }}</td>
+                            <td>{{ current_user.no_free_months }}</td>
+                            <td>{{current_user.no_discounted_months}}</td>
+                            <td>{{current_user.discounted_price}}</td>
+                            <td>{{ current_user.base_price }}</td>
+                            <td>{{ current_user.date }}</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+
+
+                    {% if all_current_active_patients.has_other_pages %}
+                    <ul class="pagination">
+                        {% if all_current_active_patients.has_previous %}
+                        <li><a href="?page={{ all_current_active_patients.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in all_current_active_patients.paginator.page_range %}
+                        {% if all_current_active_patients.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if all_current_active_patients.has_next %}
+                        <li><a href="?page={{ all_current_active_patients.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+   <div class="modal fade" id="confirmUser" role="dialog" style="">
+                        <div class="modal-dialog modal-md">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Providers Credentials Verification</h5>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <div class="btn-group col-md-12">
+                                     <div class="provider_registeration" style="width: 100%; ">
+
+        <div id="div_id_email" class="form-group"> <label for="id_email" class="col-form-label  requiredField">
+                Email<span class="asteriskField">*</span> </label> <div class=""> <input type="email" name="email" class="emailinput form-control" required="" id="id_email"> </div> </div> <div id="div_id_password" class="form-group"> <label for="id_password" class="col-form-label  requiredField">
+                Password<span class="asteriskField">*</span> </label> <div class=""> <input type="password" name="password" class="passinput textInput form-control" required="" id="id_password"> </div> </div>
+                                         
+                                <div class="create_account_button" align="center">
+                                 <div class="error" style="display: none;color: red;">All fields are required!</div>
+                                    <button type="button" class="btn btn-md btn-primary col-sm-6 providerVerification" data-id="" >Verify
+                                        </button>
+                                </div>
+
+                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+{% endblock %}
+
+
+{% block javascript %}
+
+<script>
+
+    $(document).ready(function (){
+        $("body").delegate("a.viewPatient","click",function (e) {
+            e.preventDefault();
+            $("#confirmUser").modal('show');
+            $(".emailinput").val("");
+            $(".passinput").val("");
+            $(".providerVerification").attr('data-id',$(this).data('id'));
+
+        });
+        $("body").delegate("button.providerVerification","click",function (e) {
+            e.preventDefault();
+            var email = $(".emailinput").val();
+            var pass = $(".passinput").val();
+            var user_id = $(this).data("id");
+            if(!email || !pass){
+               $("div.error").html("All fields are required!");
+                $("div.error").show();
+            }else{
+              $("div.error").hide();
+               const endpoint = '/backend/providers_verify/';
+               $.ajax({
+                    method: 'POST',
+                    data: {"email": email,"pass": pass,'user_id':user_id},
+                    url: endpoint,
+                    success: function (response_data) {
+                        console.log(response_data)
+                        var response_data = response_data;
+                        if(response_data.status){
+                           $("div.error").html("<span style='color:green !important;'>Login Successfully</span>");
+                            $("div.error").show();
+                            setTimeout(function (){
+                                window.location.href = response_data.url
+                            },2000);
+                        }else{
+                            $("div.error").html("Wrong credentials");
+                              $("div.error").show();
+                        }
+
+                    }
+                });
+            }
+          //  $("#confirmUser").modal('show');
+            //$(".providerVerification").attr('data-id',$(this).data('id'));
+
+        });
+    });
+
+
+
+
+
+    function del_p() {
+        var id = $("#pid").val();
+        window.location.href = "/delete_patient/" + id + "/current_active_patient";
+    }
+$(document).ready(function(){
+
+
+	$('.popUpBtn').on('click', function(){
+		$('#'+$(this).data('modal')).css('display','block');
+	})
+
+
+	$('span.close').on('click', function(){
+		$('.modal').css('display','none');
+	})
+
+
+	$(window).on('click', function(event){
+		if (jQuery.inArray( event.target, $('.modal') ) != "-1") {
+        	$('.modal').css('display','none');
+    	}
+	})
+
+
+
+})
+
+
+
+
+
+
+// Get the modal
+// var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+// var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+// var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+// btn.onclick = function() {
+//     modal.style.display = "block";
+// }
+
+// When the user clicks on <span> (x), close the modal
+// span.onclick = function() {
+//     modal.style.display = "none";
+// }
+
+// When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//     if (event.target == modal) {
+//         modal.style.display = "none";
+//     }
+// }
+
+
+$(document).ready(function(){
+
+
+	$('.popUpBtn').on('click', function(){
+		$('#'+$(this).data('modal')).css('display','block');
+	})
+
+
+	$('span.close').on('click', function(){
+		$('.modal').css('display','none');
+	})
+
+
+	$(window).on('click', function(event){
+		if (jQuery.inArray( event.target, $('.modal') ) != "-1") {
+        	$('.modal').css('display','none');
+    	}
+	})
+
+
+
+})
+
+</script>
+
+
+{% endblock %}

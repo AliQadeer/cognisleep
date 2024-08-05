@@ -1,0 +1,98 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+
+        .return-btn {display: inline-block;margin: 150px 0;background: #230c9a;color: #fff !important;padding: 10px 20px;border-radius: 5px;font-family: Montserrat, sans-serif;}
+
+
+.btn_provider {
+    background-color: #2d2d82;
+    border-color: #2d2d82;
+    font-size: 18px;
+}
+
+@media(min-width: 1024px) {
+
+        section.forward_sec {
+<!--    height: calc(100vh - 346px) !important;-->
+    display: flex;
+    align-items: center;
+}
+}
+
+</style>
+
+
+
+    <section class="forward_sec">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="provider_login_form">
+					<h2>ADD PROVIDER</h2>
+				</div>
+
+                <div class="col-md-3 text-center border-bottom pb-2 mb-3">
+                    <h4  class="mb-0">{{ providername }}</h4>
+
+                </div>
+
+                <div class="col-md-3 text-center border-bottom pb-2 mb-3">
+                    <button onclick="callAPI()" class="btn_provider">Add Provider</button>
+                                    <input type="hidden" id="pro_id" value="{{ providerid }}">
+                                    <input type="hidden" id="ma_id" value="{{ ma_id }}">
+
+                </div>
+
+
+
+
+
+
+            </div>
+            <div class="text-center messageBox" style="display: none;">
+                <p class="text-success">Provider added successfully.</p>
+            </div>
+        </div>
+
+    </section>
+
+
+{% endblock %}
+
+
+{% block jqueryScript %}
+
+<script>
+        function callAPI() {
+            let spid = document.getElementById("pro_id").value;
+            let pid = document.getElementById("ma_id").value;
+            let myurl = 'https://cognisleep.com/accounts/add_provider/'+pid+'/'+spid+'/'
+            fetch(myurl)
+                .then(response => response.json())
+                .then(data => {
+                    // Process the response data
+                    console.log(data);
+                    jQuery('.messageBox').show();
+                    setTimeout(function() {
+                     window.location.href = "https://cognisleep.com/accounts/provider_login/";
+                    },1000)
+
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.log(error);
+                });
+        }
+    </script>
+{% endblock %}

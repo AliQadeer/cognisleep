@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style>
+    @media(max-width: 799px) {
+        span#toggle_pwd {
+            bottom: 43%;
+            transform: translateY(-43%) !important;
+        }
+    }
+    .provider_registeration .alert-danger {
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+}
+</style>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet">
+<section class="provider_login_sec">
+        <div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="titleBoxArea position-relative text-center my-md-4">
+						   <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+						   <h3 class="sleep-rep_patient">PROVIDER LOGIN</h3>
+				   </div>
+			   </div>
+				<div class="col-sm-12 col-md-6 col-lg-6 order-3">
+					<div class="provider_registeration text-center text-md-left">
+						<h4 class="defaultHead">PROVIDER REGISTRATION</h4>
+						<div class="create_account_button">
+							<a href="/accounts/signup">Create Account</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-6">
+					<div class="provider_registeration_form">
+						<div class="provider_registeration">
+							<div class="d-none d-md-block">
+								<h4>LOGIN</h4>
+								<h5>Registered Customer? Please log in</h5>
+							</div>
+							{% if messages %}
+							{% for message in messages %}
+							<div class="alert alert-{{ message.tags}}">{{ message|safe  }}</div>
+							{% endfor %}
+						{% endif %}
+							<form method="post" method="/LoginProvider/" >
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ next }}">
+
+                                {{ form|crispy }}
+                                <!-- <div class="create_account_button">
+                                    <button class="login_buttonz" href="#">Login</a>
+                                    <a class="Forgot-Password">Forgot Your Password?</a>
+                                </div> -->
+								<span style="cursor: pointer;padding-left: 514px;" id="toggle_pwd" class="fa fa-fw fa-eye field_icon"></span>
+                                 <a href="/accounts/forgot_password/" class="anchorjs-link float-md-right">Forgot Your Password?</a>
+
+                                <div class="create_account_button">
+                                <button type="submit" class="login_buttonz">Log in</button>
+
+                                </div>
+                            </form>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#toggle_pwd").click(function () {
+                $(this).toggleClass("fa-eye fa-eye-slash");
+               var type = $(this).hasClass("fa-eye-slash") ? "text" : "password";
+                $("#id_password").attr("type", type);
+            });
+        });
+    </script>
+	{% endblock %}

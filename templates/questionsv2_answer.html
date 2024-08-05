@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <section class="forward_sec" xmlns="http://www.w3.org/1999/html">
+        <div class="container">
+            <div class="row">
+
+                <div class="text-center">
+
+                    <div class="col-md-12 preventlink" id="nesa_notification" style="display: block;">
+                        <p style="font-size: 18px;text-align:center;">{{ message_data|safe }}
+                        </p>
+                        <center>
+                            <a href="{{ site_url }}">
+                                <button class="btn btn-large">Let’s Do It!</button>
+                            </a><br>
+                            <img src="{% static "assets/images/doctor.png" %}"
+                                 class="img-responsive" style="width: 300px;margin: 0 auto;">
+                        </center>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+{% block jqueryScript %}
+    <script>
+     $(".preventlink a").click(function (e) {
+            e.preventDefault();
+            window.location.href = "{{ base_url }}/comingsoon";
+        });
+    </script>
+{% endblock %}

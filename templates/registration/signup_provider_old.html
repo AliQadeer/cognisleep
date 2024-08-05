@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+  .backBtn:hover {
+    background-color: #79ce4a;
+  }
+
+  .modal-backdrop.fade.in {
+    opacity: 1;
+  }
+
+  .modal.fade.in {
+    display: block !important;
+    opacity: 1 !important;
+    z-index: 9999999999 !important;
+  }
+
+  .modal-backdrop.fade.in:not(:last-child) {
+    display: none;
+  }
+
+  .modal-backdrop.fade.in {
+    z-index: 9999999;
+  }
+
+  .modal-footers {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .modal-body>iframe {
+    overflow-y: auto;
+  }
+
+  @media(min-width: 1170px) {
+    span#toggle_pwd {
+      bottom: 10%;
+    }
+
+    @media (min-width: 1200px) {
+      .modal-xl {
+        max-width: 100%;
+      }
+    }
+</style>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+  type="text/css" />
+<section class="provider_login_sec">
+  <div class="container">
+
+    <div class="row justify-content-center py-4">
+
+
+
+      <div class="col-md-6">
+        <div class="provider_registeration_form">
+          <div class="provider_registeration">
+            <div class="titleBoxArea text-center">
+              <button onclick="history.back();" class="backBtn left-0"><i class="fa fa-arrow-left"></i></button>
+              <h4 class="defaultHead">Create your <span class="d-md-inline d-block">Provider account</span></h4>
+            </div>
+            <form method="post" method="/accounts/signup">
+              {% csrf_token %}
+
+
+
+              <div id="div_id_email" class="form-group"> <label for="id_email" class=" requiredField">
+                  Email<span class="asteriskField">*</span> </label>
+                <div> <input type="email" name="email" class="emailinput form-control" required="" id="id_email"> </div>
+                <span id="email_message" style="font-weight: bold; color: red"></span>
+                <a class="emaillogin d-none" href="/accounts/provider_login/">Please login</a>
+              </div>
+
+              <div id="div_id_fullname" class="form-group">
+  <label for="id_fullname" class="requiredField">Full name<span class="asteriskField">*</span></label>
+  <div class="row">
+    <div class="col">
+      <input type="text" name="firstname" class="textinput textInput form-control" required="" id="firstname" placeholder="First name">
+    </div>
+    <div class="col">
+      <input type="text" name="lastname" class="textinput textInput form-control" required="" id="lastname" placeholder="Last name">
+    </div>
+  </div>
+</div>
+
+
+              <div id="div_id_providertype" class="form-group"> <label for="id_providertype" class=" requiredField" style="margin-top:-15px">
+                  Provider type<span class="asteriskField">*</span> </label>
+
+                <div>
+                  <select name="providertype" class="textinput textInput form-control" id="providertype">
+                    <option selected value="MD/DO">MD/DO</option>
+                    <option value="Associated PA, APRN">Associated PA, APRN</option>
+                    <option value="PHD">PHD</option>
+                    <option value="Independent PA, APRN">Independent PA, APRN</option>
+                  </select>
+                </div>
+                <br>
+                <input type="hidden" id="flag" name="flag" value="">
+                <div id="extraInput" style="display:none;">
+                  <input value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}'
+                    class="textinput textInput form-control" type="text"
+                    placeholder="Supervising Physician Referral Number" id="doctor_ref_number" name="doctor_ref_number"
+                    onblur="verify_refby(this.value,'office_name');">
+                  <br>
+                  <input value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}'
+                    class="textinput textInput form-control" type="text" placeholder="Supervising Physician Name"
+                    oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+"
+                    oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                    id="primary_care_doctor_name" name="primary_care_doctor_name" readonly>
+                </div>
+              </div>
+
+
+
+
+              <div id="div_id_contact" class="form-group"> <label for="id_contact" class=" requiredField">
+                  Contact number<span class="asteriskField">*</span> </label>
+                <div> <input type="text" name="contact" class="textinput textInput form-control" required=""
+                    id="contact"> </div>
+              </div>
+              <div id="div_id_password" class="form-group"> <label for="id_password" class=" requiredField">
+                  Password<span class="asteriskField">*</span> </label>
+                <div class="position-relative passwordBox"> <input type="password" name="password"
+                    class="textinput textInput form-control" required="" id="id_password">
+                  <span id="toggle_pwd" class="fa fa-fw fa-eye field_icon"></span>
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <input type="hidden" name="response_captcha" value="0" class="responseCaptcha">
+                <div style="margin-top: 13px;" id="g-recaptcha2" class="g-recaptcha2"
+                  data-sitekey="6Lf37LQUAAAAAIHIJDdoPYLF0pLXZ_zFwqbV2AAn"></div>
+              </div>
+              {% if error2 is not None %}
+              <br />
+              <b style="color: red;">{{error2}}</b>
+              {% endif %}
+              <div class="create_account_button">
+                <button type="button" class="login_buttonz" style="width: 100%;" onclick="providerSignUp()">Create
+                  Account</button>
+
+              </div>
+          </div>
+
+
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback2&render=explicit' async defer></script>
+<script>
+$( "#id_email" ).focusout(function() {
+    validateEmailAndChangeFocus();
+});
+  var recaptchaValid2 = 0;
+  $("#g-recaptcha-response-1").attr("required", true);
+
+  var onloadCallback2 = function () {
+    grecaptcha.render('g-recaptcha2', {
+      'sitekey': $("#g-recaptcha2").data("sitekey"),
+      'callback': correctCaptcha2
+    });
+  };
+
+  var correctCaptcha2 = function (response) {
+    //alert($('#g-recaptcha').length);
+    var response2 = grecaptcha.getResponse();
+    if (response.length == 0) {
+      recaptchaValid2 = 0;
+    } else {
+      recaptchaValid2 = 1;
+    }
+    setTimeout(function () {
+      recaptchaValid2 = 0;
+      $(".responseCaptcha").val(recaptchaValid2);
+      grecaptcha.reset();
+    }, 15000);
+
+    $(".responseCaptcha").val(recaptchaValid2);
+  };
+
+</script>
+<script type="text/javascript">
+  $('#email_message').hide();
+  $(function () {
+    $("#toggle_pwd").click(function () {
+      $(this).toggleClass("fa-eye fa-eye-slash");
+      var type = $(this).hasClass("fa-eye-slash") ? "text" : "password";
+      $("#id_password").attr("type", type);
+    });
+  });
+  document.getElementById('contact').addEventListener('input', function (e) {
+    var x = e.target.value
+      .replace(/\D/g, '')
+      .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+    e.target.value = !x[2]
+      ? x[1]
+      : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '')
+  })
+
+
+</script>
+
+
+<script>
+  jQuery('.modal-footers button').click(function () {
+    jQuery('.modal-backdrop').remove();
+  });
+
+  /* jQuery('input#exampleCheck1').change(function () {
+    var modalTrigger = jQuery(this).prop('checked');
+    if (modalTrigger == true) {
+      jQuery('.openModalBox').trigger('click');
+    }
+  }) */
+
+
+
+  const select = document.getElementById("providertype");
+  const input = document.getElementById("extraInput");
+  select.addEventListener("change", function () {
+    if (this.value === "Associated PA, APRN") {
+      input.style.display = "block";
+      document.getElementById("doctor_ref_number").required = true;
+      //document.getElementById("primary_care_doctor_name").required = true;
+    } else {
+      input.style.display = "none";
+      document.getElementById("doctor_ref_number").required = false;
+      document.getElementById("primary_care_doctor_name").required = false;
+    }
+  });
+</script>
+
+
+
+<script>
+
+
+  /* sign up  */
+
+  async function providerSignUp() {
+    const signupData = {}
+  const emailID = document.getElementById('id_email').value;
+  const firstName = document.getElementById('firstname').value;
+  const lastName = document.getElementById('lastname').value;
+  const providerType = document.getElementById('providertype').value;
+  const contactNo = document.getElementById('contact').value;
+  const passWord = document.getElementById('id_password').value;
+  const docterName = document.getElementById('primary_care_doctor_name').value;
+  const docterNum = document.getElementById('doctor_ref_number').value;
+  await localStorage.setItem('email', emailID);
+
+  Object.assign(signupData, {
+    'email': emailID,
+    'password': passWord,
+    'first_name': firstName,
+    'last_name': lastName,
+    'contact_no': contactNo,
+    'providertype': providerType,
+    'package_type': providerType,
+    'primary_care_doctor_name': docterName,
+    'primary_care_doctor_id': docterNum,
+    'role_id': 1,
+  })
+
+    fetch(' https://cognisleep.com/accounts/api/signup_provider/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(signupData)
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        console.log(data);
+        localStorage.setItem('user_id', data);
+        window.location.href = `https://www.cognisleep.com/accounts/baa_signature/${data}`;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+  }
+
+
+
+</script>
+<script type="text/javascript">
+  const endpoint = '/api/refby/';
+
+  function verify_refby(id, fieldid) {
+    var cname = "prp";
+    var cvalue = document.getElementById("doctor_ref_number").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', endpoint);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        var response_data = JSON.parse(xhr.responseText);
+        if (response_data.success) {
+          //document.getElementById("primary_care_office_name").value = response_data.primary_care_office_name;
+          document.getElementById("primary_care_doctor_name").value = response_data.primary_care_doctor_name;
+          document.getElementById("error_office_name").innerHTML = response_data.message;
+          document.getElementById("error_office_name").classList.remove('text-danger');
+          document.getElementById("error_office_name").classList.add('text-success');
+
+          var d = new Date();
+          d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));
+          var expires = "expires=" + d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        } else {
+          document.cookie = cname + "=" + cvalue + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+          document.getElementById("error_office_name").innerHTML = response_data.message;
+          document.getElementById("primary_care_office_name").value = '';
+          document.getElementById("primary_care_doctor_name").value = '';
+          document.getElementById("error_office_name").classList.remove('text-success');
+          document.getElementById("error_office_name").classList.add('text-danger');
+        }
+      }
+    };
+
+    var params = 'ref_name=' + encodeURIComponent(document.getElementById("doctor_ref_number").value) + '&fieldid=' + encodeURIComponent(fieldid);
+    xhr.send(params);
+  }
+
+
+</script>
+<script type="text/javascript">
+//api/ValidateEmail
+
+ function validateEmailAndChangeFocus() {
+  var idEmailInput = document.getElementById('id_email');
+  var otherElement = document.getElementById('firstname');
+  var useremail = idEmailInput.value;
+  const endpoint = '/accounts/api/ValidateEmail/';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', endpoint);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      if (data.success) {
+        idEmailInput.style.border = '1px solid red';
+        document.getElementById('email_message').innerHTML = "This email is already in use.";
+        document.getElementById('email_message').style.display = "block";
+        document.querySelector('.emaillogin').classList.remove('d-none');
+        idEmailInput.focus(); // Change focus to the other element
+      } else {
+        idEmailInput.style.border = '1px solid #dedede';
+        document.getElementById('email_message').style.display = "none";
+        document.querySelector('.emaillogin').classList.add('d-none');
+        otherElement.focus();
+      }
+    }
+  };
+  var params = 'id_email=' + encodeURIComponent(useremail);
+  xhr.send(params);
+}
+
+// Call the function whenever you want to validate the email and change the focus
+
+</script>
+
+
+
+{% endblock %}

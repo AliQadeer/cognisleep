@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% load  static %}
+
+{% block content %}
+<section class="forward_sec">
+    <div class="container">
+        <div class="row">
+            <div class="bold_heading">
+              <h2 class="text-center">Provider Dashboard</h2>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="active" style=""><a data-toggle="tab" href="#home" aria-expanded="true">Your Details</a></li>
+                <li class="" style=""><a data-toggle="tab" href="#menu1" aria-expanded="false">Patients Details</a></li>
+            </ul>
+            <div class="dashboard_form">
+            <h1 class="text-center">Welcome to CogniSleep !</h1>
+            <br>
+            <h1 style="text-align: center;">Account Details</h1>
+            <form>
+                <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Referral ID:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input type="text">
+                        </div>
+                        <label class="col-md-3 col-lg-3 control-label">First name:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input type="text">
+                        </div>
+                </div>
+                <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Last name:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Email:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Username:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Password:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input type="password">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Phone:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input name="contact" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">license:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input name="contact" type="text" >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Type of Practice:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input  name="contact" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Facility Name:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input  name="contact" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Facility Number:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input  name="contact" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Facility Address:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input  name="contact" type="text" >
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Fax:</label>
+                        <div class="col-md-8 col-lg-8">
+                          <input  name="contact" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label"></label>
+                        <div class="col-md-8 col-lg-8">
+                          <div class="create_account_button">
+                        <a class="" href="#">Update</a>
+                        <a class="" href="#">Cancel</a>
+                    </div>
+                        </div>
+                      </div>
+                      
+            </form>
+        </div>
+        <div class="table_mode">          
+        <div class="table-responsive" id="provider-table">          
+  <table class="table">
+    <thead>
+      <tr>
+        <!--<th>Sno</th>-->
+        <th>Referral Id</th>
+        <th>Patient First Name</th>
+        <th>Patient Last Name</th>
+        <th>Status</th>
+        <th>Patient Activate</th>
+        <th>Patient Deactivate</th>
+        <th>View Patient</th>
+        
+
+      </tr>
+    </thead>
+    <tbody>
+    
+            
+      
+    </tbody>
+  </table>
+    </div>
+    </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

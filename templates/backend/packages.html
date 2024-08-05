@@ -1,0 +1,411 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    .gap-15 {
+        gap: 15px;
+    }
+
+    .package-btn a {
+        font-size: 13px;
+    }
+
+    .fade.show {
+        opacity: 1;
+        display: block !important;
+    }
+
+    .modal-backdrop {
+        background-color: #0000009c !important;
+        z-index: -9;
+    }
+
+    .modal-backdrop.show {
+        z-index: 1040;
+    }
+
+    .icon_box {
+    font-size: 80px;
+}
+
+.title-box h5 {
+    font-size: 18px;
+    text-transform: capitalize;
+}
+.table-layout-fixed {
+    table-layout: fixed !important;
+}
+</style>
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8 p-r-0 title-margin-right">
+                    <div class="page-header">
+                         <button  style=" margin-top: -2px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i>Back</button>
+                        <div class="page-title">
+                            <h1>Package</h1>
+                               {% if messages %}
+                                {% for message in messages %}
+                                    <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- /# column -->
+
+                <!-- /# column -->
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view">
+
+                    <div class="row col-sm-12">
+
+                        {% comment %} <form method="post" action="#">
+                            <div class="form-row align-items-center">
+                                <div class="col-sm-3" >
+                                    <label for="date_to">Date From</label>
+
+                                    <input type="date" class="form-control" name="date_from" id="date_from"
+                                           placeholder="Date From" value="{{ date_from }}">
+                                </div>
+
+                                <div class="col-sm-3" >
+                                    <label for="date_to">Date To</label>
+                                    <input type="date" class="form-control" name="date_to" id="date_to"
+                                           placeholder="Date To" value="{{ date_to }}">
+                                </div>
+                                <div class="col-sm-9">
+                                    <label for="mysearch">Name / Email / Contact </label>
+                                    <input type="text" class="form-control" id="mysearch" name="mysearch"
+                                           placeholder="Search"
+                                           value="{{ mysearch }}">
+                                </div>
+                                <div class="col-sm-1">
+                                    <br>
+                                    <input type="submit" class="btn btn-primary mb-2" value="Search">
+                                </div>
+                            </div>
+                        </form> {% endcomment %}
+                    </div>
+
+
+                    <div class="modal fade" id="updatePackage" role="dialog" style="">
+                        <div class="modal-dialog modal-sm">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                    <h4 class="modal-title">This action is not reversable! Are you sure you want to
+                                        proceed?</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="btn-group col-md-12">
+                                        <button type="button" class="btn btn-primary btn-lg col-sm-6"
+                                                onclick="del_p();">Yes
+                                        </button>
+                                        <input type="hidden" id="pid">
+                                        <button type="button" class="btn btn-lg col-sm-6" data-dismiss="modal">No
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-layout-fixed" id="table_rows">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Action</th>
+<!--                            <th scope="col">Action2</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in package %}
+                            <tr>
+                                <td class="packageid" hidden>{{ item.product_id }}</td>
+                                <td class="priceid" hidden>{{ item.price_id }}</td>
+                                <td class="packageName">{{ item.product_name }}</td>
+                                <td class="packageDesc">{{ item.product_description }}</td>
+                                <td class="packagePrice">{{ item.price }}</td>
+
+                                <td>
+                                 <div class="dropdown">
+                                      <button class="border-0 bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                      </button>
+                                      <div class="dropdown-menu px-3 py-2 tableActions" aria-labelledby="dropdownMenuButton">
+                                          <div class="actionBtns d-flex flex-column">
+                                               <a href="#" class="userData" data-toggle="modal" data-target=".confirmUser"><i class="fa fa-file" aria-hidden="true"></i> Update Package</a>
+                                              <a href="#" class="userPrice" data-toggle="modal" data-target=".updatedPrice"><i class="fa fa-dollar" aria-hidden="true"></i> Update Price</a>
+                                              <a href="#" class="deletePackageBtn"><i class="fa fa-trash" aria-hidden="true"></i> Delete </a>
+
+                                          </div>
+                                      </div>
+                                 </div>
+                             </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                    {% if all_current_active_patients.has_other_pages %}
+                    <ul class="pagination">
+                        {% if all_current_active_patients.has_previous %}
+                        <li><a href="?page={{ all_current_active_patients.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in all_current_active_patients.paginator.page_range %}
+                        {% if all_current_active_patients.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if all_current_active_patients.has_next %}
+                        <li><a href="?page={{ all_current_active_patients.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+                <form method="post" action="/payments/update_product/">
+                            {% csrf_token %}
+                    <div class="modal fade confirmUser" id="confirmUser" role="dialog">
+                        <div class="modal-dialog modal-md">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Update Package</h5>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+
+                                </div>
+                                <div class="modal-body">
+
+                            <div class="form-row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="form-group w-100">
+                                        <label for="package_name">Package Name:</label>
+                                        <input type="text" id="package_name" class="form-control package_name" name="package_name"
+                                               placeholder="Package Name" value="">
+                                        <input type="hidden" class="form-control packageid" name="packageid" id="packageid" value="">
+                                    </div>
+                                     <div class="form-group w-100" >
+                                        <label for="package_Description">Package Description:</label>
+                                        <textarea rows="5" id="package_Description" placeholder="Package Description" name="package_Description" class="form-control package_Description" value=""></textarea>
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label for="package_price">Package Price:</label>
+                                        <input type="number" class="form-control package_price" name="package_name"
+                                               placeholder="Package Price" value="" disabled id="package_price">
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-1">
+                                    <br>
+                                    <button type="submit" class="btn btn-primary mb-2" >Update</button>
+                                </div>
+                            </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+
+                    <!-- update price modal -->
+
+                    <div class="modal fade updatedPrice" id="updatedPrice" role="dialog">
+                        <div class="modal-dialog modal-md">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Update Price</h5>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="/payments/update_price/">
+                            {% csrf_token %}
+                            <div class="form-row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="form-group w-100">
+                                        <label for="package_name">Package Name:</label>
+                                        <input type="text" class="form-control package_name" name="package_name"
+                                               placeholder="Package Name" value="" disabled>
+                                        <input type="hidden" class="form-control packageid" name="packageid" id="packageid" value="">
+
+                                        </div>
+                                    <div class="form-group w-100">
+                                        <label for="package_price">Package Price:</label>
+                                        <input type="number" class="form-control package_price" name="package_price"
+                                               placeholder="Package Price" value="" id="package_price">
+                                    </div>
+                                    <div class="form-group w-100" >
+                                        <label for="package_Description">Package Description:</label>
+                                        <textarea rows="5" class="form-control package_Description" value="" disabled></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <br>
+                                    <button type="submit" class="btn btn-primary mb-2" >Update</button>
+                                </div>
+                            </div>
+                        </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+{% endblock %}
+
+
+{% block javascript %}
+
+<script>
+
+    $(document).ready(function (){
+        $("body").delegate("a.viewPatient","click",function (e) {
+            e.preventDefault();
+            $("#confirmUser").modal('show');
+            $(".emailinput").val("");
+            $(".passinput").val("");
+            $(".providerVerification").attr('data-id',$(this).data('id'));
+
+        });
+        $("body").delegate("button.providerVerification","click",function (e) {
+            e.preventDefault();
+            var email = $(".emailinput").val();
+            var pass = $(".passinput").val();
+            var user_id = $(this).data("id");
+            if(!email || !pass){
+               $("div.error").html("All fields are required!");
+                $("div.error").show();
+            }else{
+              $("div.error").hide();
+               const endpoint = '/backend/admin_verify/';
+               $.ajax({
+                    method: 'POST',
+                    data: {"email": email,"pass": pass,'user_id':user_id},
+                    url: endpoint,
+                    success: function (response_data) {
+                        console.log(response_data)
+                        var response_data = response_data;
+                        if(response_data.status){
+                           $("div.error").html("<span style='color:green !important;'>Login Successfully</span>");
+                            $("div.error").show();
+                            setTimeout(function (){
+                                window.location.href = response_data.url
+                            },2000);
+                        }else{
+                            $("div.error").html("Wrong credentials");
+                              $("div.error").show();
+                        }
+
+                    }
+                });
+            }
+          //  $("#confirmUser").modal('show');
+            //$(".providerVerification").attr('data-id',$(this).data('id'));
+
+        });
+    });
+
+
+
+    function loadModel(id) {
+        $("#pid").val(id);
+        $("#myModal").modal('show');
+
+    }
+
+    function del_p() {
+        var id = $("#pid").val();
+        window.location.href = "/delete_patient/" + id + "/current_active_patient";
+    }
+
+
+    jQuery('.userData').click(function(){
+   var name =  jQuery(this).parents('tr').find('.packageName').text();
+    jQuery('.package_name').val(name);
+    var id =  jQuery(this).parents('tr').find('.packageid').text();
+    jQuery('.packageid').val(id);
+    var description =  jQuery(this).parents('tr').find('.packageDesc').text();
+    jQuery('.package_Description').val(description);
+    var price =  jQuery(this).parents('tr').find('.packagePrice').text();
+    jQuery('.package_price').val(price);
+});
+
+jQuery('.userPrice').click(function(){
+    var name =  jQuery(this).parents('tr').find('.packageName').text();
+    jQuery('.package_name').val(name);
+     var id =  jQuery(this).parents('tr').find('.packageid').text();
+    jQuery('.packageid').val(id);
+    var description =  jQuery(this).parents('tr').find('.packageDesc').text();
+    jQuery('.package_Description').val(description);
+    var price =  jQuery(this).parents('tr').find('.packagePrice').text();
+    jQuery('.package_price').val(price);
+})
+
+
+</script>
+
+<script>
+
+    // Function to handle deletion of a package
+    function deletePackage(product_id) {
+        if (confirm("Are you sure you want to delete this package?")) {
+            $.ajax({
+                type: "DELETE",
+                url: "/payments/api/delete_package/" + product_id + "/",  // Replace this URL with your actual delete API endpoint
+                success: function (response) {
+                    alert("Package deleted successfully");
+                    // You may need to reload the page or update the UI after successful deletion
+                    location.reload(); // For example, you can reload the page
+                },
+                error: function (xhr, status, error) {
+                    alert("Error deleting package: " + error);
+                }
+            });
+        }
+    }
+
+    $(document).ready(function (){
+        // Add event listener to handle deletion when the delete button is clicked
+        $("body").delegate(".deletePackageBtn", "click", function () {
+            var product_id = $(this).closest("tr").find(".packageid").text();
+            deletePackage(product_id);
+        });
+    });
+</script>
+
+{% endblock %}

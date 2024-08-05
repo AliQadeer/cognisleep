@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% load  static %}
+
+{% block content %}
+
+    <section class="business_top">
+		<div class="container">
+			<div class="row">
+				<div class="business_top_outer">
+					<h2>The numbers speak volumes</h2>
+					<p>According to a study conducted by Harvard Medical School, Insomnia costs the US workforce an estimated $63.2 Billion Annually, affecting 23% of workers, with a higher incidence in women.<sup>[1]</sup></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <section class="business_top">
+		<div class="container">
+			<div class="row">
+				<div class="business_top_outer">
+					<h2>When your employees lose sleep, you lose productivity</h2>
+					<p>How much is your employees’ sleeplessness costing you in the long run? Symptoms of Insomnia include difficulty paying attention or focusing and increased accidents. A small, one-time investment in our  treatment can help your employees be more productive and safer on the job.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+    <section class="business_top">
+		<div class="container">
+			<div class="row">
+				<div class="business_top_outer">
+					<h2>Sleeping Pills</h2>
+					<p>According to Time.com, roughly 9 million Americans, or 4% of US adults, use prescription sleep aids or medications to help with sleep disorders. The FDA has issued warnings pertaining to three widely used sedative-hypnotic sleep aids, connecting them to accidental overdoses, falls, and near drownings. This can be a huge liability for employers who have employees who are hooked on sleeping pills.<sup>[2]</sup></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <section class="business_top">
+		<div class="container">
+			<div class="row">
+				<div class="business_top_outer">
+					<h2>Empower Employees</h2>
+					<p>Our CBT-I-based approach redirects thought processes to help your employees get the sleep they need to perform their best on the job. Better yet, you could experience a decrease in healthcare expenses due to a decrease in the use of expensive sleeping pills by employees.
+Give your employees the cognitive tools they need for quality sleep. Your employees are an investment in your organization; having them perform their tasks in a well-rested state is a win-win for everyone.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<section class="business_bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12">
+					<div class="fadeInRight">
+					<span class="shape1"><img src="{% static "assets/images/shape1.png" %}" alt=""></span>
+					<p>Our friendly and helpful staff are available to provide more information on our CogniSleep Business Subscriptions, and will be happy to answer any additional questions you may have.</p>
+					<form>
+						<input type="text" placeholder="Enter name of business"/>
+						<input type="text" placeholder="Contact Name"/>
+						<input type="email" placeholder="Email"/>
+						<input type="tel" placeholder="Phone Number"/>
+						<div class="create_account_button">
+							<a class="" href="javascript:void (0);" onclick="show_msg();">Submit</a>
+						</div>
+						<span class="text-red " style="display: none;" id="bus_msg">Thank you for your submission. We will get back to you within the next 24 Hours.</span>
+					</form>
+					<span class="shape2"><img src="{% static "assets/images/shape2.png" %}" alt=""></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+<div class="container">
+        <div class="row">
+            <div class="consumers_outer">
+                <div>
+                    <strong><p>References</p></strong>
+                     <p style="font-size: 11pt; margin-bottom: 0px;
+    line-height: 25px;">1. Insomnia costing U.S. workforce $63.2 billion a year, researchers estimate. Insomnia Costing U.S. Workforce $63.2 Billion a Year, Researchers Estimate | Harvard Medical School. (2011, September 2). Retrieved September 7, 2022, from https://hms.harvard.edu/news/insomnia-costing-us-workforce-632-billion-year-researchers-estimate
+
+</p>
+            <p style="font-size: 11pt; margin-bottom: 30px;
+    line-height: 25px;">2. Ducharme, J. (2019, May 7). Are sleeping pills safe? here's what research says. Time. Retrieved September 7, 2022, from https://time.com/5584937/sleeping-pills-safe/
+
+</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block jqueryScript %}
+
+    <script>
+
+    function show_msg() {
+            $("#bus_msg").show();
+    }
+
+    </script>
+
+
+{% endblock %}

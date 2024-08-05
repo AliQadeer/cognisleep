@@ -1,0 +1,817 @@
+{% extends "backend/base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+
+.butnBox .dropdown-menu {
+
+    min-width: 20rem;
+}
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        .butnBox {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.dayData {
+    display: flex;
+}
+
+.dayData > div:first-child {
+    flex-grow: 1;
+}
+
+.dayData > div:last-child {
+    flex-shrink: 0;
+}
+
+.dayData label {
+    display: block;
+}
+
+.dayData select {
+    max-width: 140px;
+}
+
+.dayData input {
+    width: 125px;
+    max-width: 100%;
+}
+
+
+        .activeWeek, .activeWeek button, .activeWeek a {
+    background-color: #00a115 !important;
+}
+        .viewsleepdiary .weeks ul li {
+            /* width: 100%; */
+        }
+        .weeks ul li {
+            width: 16.66% !important;
+            height: 34 p;
+        }
+        .table-sleepreport_new span{
+        padding-bottom: 10px;
+        display: block;
+       border-bottom:  3px solid #000000 !important;
+      }
+      .table-sleepreport_new th{
+         border: none!important;
+         text-align: center;
+         background-color: #FFFFFF!important;
+         color: #717371!important;
+         font-size: 18px;
+    font-weight: 600;
+      }
+      .table-sleepreport_new td{
+        border: none!important;
+        border-bottom: 1px solid #484848!important;
+        padding: 5px!important;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .table-sleepreport_new tbody tr:first-child{
+      color: #212529!important;
+
+      }
+      .table-sleepreport_new tbody tr:first-child td{
+      font-size: 14px!important;
+      }
+      .conditions-modal-cont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+      .conditions-modal-cont h3 {
+            font-size: 17px;
+            font-weight: 800;
+            border-bottom: 2px solid #717371;
+            padding: 5px;
+        }
+        ul.nav.nav-tabs {
+    float: left;
+    width: 100%;
+    padding: 20px 0 0px;
+    margin-bottom: 0px;
+}
+ul.nav.nav-tabs li.active a {
+    color: white !important;
+    cursor: default;
+    background-color: #00a115 !important;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding: 10px 30px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+ul.nav.nav-tabs li a {
+    color: #333 !important;
+    font-size: 15px;
+    text-transform: uppercase;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding: 10px 23px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: 500;
+    display: inline-block;
+}
+a {
+    text-decoration: none !important;
+    /* color: #fff!important; */
+}
+.weeks ul li a {
+    display: block;
+    text-decoration: none;
+    color: #616161;
+    padding: 0;
+    height: 49px;
+    color: white;
+    font-size: 20px;
+    line-height: 44px;
+    border-right: 1px solid white;
+    background: #3e3e3e;
+}
+.activeWeek, .activeWeek button, .activeWeek a {
+    background-color: #00a115 !important;
+}
+a {
+    text-decoration: none !important;
+    /* color: #fff!important; */
+}
+.weeks ul li a button {
+    outline: none !important;
+}
+
+.weeks ul li a button {
+    background: #3e3e3e;
+    border: none;
+    color: #fff;
+    font-size: 17px;
+}
+.activeWeek, .activeWeek button, .activeWeek a {
+    background-color: #00a115 !important;
+}
+.nav-justified {
+    width: 100%;
+}
+
+.nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+.viewsleepdiary {
+    padding-top: 30px;
+}
+.viewsleepdiary th {
+    font-weight: 400;
+    background: #200b94;
+    color: #fff;
+}
+
+.viewsleepdiary .weeks ul{
+display:block;
+}
+
+.viewsleepdiary .weeks ul li{
+width:16.6%;
+}
+.viewsleepdiary .weeks ul li:not(:last-child){
+    margin-bottom:10px
+}
+
+.viewsleepdiary table th,.viewsleepdiary table td{
+padding:10px 15px;
+}
+
+.viewsleepdiary .days-menu {margin-bottom: 25px;}
+
+
+.viewsleepdiary .account-details label {
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+}
+.modal-content {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+#conditionsLegend .modal-header {
+    border: none !important;
+}
+#conditionsLegend .modal-header {
+    display: block !important;
+}
+.modal-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+}
+.modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+#conditionsLegend .modal-dialog {
+    max-width: 80%;
+}
+
+@media (min-width: 576px)
+.modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto;
+}
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 0.5rem;
+    pointer-events: none;
+}
+#conditionsLegend .modal-dialog {
+    max-width: 80%;
+}
+
+@media (min-width: 576px)
+.modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto;
+}
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 0.5rem;
+    pointer-events: none;
+}
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+}
+.col-md-4, .col-sm-4, .col-lg-4, .col-xl-4, .col-xs-4 {
+    float: left;
+}
+
+#conditionsLegend .modal-dialog {
+    max-width: 80%;
+}
+
+.modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto !important;
+}
+#conditionsLegend ol {
+    padding-left: 10px;
+}
+#conditionsLegend ol {
+    padding-left: 10px;
+}
+#conditionsLegend .modal-body h3 {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+#conditionsLegend .col-sm-12 h3 {
+    border-bottom: none!important;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Montserrat", sans-serif;
+}
+ol ol, ol ul, ul ol, ul ul {
+    margin-bottom: 0;
+}
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+ol[Attributes Style] {
+    list-style-type: lower-alpha !important;
+}
+user agent stylesheet
+ol ol {
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+user agent stylesheet
+ol {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+li {
+    display: list-item !important;
+    text-align: -webkit-match-parent !important;
+}
+user agent stylesheet
+ol {
+    list-style-type: decimal !important;
+}
+
+    </style>
+
+
+
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                         <ul class="pb-4 nav nav-tabs">
+                                     <li id="view_sleep_diary" class="active" style=""><a class="tablinks" href="/backend/patient-admin/view-diary/0/{{patient}}/">Sleep Report</a>
+                                    </li>
+                                    {% if request.user.package != 3 %}
+                                    <li id="progress" class="" style=""><a class="tablinks" href="/backend/progress-admin/{{patient}}">Your Progress</a>
+                                    </li>
+                                    {% endif %}
+                                      <li id="dash" class="" style=""><a class="tablinks"  href="/backend/accountdetails-admin/{{patient}}/">Account Details</a>
+                                    </li>
+                                </ul>
+
+                            <div id="responsivez" class="viewsleepdiary tabcontent" style="display:block;">
+
+
+
+                                                        <nav class="weeks">
+                                                            <ul class="nav nav-pills nav-justified ">
+
+                                                            {% for x in weekDays_array %}
+                                                                {% if x.x == week  %}
+
+                                                                <li class="activeWeek" style=" !important;width: calc(100% / );">
+                                                                    <a   class="getWeekData" href="javascript:void(0)" data-week="{{ x.x }}"  >
+                                                                        <button  id="weeks_id_1" >
+                                                                        {{ x.x }} Week
+                                                                    </button></a>
+                                                                </li>
+                                                                {% else %}
+
+                                                             <li  style="width: calc(100% / );">
+                                                                    <a class="getWeekData " href="javascript:void(0)" data-week="{{ x.x }}">
+                                                                        <button class="" id="weeks_id_1" >
+                                                                        {{ x.x }} Week
+                                                                    </button></a>
+                                                                </li>
+
+
+                                                                {% endif %}
+
+                                                            {% endfor %}
+
+                                                        </ul>
+                                                        </nav>
+
+
+                                                    <div class="col-xs-12 col-md-12 conditions-modal-cont">
+                                                        <h3>Patient Sleep Information</h3>
+                                                        <div class="butnBox">
+                                                            <div class="dropdown show">
+                    <a href="javascript: void();" class="btn btn-success" style="color: #fff;" role="button" id="selectWeek">
+                        Send Custom Fax Report
+                    </a>
+                  
+                    <div class="dropdown-menu" id="weekData">
+                        <div class="week-select p-3">
+<!--                            <form method="POST" action="/questions/custom_fax_send/">-->
+<!--                                 {% csrf_token %}-->
+                                                                                            <input type="hidden" name="patient_id" value="{{patient}}">
+                                                                                        <h3 class="text-center h5 font-weight-bold">Select Weeks:</h3>
+                                                                                        <div class="downloadFields">
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-12">
+                                                                                                    <div class="dayData">
+                                                                                                        <div class="form-group">
+                                                                                                            <label>From Week:</label>
+                                                                                                            <select class="form-control weekStart" name="start_week">
+                                                                                                                <option>Select Week...</option>
+                                                                                                                <option value="1">1</option>
+                                                                                                                <option value="2">2</option>
+                                                                                                                <option value="3">3</option>
+                                                                                                                <option value="4">4</option>
+                                                                                                                <option value="5">5</option>
+                                                                                                                <option value="6">6</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group">
+                                                                                                            <label>From Day:</label>
+                                                                                                            <input type="number" name="fromDay" class="form-control">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-12">
+                                                                                                     <div class="dayData">
+                                                                                                        <div class="form-group">
+                                                                                                            <label>From Week:</label>
+                                                                                                            <select class="form-control weekStart" id="start_week" name="start_week">
+                                                                                                                <option>Select Week...</option>
+                                                                                                                <option value="1">1</option>
+                                                                                                                <option value="2">2</option>
+                                                                                                                <option value="3">3</option>
+                                                                                                                <option value="4">4</option>
+                                                                                                                <option value="5">5</option>
+                                                                                                                <option value="6">6</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group">
+                                                                                                            <label>From Day:</label>
+                                                                                                            <input type="number" name="fromDay" id="fromDay" class="form-control">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md-12">
+                                                                                                    <div class="dayData">
+                                                                                                        <div class="form-group">
+                                                                                                            <label>To Week:</label>
+                                                                                                            <select class="form-control weekStart" name="end_week" id="end_week">
+                                                                                                                <option>Select Week...</option>
+                                                                                                                <option value="1">1</option>
+                                                                                                                <option value="2">2</option>
+                                                                                                                <option value="3">3</option>
+                                                                                                                <option value="4">4</option>
+                                                                                                                <option value="5">5</option>
+                                                                                                                <option value="6">6</option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="form-group">
+                                                                                                            <label>To Day:</label>
+                                                                                                            <input type="number" name="toDay" id="toDay" class="form-control">
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                                                                                                                <div class="col-md-12 text-center">
+                                                                                                    <button class="fullMode btn bg-blue text-white sendDetails" style="background: royalblue;">
+                                                                                                        Fax Send
+                                                                                                    </button>
+
+
+                                                                                                      <p class="successMessage text-success d-none">Send Successfully</p>
+                                                                                                        <p class="errorMessage text-danger d-none">Something went wrong</p>
+
+                                                                                                                                                                                                    <p class="errorMessage1 text-danger d-none">start week missing</p>
+                                                                                                                                                                                                    <p class="errorMessage2 text-danger d-none">start day missing</p>
+                                                                                                                                                                                                    <p class="errorMessage3 text-danger d-none">end week missing</p>
+                                                                                                                                                                                                    <p class="errorMessage4 text-danger d-none">end day missing</p>
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+<!--                                                                                            </form>-->
+                        </div>
+                    </div>
+                  </div>
+      
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary btn-modal" data-toggle="modal" data-target="#conditionsLegend"> Conditions Legend </button>    
+                                                        </div>
+                                                        <!-- Modal -->
+                                                        <div class="modal " id="conditionsLegend" tabindex="-1" role="dialog" aria-labelledby="conditionsLegendLabel" style="">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h3 class="modal-title" id="conditionsLegendLabel">Conditions Legend  </h3> </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="container">
+                                                                <div class="col-sm-12 col-lg-4">
+                                                                    <ol>
+                                                                        <li style="">
+                                                                            <h3><b>Sleep Onset Insomnia</b> <span> (Problem Falling Asleep)</span></h3>
+                                                                            <ol type="a">
+                                                                                <li>Psychological insomnia</li>
+                                                                                <li>Anxiety</li>
+                                                                                <li>Restless Legs syndrome</li>
+                                                                                <li>Periodic limb movements in sleep</li>
+                                                                                <li>Obstructive Sleep Apnea</li>
+                                                                                <li>Delayed phase sleep</li>
+                                                                                <li>CHF</li>
+                                                                                <li>Bad sleep habits
+                                                                                    <ol type="1">
+                                                                                        <li>Electronics</li>
+                                                                                        <li>Caffeine</li>
+                                                                                        <li>Alcohol</li>
+                                                                                        <li>Smoking</li>
+                                                                                        <li>Abnormal sleep schedule</li>
+                                                                                    </ol>
+                                                                                </li>
+                                                                            </ol>
+                                                                        </li>
+                                                                    </ol>
+                                                                </div>
+                                                                <div class="col-sm-12 col-lg-4">
+                                                                    <ol type="1" start="2">
+                                                                        <li>
+                                                                            <h3><b>Maintenance insomnia</b> <span> (Awake During Night)</span></h3>
+                                                                            <ol type="a">
+                                                                                <li> Physical causes
+                                                                                    <ol type="1">
+                                                                                        <li>Pain</li>
+                                                                                        <li>Respiratory problems like asthma/COPD</li>
+                                                                                        <li>Digestive problems like GERD, IBS, gassiness</li>
+                                                                                        <li>Hormonal issues like hot flushes (menopause)</li>
+                                                                                        <li>Neurologic disorder like Parkinson, dementia</li>
+                                                                                        <li>Dysuria</li>
+                                                                                    </ol>
+                                                                                </li>
+                                                                                <li>Psychological causes
+                                                                                    <ol type="a">
+                                                                                        <li>PTSD</li>
+                                                                                        <li>Bipolar disorder</li>
+                                                                                        <li>Depression</li>
+                                                                                        <li>Schizophrenia</li>
+                                                                                    </ol>
+                                                                                </li>
+                                                                                <li>Bad sleep habits
+                                                                                    <ol type="a">
+                                                                                        <li>Electronics</li>
+                                                                                        <li>Caffeine</li>
+                                                                                        <li>Alcohol</li>
+                                                                                        <li>Smoking</li>
+                                                                                        <li>Abnormal sleep schedule</li>
+                                                                                    </ol>
+                                                                                </li>
+                                                                            </ol>
+                                                                        </li>
+                                                                    </ol>
+                                                                </div>
+                                                                <div class="col-sm-12 col-lg-4">
+                                                                    <ol type="1" start="3">
+                                                                        <li>
+                                                                            <h3><b>Early morning insomnia</b> <span> (Awake Too Early & Delayed Getting Up)</span></h3>
+                                                                            <ol type="a">
+                                                                                <li>Anxiety/Depression</li>
+                                                                                <li>Sleep apnea</li>
+                                                                                <li>Aging</li>
+                                                                                <li>Circadian rhythm disturbances (Advanced Sleep phase disorder)</li>
+                                                                            </ol>
+                                                                        </li>
+                                                                    </ol>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-md-12">
+                                                        <div class="table-responsive table-sleepreport_new">
+                                                                    <table class="table table-striped table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="bg-dark" colspan="4"><span>Falling Asleep</span></th>
+                                                                                <th class="bg-dark" colspan="2"><span>Middle Of Night Sleep</span></th>
+                                                                                <th class="bg-dark" colspan="4"><span>Morning Wake Up Process</span></th>
+                                                                                <th class="bg-dark" colspan="2"><span>Middle Of Day Naps</span></th>
+                                                                                <th class="bg-dark" colspan="3"><span>Results</span></th>
+                                                                                <th class="bg-dark" colspan="4"><span>Triggers (Hour Decimal Time)</span></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td>Day</td>
+                                                                                <td>Time Went To Bed</td>
+                                                                                <td>Lights Out</td>
+                                                                                <td>Minutes To Fall Asleep</td>
+                                                                                <td>How Many Times You Woke Up</td>
+                                                                                <td>Awake During The Night</td>
+                                                                                <td>Time You Woke Up</td>
+                                                                                <td>Minutes Fell Back To Sleep</td>
+                                                                                <td>Desired Wake Up Time</td>
+                                                                                <td>Got Up From Bed</td>
+                                                                                <td>No. Of Naps</td>
+                                                                                <td>Total Time Napping In Minutes</td>
+                                                                                <td>Time In Bed</td>
+                                                                                <td>Time Asleep</td>
+                                                                                <td>Sleep Effcy %</td>
+                                                                                <td>Problem Falling Asleep</td>
+                                                                                <td>Awake During Night</td>
+                                                                                <td>Awake Too Early</td>
+                                                                                <td>Delayed Getting Up</td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        {%  for week in user_sleep_diarys %}
+                                                                            <tr>
+
+                                                                            </tr>
+                                                                           {% endfor %}
+
+
+                                                                        </tbody>
+                                                                    </table>
+                                                        </div>
+
+                                                    </div>
+
+                                    </div>
+
+                    </div>
+<!--                    <div class="dashboard-wrapper">-->
+<!--                        <div id="w0" class="grid-view">-->
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+{% endblock %}
+{% block jqueryScript %}
+{% include "backend/dashboard-js-provider.html" %}
+<script>
+
+jQuery('.sendDetails').click(function(){
+            let pid = document.getElementById("patient_id").value;
+            let sw = document.getElementById("start_week").value;
+            let sd = document.getElementById("fromDay").value;
+            let ew = document.getElementById("end_week").value;
+            let ed = document.getElementById("toDay").value;
+
+
+            if (pid == "" || sw == "" || sd == "" || ew == "" || ed == "")
+            {
+
+                jQuery('.errorMessage5').removeClass('d-none');
+                setTimeout(function(){
+                    jQuery('.errorMessage5').addClass('d-none');
+                },1000)
+
+            }
+            else
+            {
+
+                let sendData = `https://cognisleep.com/questions/custom_fax_send/${pid}/${sw}/${sd}/${ew}/${ed}`
+                fetch(sendData)
+                .then(res => {
+                return res.json();
+                })
+                .then(data => {
+                console.log(data);
+                if(data == "sw"){
+                 jQuery('.errorMessage1').removeClass('d-none');
+                }
+                if(data == "sd"){
+                 jQuery('.errorMessage2').removeClass('d-none');
+                }
+                if(data == "ew"){
+                 jQuery('.errorMessage3').removeClass('d-none');
+                }
+                if(data == "ed"){
+                 jQuery('.errorMessage4').removeClass('d-none');
+                }
+                if (data == "True"){
+                jQuery('.successMessage').removeClass('d-none');}
+                setTimeout(function(){
+                    jQuery('#weekData').hide();
+                },3000)
+                })
+
+                .catch(error => {
+                jQuery('.errorMessage').removeClass('d-none');
+                console.log(error);
+                setTimeout(function(){
+                    jQuery('.close').trigger('click');
+                },3000)
+                });
+
+            }
+
+});
+
+
+
+</script>
+<script>
+
+    jQuery(document).ready(function(){
+    jQuery('.fullMode').click(function(){
+    //jQuery('#weekData').hide();
+})
+
+    setTimeout(function(){
+                     jQuery('.activeWeek a').trigger('click');
+
+                 },200);
+
+         setTimeout(function(){
+            jQuery('.reason-description').each(function() {
+                    var reason = jQuery(this).text();
+                    if(reason != '') {
+                        jQuery(this).parents('tr').prev('tr').find('.reasonRow').show();
+                    } else {
+                            jQuery(this).parents('tr').prev('tr').find('.reasonRow').hide();
+                        }
+             });
+
+                      jQuery('.valueFind').each(function(){
+            var tdText = jQuery(this).text();
+             tdText = parseFloat(tdText);
+                if(tdText >= 20) {
+                    jQuery(this).addClass('text-danger');
+                }
+                 });
+
+                     jQuery('.reasonRow').click(function() {
+            jQuery(this).parents('tr').next('.patientComment').toggleClass('show');
+            });
+         },1000)
+
+
+
+
+
+
+
+    });
+
+    jQuery('.getWeekData').click(function() {
+          setTimeout(function() {
+            jQuery('.valueFind').each(function(){
+                var tdText = jQuery(this).text();
+                 tdText = parseFloat(tdText);
+                    if(tdText >= 20) {
+                        jQuery(this).addClass('text-danger');
+                        }
+                });
+
+                jQuery('.reasonRow').click(function() {
+                jQuery(this).parents('tr').next('.patientComment').toggleClass('show');
+                });
+
+                 jQuery('.reason-description').each(function() {
+                        var reason = jQuery(this).text();
+                        if(reason != '') {
+                            jQuery(this).parents('tr').prev('tr').find('.reasonRow').show();
+                        } else {
+                            jQuery(this).parents('tr').prev('tr').find('.reasonRow').hide();
+                        }
+                 });
+
+          }, 1000)
+    });
+
+    jQuery('a#selectWeek').click(function(){
+        jQuery('#weekData').toggleClass('show');
+    })
+</script>
+{% endblock %}

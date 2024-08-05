@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+    </style>
+
+
+
+    <section class="forward_sec">
+        <div class="container">
+            <div class="row">
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+                <ul class="nav nav-tabs">
+
+                     <li id="view_sleep_diary" class="active" style=""><a class="tablinks" href="/dashboard/patient/view-diary/0/{{patient}}/">Sleep Report</a>
+                    </li>
+                    {% if request.user.package != 3 %}
+                    <li id="progress" class="" style=""><a class="tablinks" href="/dashboard/progress/{{patient}}">Your Progress</a>
+                    </li>
+                    {% endif %}
+                      <li id="dash" class="" style=""><a class="tablinks"  href="/dashboard/accountdetails/{{patient}}/">Account Details</a>
+                    </li>
+
+
+                </ul>
+
+
+                <div id="responsivez" class="viewsleepdiary tabcontent" style="display:block;">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+
+<div class="row">
+
+    <div class="col-xs-12 col-md-12"><nav class="weeks">
+                        <ul>
+
+                            {% for x in weekDays_array %}
+                                {% if x.is_selected == 1  %}
+
+                                <li class="activeWeek" style=" !important;width: calc(100% / );">
+                                    <a   class="getWeekData" href="javascript:void(0)" data-week="{{ x.x }}"  >
+                                        <button  id="weeks_id_1" >
+                                        {{ x.x }} Week
+                                    </button></a>
+                                </li>
+                                {% else %}
+
+                             <li  style="width: calc(100% / );background-color: rgb(32, 11, 148); ">
+                                    <a class="getWeekData" href="javascript:void(0)" data-week="{{ x.x }}">
+                                        <button id="weeks_id_1" >
+                                        {{ x.x }} Week
+                                    </button></a>
+                                </li>
+
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </ul>
+                    </nav>
+
+    </div>
+    <div class="col-xs-12 col-md-12 conditions-modal-cont">
+        <h3>Patient Sleep Information</h3>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-modal" data-toggle="modal" data-target="#conditionsLegend"> Conditions Legend </button>
+                <!-- Modal -->
+                <div class="modal " id="conditionsLegend" tabindex="-1" role="dialog" aria-labelledby="conditionsLegendLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="modal-title" id="conditionsLegendLabel">Conditions Legend  </h3> </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="container">
+                                        <div class="col-sm-12 col-lg-4">
+                                            <ol>
+                                                <li>
+                                                    <h3><b>Sleep Onset Insomnia</b> <span> (Problem Falling Asleep)</span></h3>
+                                                    <ol type="a">
+                                                        <li>Psychological insomnia</li>
+                                                        <li>Anxiety</li>
+                                                        <li>Restless Legs syndrome</li>
+                                                        <li>Periodic limb movements in sleep</li>
+                                                        <li>Obstructive Sleep Apnea</li>
+                                                        <li>Delayed phase sleep</li>
+                                                        <li>CHF</li>
+                                                        <li>Bad sleep habits
+                                                            <ol type="1">
+                                                                <li>Electronics</li>
+                                                                <li>Caffeine</li>
+                                                                <li>Alcohol</li>
+                                                                <li>Smoking</li>
+                                                                <li>Abnormal sleep schedule</li>
+                                                            </ol>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-4">
+                                            <ol type="1" start="2">
+                                                <li>
+                                                    <h3><b>Maintenance insomnia</b> <span> (Awake During Night)</span></h3>
+                                                    <ol type="a">
+                                                        <li> Physical causes
+                                                            <ol type="1">
+                                                                <li>Pain</li>
+                                                                <li>Respiratory problems like asthma/COPD</li>
+                                                                <li>Digestive problems like GERD, IBS, gassiness</li>
+                                                                <li>Hormonal issues like hot flushes (menopause)</li>
+                                                                <li>Neurologic disorder like Parkinson, dementia</li>
+                                                                <li>Dysuria</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>Psychological causes
+                                                            <ol type="a">
+                                                                <li>PTSD</li>
+                                                                <li>Bipolar disorder</li>
+                                                                <li>Depression</li>
+                                                                <li>Schizophrenia</li>
+                                                            </ol>
+                                                        </li>
+                                                        <li>Bad sleep habits
+                                                            <ol type="a">
+                                                                <li>Electronics</li>
+                                                                <li>Caffeine</li>
+                                                                <li>Alcohol</li>
+                                                                <li>Smoking</li>
+                                                                <li>Abnormal sleep schedule</li>
+                                                            </ol>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-4">
+                                            <ol type="1" start="3">
+                                                <li>
+                                                    <h3><b>Early morning insomnia</b> <span> (Awake Too Early & Delayed Getting Up)</span></h3>
+                                                    <ol type="a">
+                                                        <li>Anxiety/Depression</li>
+                                                        <li>Sleep apnea</li>
+                                                        <li>Aging</li>
+                                                        <li>Circadian rhythm disturbances (Advanced Sleep phase disorder)</li>
+                                                    </ol>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <div class="col-xs-12 col-md-12">
+    <div class="table-responsive table-sleepreport_new">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="4"><span>Falling Asleep</span></th>
+                                <th colspan="2"><span>Middle Of Night Sleep</span></th>
+                                <th colspan="4"><span>Morning Wake Up Process</span></th>
+                                <th colspan="2"><span>Middle Of Day Naps</span></th>
+                                <th colspan="3"><span>Results</span></th>
+                                <th colspan="4"><span>Triggers (Hour Decimal Time)</span></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <td>Day</td>
+                                <td>Time Went To Bed</td>
+                                <td>Lights Out</td>
+                                <td>Minutes To Fall Asleep</td>
+                                <td>How Many Times You Woke Up</td>
+                                <td>Awake During The Night</td>
+                                <td>Time You Woke Up</td>
+                                <td>Minutes Fell Back To Sleep</td>
+                                <td>Desired Wake Up Time</td>
+                                <td>Got Up From Bed</td>
+                                <td>No. Of Naps</td>
+                                <td>Total Time Napping In Minutes</td>
+                                <td>Time In Bed</td>
+                                <td>Time Asleep</td>
+                                <td>Sleep Effcy %</td>
+                                <td>Problem Falling Asleep</td>
+                                <td>Awake During Night</td>
+                                <td>Awake Too Early</td>
+                                <td>Delayed Getting Up</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {%  for week in user_sleep_diarys %}
+                            <tr>
+
+                            </tr>
+                           {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+    </div>
+    </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        </div>
+        </div>
+
+    </section>
+
+
+{% endblock %}
+{% block jqueryScript %}
+{% include "dashboard-js-provider.html" %}
+{% endblock %}

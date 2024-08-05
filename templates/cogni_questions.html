@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <style>
+        button#prev {
+            margin-top: 20px !important;
+            margin-left: 15px !important;
+            float: left;
+        }
+
+        button#next {
+            margin-top: 20px !important;
+            margin-left: 5px !important;
+            float: left;
+        }
+
+        #myModal {
+            padding-top: 200px !important;
+        }
+
+        #myModal .modal-content {
+            margin: 0 auto !important;
+        }
+
+        .modal { background-color: rgba(0,0,0,0.4) }
+
+        #myModal .close {
+            position: absolute !important;
+            right: 15px !important;
+            top: 15px !important;
+        }
+
+        #myModal input[type=submit], #myModal input[type=button], #myModal input[type=reset] {
+            background: #ab3822;
+            color: #eecb56;
+            text-transform: uppercase;
+            font-size: 15px;
+            transition: all 200ms linear;
+        }
+
+        #myModal input[type=submit]:hover, #myModal input[type=button]:hover, #myModal input[type=reset]:hover {
+            background: #eecb56;
+            color: #ab3822;
+            transition: all 200ms linear;
+        }
+
+        #myModal .modal-content {
+            padding: 17px 40px
+        }
+
+
+    </style>
+
+    <section class="forward_sec" xmlns="http://www.w3.org/1999/html">
+        <div class="container">
+            <div class="row">
+                {% if alldone != True %}
+                    <div class="progress">
+                        <div class="progress-bar" id="prog-bar" role="progressbar" style="width:{{ progressbar_ref }}%;"
+                             aria-valuenow="25"
+                             aria-valuemin="0" aria-valuemax="100"><span id="progress-bar">{{ progressbar_ref }}%</span>
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                <div class="forward_quest_outer">
+
+                    <div class="container" style="width:100%; margin: 0 auto;" id="questions">
+
+                        {% csrf_token %}
+
+                        {% if alldone == True %}
+
+
+
+                            <form id="ques_form_submit" method="post" action="/questions/cogni_questions">
+                                {% csrf_token %}
+                                <div class="col-md-12" id="question_eleven">
+                                    <h2 class="text-center" style="font-size: 32px!important;">Thank you for taking
+                                        the test</h2>
+                                    <p class="text-center"></p>
+                                    <div class="col-md-12 center-block" style="text-align: center;">
+
+                                        <div class="col-md-12" id="question_thirteen"
+                                             style="display:block;text-align:left;">
+                                            <h5 style="display:block;text-align:center;font-size: 18px;font-weight: bold;">
+                                                Fill out your information below to receive your test results</h5>
+
+                                            {{ form_guest|crispy }}
+
+                                            {% if messages %}
+                                                {% for message in messages %}
+                                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                         <div style="margin-top: 13px;" id="g-recaptcha3"  class="g-recaptcha3" data-sitekey="6Lf37LQUAAAAAIHIJDdoPYLF0pLXZ_zFwqbV2AAn"></div>
+                                            <input type="hidden" name="response_captcha" value="0" class="responseCaptcha3">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="result_condition" id="result_condition"
+                                                           value=""
+                                                           required="">&nbsp; Accept <a href="javascript: void();"
+                                                                                        id="terms">
+                                                    Terms &amp; Conditions</a>
+                                                </label>
+                                            </div>
+                                            <button type="button" id="back_10" name="back_10"
+                                                    class="btn btn-primary"
+                                                    onclick="goBack();"
+                                                    style="background: #1e0a92;color: #ffffff;">Back
+                                            </button>
+                                            <button type="submit" id="getmyResult" name="getmyResult"
+                                                    class="btn btn-primary"
+                                                    style="background: #1e0a92;color: #ffffff;">Get My Result
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="txt_insomnia_points" id="txt_insomnia_points"
+                                       value="{{ txt_insomnia_points }}">
+                                <input type="hidden" name="txt_insomnia_msg" id="txt_insomnia_msg"
+                                       value="{{ txt_insomnia_msg }}">
+                                <input type="hidden" name="class_name" id="class_name"
+                                       value="{{ class_name }}">
+                                <input type="hidden" name="insomnia_value" id="insomnia_value"
+                                       value="{{ insomnia_value }}">
+
+
+                            </form>
+
+                        {% else %}
+
+
+                            <form id="ques_form_submit" method="post" action="/questions/cogni_questions">
+                                {% csrf_token %}
+                                {% for question in questions %}
+                                    <div class="col-md-12" id="question_{{ question.question_slug }}"
+                                         style="display: block;">
+                                        <div class="forward_login_process">
+                                            <h2>{{ question.id }}. {{ question.question|safe }}</h2></div>
+
+                                        <div class="col-md-12 inso">
+                                            {% if answer_radiovalue ==  10 %}
+                                                <input type="radio" value="Not at all" name="ans"
+                                                       checked
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}1">
+                                                <label>Not at all</label>
+                                            {% else %}
+                                                <input type="radio" value="Not at all" name="ans"
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}1">
+                                                <label>Not at all</label>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-12 inso">
+                                            {% if answer_radiovalue == 8 %}
+                                                <input type="radio" value="Just a little" name="ans"
+                                                       checked
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}2">
+                                                <label>Just a little</label>
+                                            {% else %}
+                                                <input type="radio" value="Just a little" name="ans"
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}2">
+                                                <label>Just a little</label>
+                                            {% endif %}
+
+                                        </div>
+                                        <div class="col-md-12 inso">
+                                            {% if answer_radiovalue ==  6 %}
+                                                <input type="radio" value="Somewhat" name="ans" checked
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}3">
+                                                <label>Somewhat</label>
+                                            {% else %}
+                                                <input type="radio" value="Somewhat" name="ans"
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}3">
+                                                <label>Somewhat</label>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-12 inso">
+                                            {% if answer_radiovalue ==  4 %}
+                                                <input type="radio" value="Often" name="ans" checked
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}4">
+                                                <label>Often</label>
+                                            {% else %}
+                                                <input type="radio" value="Often" name="ans"
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}4">
+                                                <label>Often</label>
+                                            {% endif %}
+
+                                        </div>
+                                        <div class="col-md-12 inso">
+                                            {% if answer_radiovalue ==  2 %}
+                                                <input type="radio" value="Very often" name="ans"
+                                                       checked
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}5">
+                                                <label>Very often</label>
+                                            {% else %}
+                                                <input type="radio" value="Very often" name="ans"
+                                                       onclick="radioSubmit();"
+                                                       id="ans{{ question.ans_sr }}5">
+                                                <label>Very often</label>
+                                            {% endif %}
+                                        </div>
+
+
+                                    </div>
+                                    <input type="hidden" id="question" name="question"
+                                           value="{{ question.id }}">
+
+                                {% endfor %}
+
+                                <input type="hidden" id="ans_sr" name="ans_sr" value="{{ ans_sr }}">
+                                <input type="hidden" id="sr" name="sr" value="{{ sr }}">
+                                <input type="hidden" id="offset" name="offset" value="{{ offset }}">
+                                <input type="hidden" id="limit" name="limit" value="{{ limit }}">
+                                <input type="hidden" id="question_code_array" name="question_code_array"
+                                       value="{{ question_code_array }}">
+                                <input type="hidden" id="ans_code_array" name="ans_code_array"
+                                       value="{{ ans_code_array }}">
+                                <input type="hidden" id="answer_radio_value" name="answer_radio_value"
+                                       value="{{ answer_radio_value }}">
+
+                                <input type="hidden" id="progressbar_ref" name="progressbar_ref"
+                                       value="{{ progressbar_ref }}">
+                            <div class="next-prev-btn-container">
+                                {% if offset > 0 %}
+                                  <!--  <button type="submit" class="btn btn-primary m-1" name="prev"
+                                            id="prev"
+                                            style="display: block;float: inline-start;"
+                                            value="prev">Prev
+                                    </button>-->
+                                {% endif %}
+                                {% if isback %}
+                                    <button type="submit" class="btn btn-primary m-1" name="next"
+                                            id="next"
+                                            style="display: block;float: inline-start;"
+                                            value="next">Next
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary m-1"
+                                            style="display: none;float: inline-start;" name="next"
+                                            id="next"
+                                            value="next">Next
+                                    </button>
+                                {% endif %}
+                                    </div>
+
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+    </section>
+
+    <div id="myModal" class="modal" style="display: none;">
+
+        <!-- Modal content -->
+        <div class="modal-content" style="width:600px;">
+            <span class="close"  onclick="closem();">×</span>
+            <p class="text-center">Are you sure you want to go back, this will cause resubmission of your information
+                and your progress might be lost</p>
+            <center>
+                <input type="button" class="btn btn-lg" onclick="history.back()" value="Leave Page">
+                <input type="button" class="closebtn btn btn-lg"  value="Close"  onclick="closem();" style="width: 135px;">
+            </center>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block jqueryScript %}
+    <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback2&render=explicit' async defer></script>
+
+    <script>
+    var recaptchaValid2 = 0;
+    $("#g-recaptcha-response-3").attr("required",true);
+
+    var onloadCallback2 = function() {
+    grecaptcha.render('g-recaptcha3', {
+      'sitekey' : $("#g-recaptcha3").data("sitekey"),
+      'callback' : correctCaptcha3
+    });
+  };
+
+    var correctCaptcha3 = function(response) {
+        //alert($('#g-recaptcha').length);
+        var response2 = grecaptcha.getResponse();
+        if(response.length == 0){
+            recaptchaValid2 = 0;
+        }else{
+            recaptchaValid2 = 1;
+        }
+        setTimeout(function () {
+            recaptchaValid2 = 0;
+            $(".responseCaptcha3").val(recaptchaValid2);
+            grecaptcha.reset();
+        },15000);
+
+        $(".responseCaptcha3").val(recaptchaValid2);
+    };
+
+
+document.getElementById('id_phone').addEventListener('input', function (e) {
+            var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
+
+
+        $(window).on('popstate', function () {
+            $("#myModal").show();
+        });
+
+
+        function abcrun() {
+            window.history.pushState('forward', null, './cogni_questions');
+        }
+
+        abcrun();
+
+
+        $('html, body').animate({
+            scrollTop: parseInt($(".login_banner").offset().top)
+        }, 0);
+
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function radioSubmit() {
+            $("#next").trigger("click");
+        }
+
+        function closem(){
+            $("#myModal").hide();
+        }
+
+
+
+
+    </script>
+
+
+{% endblock %}

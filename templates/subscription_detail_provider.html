@@ -1,0 +1,322 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+
+{% block content %}
+<style xmlns="http://www.w3.org/1999/html">
+.form-row.align-items-center input.btn.btn-primary.mb-2 {
+    margin: 22px 0 0;
+}
+
+.modal-content {
+    width: 37%;
+    margin: 0 auto;
+}
+.inlineimage {
+    text-align: center;
+}
+.inlineimage img.img-responsive.images {
+    width: 20%;
+}
+.modal-header {
+    background: #6bdb2d;
+    color: #fff;
+    text-align: CENTER;
+}
+.modal-header H2 {
+    color: #fff;
+    text-align: CENTER;
+    DISPLAY: BLOCK;
+    WIDTH: 90%;
+    background: transparent !important;
+    margin: 0 auto !important;
+}
+.modal-header .close {
+    top: 23px;
+    right: 24px;
+    float: right;
+    text-align: right;
+    display: block;
+    color: #fff;
+    opacity: 1;
+    position: absolute;
+}
+textarea {
+    overflow: auto;
+    resize: vertical;
+    width: 72%;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    float: right;
+}
+.modal-body {
+    padding: 30px 50px;
+}
+form label {
+    margin-top: 10px;
+    color: #000;
+    font-weight: bold;
+}
+.form-group input.form-control {
+    float: right;
+}
+.form-group {
+    margin: 0 0 10px;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+div#myModal1 input.btn.btn-primary {
+    margin: 0 auto;
+    width: 185px;
+    display: block;
+}
+.modal-body span.close.btn.btn-primary {
+    background: #6bdb2d !important;
+    opacity: 1;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 11px 31px;
+}
+.modal-body span.close.btn.btn-primary:hover {
+    background:#5eb82d !important;
+    color:#fff;
+}
+div#myModal1 input.btn.btn-primary{
+    border-color: #6bdb2d;
+    background: #6bdb2d !important;
+    font-size: 20px;;
+}
+div#myModal1 .btn-primary:focus {
+    box-shadow:none;
+}
+div#myModal1 input.btn.btn-primary:hover{
+    background: #5eb82d !important;
+}
+input.form-control {
+    border: 1px solid #827d7d;
+}
+
+.loginOption {
+    border: none !important;
+    border-radius: 20px !important;
+    padding: 15px 5px !important;
+    z-index: 99999 !important;
+}
+</style>
+    <style>
+    .input-group-addon {
+    padding: 15px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #827d7d;
+    border-radius: 0 4px 4px 0;
+    position: inherit;
+    right: 0;
+}
+.form-group input.form-control {
+    float: right;
+    height: auto !important;
+    padding: 10px;
+}
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #827d7d;
+    outline: 0;
+    box-shadow: none;
+}
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+        .packageFrame {
+            border: 1px solid #eadcdc;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px 1px rgb(64 60 67 / 16%);
+            border-radius: 0 50px;
+        }
+        .packageFrame h2 {
+            color: #fff;
+            background:#7ace4b;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px !important;
+            margin:0;
+        }
+        .packageFrame p {
+            font-size: 20px;
+            border-bottom: 1px solid #ddd;
+            margin: 0;
+            padding: 10px 20px;
+        }
+        .packageFrame p:hover {
+         background:#f9f9f9;
+         transition:all 0.5s ease 0s;
+        }
+        .packageFrame p strong {
+            margin: 0 15px 0 0;
+            text-align:left;
+            FONT-WEIGHT: 600;
+        }
+        .packageFrame p span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #06971F;
+            text-align: right;
+            float: right;
+        }
+        .packageFrame p:nth-of-type(2n+1) {
+          background-color: #f9f9f9;
+        }
+        .packageFrame a {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background: #230c9a;
+            overflow: hidden;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            width: 220px;
+            margin: 20px auto;
+            border: 2px solid #230c9a;
+            border-radius: 25px 0;
+        }
+        .packageFrame a:hover {
+            background: #fff;
+            color: #230c9a;
+            transition:all 0.5s ease 0s;
+        }
+        .packageFrame.yellow h2 {
+            background: #dada06;
+        }
+        .packageFrame.yellow p.dicPrice {
+            background: #d0d00d !important;
+        }
+        .packageFrame.red h2 {
+            background: #d71a1a;
+        }
+        .packageFrame.red p.dicPrice {
+            background: #c51c1c !important;
+        }
+        p.pkgDetails strong {
+            width: 100% !important;
+            text-align: center !important;
+            display: block;
+        }
+        p.pkgDetails span {
+            font-weight: normal;
+            color: #000;
+            text-align: justify;
+            margin: 12px 0;
+            FONT-SIZE: 17PX;
+            LINE-HEIGHT: 25PX;
+            width: 100%;
+            text-align: center;
+        }
+
+    </style>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .days-menu ul li a button.green {
+            background: #00a115;
+        }
+
+        .days-menu ul li a button.red {
+            background: #eb0606;
+        }
+    </style>
+
+
+
+
+     <section class="forward_sec">
+        <div class="container">
+
+                        <div class="row justify-content-between align-items-center my-4">
+                            <div class="col-md-6">
+                                <div class="title-box">
+                                     <h2 class="mb-0 text-dark p-0">Your Subscription:</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-md-flex justify-content-end">
+                                {% if status == "Active" %}
+                                <div class="status">
+                                    <h5><i class="fa fa-check-circle text-success pr-2" aria-hidden="true"></i>Active</h5>
+                                </div>
+<!--                                pending-->
+                                {% else %}
+                                <div class="pending-status">
+                                    <h5><i class="fa fa-exclamation-circle text-warning pr-2" aria-hidden="true"></i>Pending</h5>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-center py-4">
+                             <div class="col-md-6">
+                                  <div class="package-box">
+                                                      <div class="package-header">
+                                                          <div class="package-name">
+                                                               <h2 class="mb-0">{{ product.product_name }}</h2>
+                                                          </div>
+                                                          <div class="price-box">
+                                                              <h2 class="mb-0"><sup>$</sup>{{ product.price }} / Mo</h2>
+                                                          </div>
+                                                      </div>
+                                                      <div class="package-body">
+                                                          <div class="package-content">
+                              <p class="pkgDetails"> With the CogniSleep Provider Package, healthcare providers can track their patient's progress over the 6-week CogniSleep program, including:</p>
+                              <ul>
+                                   <li>Weekly sleep reports with highlighted problem areas-<span>Yes</span></li>
+                                  <li>Ability to modify patient sleep schedule recommendations -<span>Yes</span></li>
+                                  <li>Access to patient comments/concerns about their sleep-<span>Yes</span></li>
+
+
+                              </ul>
+                          </div>
+                                                      </div>
+                                                      <div class="package-footer">
+                                                         <!-- {% if status == "Active" %}
+                                                          <a href="/payments/cancel_request" class="btn btn-primary cancel-subscription border-danger text-danger button">Request Cancel Subscription</a>
+                                                          {% else %}
+                                                          <a href="/payments/cancel_pending_request" class="btn btn-primary cancel-subscription border-danger text-danger button">Cancel Pending Request</a>
+                                                            {% endif %}-->
+                                                          <!--                                                          <div class="pendingBox">-->
+<!--                                                              <h6 class="mb-0 text-warning">Your cancel request is pending.</h6>-->
+<!--                                                          </div>-->
+                                                          <!--
+  <button type="submit"  class="btn btn-primary cancel-subscription border-danger text-danger" id="submitBtn2">Cancel Subscription</button>-->
+                                                      </div>
+                                                  </div>
+                                 <div class="mt-4 success-message text-center">
+                                     <!--<p class="text-success text-capitalize">Your Subscription Cancel request has been sent successfully.</p>-->
+                                 </div>
+                                 {% if status == "" %}
+                                 <div class="noSubscription text-center">
+                                     <h5>You don't have any subscription.</h5>
+                                 </div>
+                                 {% endif %}
+                                    </div>
+                            </div>
+
+
+          </div>
+
+
+    </section>
+
+{% endblock %}

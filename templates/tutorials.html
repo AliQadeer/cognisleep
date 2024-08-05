@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+    </style>
+
+
+
+    <section class="forward_sec">
+        <div class="container">
+            <div class="row">
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+                <ul class="nav nav-tabs">
+                     <li id="dash" class="" style=""><a class="tablinks" data-toggle="tab" href="#home"
+                                                       aria-expanded="true"
+                                                       onclick="{% if patient > 0 %}goDashboard({{patient}}); {% else %}goDashboard(0);{% endif %}">Dashboard</a>
+                    </li>
+                    <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu1"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">Videos</a>
+                    </li>
+                     {% if patient == 0 %}
+                    <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                              href="javascript:void(0);"
+                                                              aria-expanded="false"
+                                                              onclick="{% if patient > 0 %} goDiary({{patient}}); {% else %}goDiary(0);{% endif %}">Sleep Diary</a>
+                    </li>
+                      {% endif %}
+                     <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                              href="javascript:void(0);"
+                                                              aria-expanded="false"
+                                                              onclick="{% if patient > 0 %} viewDiary({{patient}}); {% else %}viewDiary(0);{% endif %}">View Sleep Diary</a>
+                    </li>
+                    <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                                 aria-expanded="false"
+                                                                 onclick="{% if patient > 0 %} goDashboardsub('progress',{{patient}}); {% else %}goDashboardsub('progress',0);{% endif %}">Your Progress</a>
+                    </li>
+                      {% if patient == 0 %}
+{#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+{#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+{#                        Us</a></li>#}
+                    <li id="tuts" class="active" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                       aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                    </li>
+                      {% endif %}
+                </ul>
+
+
+
+
+            <div id="responsivez4" class="tutorials tabcontent" style="display:block;">
+                <div class="tab-pane active" id="6a">
+                    <h1 class="text-center">Coming Soon</h1>
+                    <center>
+                        <video src="{% static "assets/images/welcome_Video_2019_10_29.mp4" %}"
+                               class="int_vid_three" id="video_one" controls="" controlslist="nodownload">
+                        </video>
+                    </center>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
+
+
+{% endblock %}

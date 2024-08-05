@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+    <style>
+        span.referal-price {
+            font-size: 19px;
+            line-height: 0.3;
+            padding: 17px;
+        }
+    </style>
+    <div class="table_heading">
+        <h2>CHOOSE YOUR COGNISLEEP PROGRAM</h2>
+    </div>
+    <section class="tables_sec">
+        <div class="container">
+            <div class="row">
+                <div class="tables_pricing">
+                <div class="col-md-6 col-lg-4">
+                         {% if pid == 12 %}
+                        <div class="plan highlight hilight" id="selplan-3">
+                          {% else %}
+                             <div class="plan first" id="selplan-3">
+                            {% endif %}
+                            <div class="plan-header">
+                                <h1>COGNISLEEP <span class="freeplan">FREE</span></h1>
+                            </div>
+                            <!-- <div class="plan-price">
+                                <span class="price">With Cognisleep Free, you'll have access to important tools needed to combat Insomnia.</span>
+                            </div> -->
+                            <div class="plan-features">
+                                <ul>
+                                    <li>With Cognisleep Free, you'll have access to important tools needed to combat Insomnia.</li>
+                                    <li>CogniSleep Diary</li>
+                                    <li>Sleep Efficiency Calculator</li>
+                                    <li>Bedtime Calculator</li>
+                                </ul>
+                            </div>
+                            <div class="main_price">
+                                <span class="prices"><span class="price-unit">$</span>0</span>
+                            </div>
+                            <div class="plan-footer">
+                                <a href="javascript:void(0);" class="btn-modern" onclick="sel_price(3);">Select</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                         {% if pid == 6 %}
+                        <div class="plan  highlight hilight" id="selplan-1">
+                            {% else %}
+                             <div class="plan first" id="selplan-1">
+                                 {% endif %}
+                            <div class="plan-header">
+                                <h1>REFERRAL SUBSCRIPTION FROM PHYSICIAN/PROVIDER</h1>
+                            </div>
+                            <div class="plan-price">
+                                <span class="price">6 weeks</span>
+                            </div>
+                            <div class="plan-features">
+                                <p>This package is for patients who have been signed up for Cognisleep by their own
+                                    Primary Care and/or Sleep Specialist. Please click on this package if your Primary
+                                    Care Doctor has instructed you to use this program to help you overcome your
+                                    Insomnia.</p>
+                                <ul>
+                                    <li>Cognisleep Diary</li>
+                                    <li>Primary Care Weekly Visits</li>
+                                    <li>CogniSleep Sleep Efficiency Calculator</li>
+                                    <li>Bedtime Calculator</li>
+                                    <li>Guided Meditations</li>
+                                </ul>
+                            </div>
+                            {#                            <div class="main_price" style="padding: 17px;">#}
+                            {#                                <span class="prices"><span style="font-size: 14px;top: 0px;" class="price-unit"><strong>Note :</strong> YOU WILL NEED A REFERRAL CODE FROM YOUR PROVIDER TO ACCESS THIS SECTION OF COGNISLEEP</span></span>#}
+                            {#                            </div>#}
+
+                            <div class="main_price" style="padding: 20px;">
+                                <span class="referal-price"><span><strong>Note :</strong> YOU WILL NEED A REFERRAL CODE FROM YOUR PROVIDER TO ACCESS THIS SECTION OF COGNISLEEP</span></span>
+                            </div>
+                            <div class="plan-footer">
+                                <a href="javascript:void(0);" class="btn-modern" onclick="sel_price(1);">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6 col-lg-4">
+                        {% if pid == 8 %}
+                        <div class="plan highlight hilight" id="selplan-2">
+                        {% else %}
+                             <div class="plan" id="selplan-2">
+                         {% endif %}
+                            <div class="plan-header">
+                                <h1>COGNISLEEP LEARNERS</h1>
+                            </div>
+                            <div class="plan-price">
+                                <span class="price">6 Weeks</span>
+                            </div>
+                            <div class="plan-features">
+                                <p>If you are ready to overcome insomnia, this is the program for you.</p>
+                                <ul>
+                                    <li>Video sessions 1-6</li>
+                                    <li>CogniSleep Diary</li>
+                                    <li>6 Week Support</li>
+                                </ul>
+                            </div>
+                            <div class="main_price">
+                                <span class="prices"><span class="price-unit">$</span>139</span>
+                            </div>
+                            <div class="plan-footer">
+                                <a href="javascript:void(0);" class="btn-modern" onclick="sel_price(2);">Select</a>
+                            </div>
+                        </div> -->
+                    </div>
+
+
+                 <!--     <div class="col-md-6 col-lg-3">
+                              {% if pid == 15 %}
+                        <div class="plan highlight hilight" id="selplan-4">
+                          {% else %}
+                             <div class="plan" id="selplan-4">
+                            {% endif %}
+                            <div class="plan-header">
+                                <h1>COGNISLEEP PLUS</h1>
+                            </div>
+                            <div class="plan-price">
+                                <span class="price">15 Weeks</span>
+                            </div>
+                            <div class="plan-features">
+                                <p>This program is intended to correct the worst of the worst sleeping behaviors. This program is intended to correct the worst of the worst sleeping behaviors. We provide you with a sleep coach to help you in your fight against insomnia</p>
+                                <ul>
+                                    <li>Video sessions 1-6</li>
+                                    <li>CogniSleep Diary</li>
+                                    <li>Relaxation Subscription</li>
+                                    <li>CogniSleep Coach</li>
+                                    <li>CogniSleep E-Book</li>
+                                    <li>15 Week Support</li>
+                                </ul>
+                            </div>
+                            <div class="main_price">
+                                <span class="prices"><span class="price-unit">$</span>199</span>
+                            </div>
+                            <div class="plan-footer">
+                                <a href="javascript:void(0);" class="btn-modern" onclick="sel_price(4);">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+        </div>
+        <div class="row w-100">
+            <div class="col-md-12 py-4 text-center">
+                <button class="btn btn-primary  btn-lg d-inline-block" id="btncont" onclick="conti();" >Continue</button>
+                <input type="hidden" id="sel_price" name="sel_price" value="3"/>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+
+{% block jqueryScript %}
+
+    <script>
+
+        function sel_price(id) {
+            $("#sel_price").val(id);
+            $("#btncont").show();
+            $(".plan").removeClass("hilight");
+            $(".plan").removeClass("first");
+            $("#selplan-"+id).addClass("hilight");
+            $("#selplan-"+id).addClass("first");
+        }
+
+        function conti() {
+            if ($("#sel_price").val() == "") {
+                alert("Please select price");
+            } else {
+                window.location.href = "/acknowledge_page/" + $("#sel_price").val();
+            }
+        }
+
+
+    </script>
+
+
+{% endblock %}

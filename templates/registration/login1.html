@@ -1,0 +1,90 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" >
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <title>
+        {{ title }}   </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "assets/bootstrap/dist/css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="{% static "assets/css/style.css" %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="{% static "assets/js/functions.js" %}"></script>
+
+<style>
+    @media(max-width: 799px) {
+        span#toggle_pwd {
+            bottom: 43%;
+            transform: translateY(-43%) !important;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container px-md-5">
+    <div class="row">
+        <div class="col-md-12 py-5">
+
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+
+                    <!-- form card login -->
+                    <div class="card px-md-5">
+                        <div class="card-header">
+                            <h3 class="mb-0">Login</h3>
+                        </div>
+                        
+                        <div class="card-body clearfix ">
+
+
+                            <form accept="" method="POST">
+                                {% csrf_token %}
+
+
+                                {{ form|crispy }}
+
+
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="create_account_button">
+                                    <button type="submit" class="login_buttonz">Log in</button>
+
+                                </div>
+
+                            </form>
+                        </div>
+                        <!--/card-block-->
+                    </div>
+                    <!-- /form card login -->
+
+                </div>
+
+
+            </div>
+            <!--/row-->
+
+        </div>
+        <!--/col-->
+    </div>
+    <!--/row-->
+</div>
+
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,230 @@
+{% load  static %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" >
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <title>
+        {{ title }} </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{%  static "assets/bootstrap/dist/css/bootstrap.min.css" %}"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="{% static "assets/css/style.css" %}"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-lg-2 col-sm-12">
+					<div class="logo"><a href="{{ base_url }}" title="Cogni Sleep" rel="home"><img src="{% static "assets/images/logo-1.png" %}" class="" alt=""></a></div>
+				</div>
+				<div class="col-md-12 col-lg-10 col-sm-12">
+
+                <div class="mnu">
+        <span class="hamburger hamburger--collapse">
+          <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+        </span>
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+                    <div class="collapse navbar-collapse respon navbar-main" id="navbarSupportedContent">
+                        <div class="fstrip">
+                             <div class="col-sm-12 col-md-5 dvr1">
+                                <div class="top_header_cont">
+								 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <ul>
+                                    <li class="" style="padding: 0;"><a href="#" style="font-size: 12px;">Like Us On Facebook<i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                                    <li class="" style="padding: 0;"><a href="#" style="font-size: 12px;">HOW BAD IS YOUR<br>INSOMNIA ?</a></li>
+
+                                                                    </ul>
+
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-sm-12 col-md-7 dvr">
+                                <div class="cred nopad">
+                                    <ul>
+                                      <li class="li_login test-now" style="padding: 0;"><a href="{{ base_url }}cogni_questions" style="">take test now</a></li>
+                                      <li class="li_login grey_button" style="padding: 0;"><a href="{{ base_url }}provider_login" style="font-size: 12px;">Provider <br>Login / Register</a></li>
+                                      <li class="li_login last-button" style="padding: 0;"><a href="{{ base_url }}patient_login" style="font-size: 12px;"> Patient <br>Login / Register</a></li>
+
+                                                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="navi">
+                            <div class="col-sm-12 col-md-12 nopad">
+                                <div class="menu-header-menu-container"><ul class="nav navbar-nav">
+<li class="nav-item active"><a href="#">For CONSUMERS</a></li>
+<li class="nav-item"><a href="#">For Business</a></li>
+<li class="nav-item"><a href="#">Providers/Physicians</a></li>
+<li class="nav-item"><a href="#">Proof it Works</a></li>
+<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Plans &amp; Pricing</a>
+<ul class="sub-menu dropdown-menu" aria-labelledby="navbarDropdown">
+<li class="">
+<a href="#">CogniSleep PLUS</a>
+</li>
+</ul>
+</li>
+<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+<ul class="sub-menu dropdown-menu" aria-labelledby="navbarDropdown">
+	<li class=""><a href="#">FAQs</a></li>
+	<li class=""><a href="#">Blog</a></li>
+</ul>
+</li>
+</ul></div>                            </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+			</nav>
+        </div>
+		</div>
+
+			</div>
+		</div>
+	</header>
+	<section class="login_banner">
+            <div class="row">
+				<div class="empty_banner">
+				</div>
+			</div>
+	</section>
+	<section class="provider_login_sec">
+        <div class="container">
+			<div class="row">
+				<div class="provider_login_form">
+					<h1 class="hilight_text">PROVIDER LOGIN</h1>
+					<h2>PROVIDER LOGIN</h2>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-6">
+					<div class="provider_registeration">
+						<h4>PROVIDER REGISTRATION</h4>
+						<div class="create_account_button">
+							<a href="{{ base_url }}provider_registration">Create Account</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-6">
+					<div class="provider_registeration_form">
+						<div class="provider_registeration">
+							<h4>LOGIN</h4>
+							<h5>Registered Customer? Please log in</h5>
+							<form>
+						<label>Email Address</label>
+						<input type="text"/>
+						<label>Password</label>
+						<input type="password"/>
+						<div class="create_account_button">
+							<a class="login_buttonz" href="#">Login</a>
+							<a class="Forgot-Password">Forgot Your Password?</a>
+						</div>
+					</form>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<footer id="site-footer" class="site-footer">
+		<div class="site-footer-top ">
+        <div class="container">
+            <div class="row">
+	            <div class="col-sm-12 col-md-6 col-lg-3">
+			        <section id="text-2" class=""><h3 class="title">About MedicalPress</h3>
+						<div class=""><p>Lorem ipsum dolor sit amet, conse ctetuer adipiscing elit, sed diamno nummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+							<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+						</div>
+					</section>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-3">
+					<section id="recent-posts-2" class="">
+					<h3 class="title">Recent Posts</h3>
+						<ul>
+								<li><a href="#">We make you smile each time without any pain</a><span class="post-date">May 7, 2018</span></li>
+								<li><a href="#">Dental Implants are easier now</a><span class="post-date">May 7, 2018</span></li>
+								<li><a href="#">Image Post Format</a><span class="post-date">May 20, 2014</span></li>
+								<li><a href="#">Quote Post Format</a><span class="post-date">May 18, 2014</span></li>
+						</ul>
+					</section>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-3">
+					<section id="categories-4" class="">
+						<h3 class="title">Categories</h3>
+							<ul>
+								<li class="cat-item cat-item-2"><a href="">Environment</a> (2)</li>
+								<li class="cat-item cat-item-3"><a href="s/">Health Basics</a> (2)</li>
+								<li class="cat-item cat-item-4"><a href="">Lifestyle</a> (3)</li>
+								<li class="cat-item cat-item-5"><a href="">Motivation</a> (2)</li>
+							</ul>
+					</section>
+				</div>
+				<div class="col-sm-12 col-md-6 col-lg-3">
+					<section id="" class="">
+						<h3 class="title">Newsletter Sign Up</h3>
+							<div class=""><p>Stay updated with latest news from Medical Press.</p></div>
+								<div class="form_footer">
+									<form>
+										<label class="">Name:</label>
+										<input type="text" class="" title="Name"><br>
+										<label class="">Email:</label>
+										<input type="text" class=" title="Email"><br>
+										<input type="hidden" name="wp_capture_action" value="1">
+										<input name="Submit" type="submit" value="Submit" class="submit_btn">
+									</form>
+								</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="site-footer-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-7 site-footer-bottom-left-col">
+                <nav id="footer-navigation" class="footer-navigation">
+		            <ul id="menu-footer-menu" class="footer-menu clearfix"><li id="menu-item-489" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-11 current_page_item menu-item-489"><a href="http://medicalpress-reborn.inspirydemos.com/" aria-current="page">Home</a></li>
+<li><a href="">Services</a></li>
+<li><a href="">Doctors</a></li>
+<li><a href="">Gallery</a></li>
+<li><a href="">FAQs</a></li>
+<li><a href="">News</a></li>
+<li><a href="">Contact</a></li>
+</ul>                </nav>
+
+	                            <div class="site-info">
+                    <p>© Copyright 2018. All Rights Reserved</p>
+                </div><!-- .site-info -->
+            </div>
+            <div class="col-sm-12 col-md-5 site-footer-bottom-right-col">
+                                    <div class="footer-social-nav-wrapper">
+                                                    <h4 class="footer-social-nav-title">Social</h4>
+                                                <ul class="list-unstyled clearfix footer-social-nav">
+												<li><a class="twitter" target="_blank" href=""><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+												<li><a class="facebook" target="_blank" href=""><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+												<li><a class="linkedin" target="_blank" href="#linkedin"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+												</ul>
+												</div>
+                            </div>
+        </div>
+    </div>
+</div>
+</footer>
+</body>
+</html>
+
+
+

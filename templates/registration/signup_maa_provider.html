@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+
+.backBtn:hover {
+    background-color: #79ce4a;
+}
+@media(min-width: 1024px) {
+.provider_registeration span#toggle_pwd {
+     bottom: 10%;
+    transform: translateY(-38%);
+}
+}
+</style>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet" type="text/css" />
+    <section class="provider_login_sec">
+        <div class="container">
+
+           <div class="row justify-content-center py-4">
+
+
+
+                <div class="col-md-6">
+					<div class="provider_registeration_form">
+						<div class="provider_registeration" >
+             <div class="titleBoxArea text-center">
+               <button onclick="history.back();" class="backBtn left-0"><i class="fa fa-arrow-left"></i></button>
+							<h4 class="defaultHead">Create your <span class="d-md-inline d-block">MA account</span></h4>
+             </div>
+							<form method="post" method="/accounts/signup" >
+                                {% csrf_token %}
+
+
+
+                                <div id="div_id_email" class="form-group"> <label for="id_email" class=" requiredField">
+                                    Email<span class="asteriskField">*</span> </label> <div> <input type="email" name="email" class="emailinput form-control" required="" id="id_email" value="{{email}}" readonly> </div>
+                                <span  id="email_message" style="font-weight: bold; color: red"></span>
+                                    <a class="emaillogin d-none" href="/accounts/provider_login/" >Pleaes login</a>
+                                </div>
+
+                                <div id="div_id_fullname" class="form-group">
+  <label for="id_fullname" class="requiredField">Full name<span class="asteriskField">*</span></label>
+  <div class="row">
+    <div class="col">
+      <input type="text" name="firstname" class="textinput textInput form-control" required="" id="firstname" placeholder="First name">
+    </div>
+    <div class="col">
+      <input type="text" name="lastname" class="textinput textInput form-control" required="" id="lastname" placeholder="Last name">
+    </div>
+  </div>
+</div>
+                                <div id="div_id_providertype" class="form-group"> <label for="id_providertype" class=" requiredField">
+                                    Provider type<span class="asteriskField">*</span> </label>
+
+                               <div>
+                                  <select name="providertype" class="textinput textInput form-control"  id="providertype">
+                                    <option selected value="MA">MA</option>
+
+                                  </select>
+                                   </div>
+                                  <br>
+                                   <input type="hidden" id="flag" name="flag" value="">
+                                  <div id="extraInput" style="display:none;">
+                                    <input  value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}' class="textinput textInput form-control"  type="text" placeholder="Supervising Physician Referral Number"
+                                               id="doctor_ref_number" name="doctor_ref_number"
+                                        onblur="verify_refby(this.value,'office_name');">
+                                    <br>
+                                    <input  value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}' class="textinput textInput form-control" type="text"  placeholder="Supervising Physician Name" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                                               id="primary_care_doctor_name" name="primary_care_doctor_name">
+                                  </div>
+                                </div>
+
+
+
+
+                                <div id="div_id_contact" class="form-group"> <label for="id_contact" class=" requiredField">
+                                    Contact number<span class="asteriskField">*</span> </label> <div> <input type="text" name="contact" class="textinput textInput form-control" required="" id="contact"> </div> </div>
+                                <div id="div_id_password" class="form-group"> <label for="id_password" class=" requiredField">
+                                    Password<span class="asteriskField">*</span> </label>
+                                    <div class="position-relative passwordBox"> <input type="password" name="password" class="textinput textInput form-control" required="" id="id_password">
+                                    <span id="toggle_pwd" class="fa fa-fw fa-eye field_icon"></span>
+                                    </div> </div>
+
+                                     <div class="form-group">
+                                         <input type="hidden" name="response_captcha" value="0" class="responseCaptcha">
+                                <div style="margin-top: 13px;" id="g-recaptcha2" class="g-recaptcha2"
+                                     data-sitekey="6Lf37LQUAAAAAIHIJDdoPYLF0pLXZ_zFwqbV2AAn"></div>
+                                </div>
+
+                                {% if error2 is not None %}
+                                <br />
+                                <b style="color: red;">{{error2}}</b>
+                                {% endif %}
+                                    <div class="create_account_button">
+                                    <button type="submit" class="login_buttonz" style="width: 100%;">Create Account</button>
+
+                                </div>
+                            </form>
+					</div>
+					</div>
+				</div>
+            </div>
+        </div>
+         </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback2&render=explicit' async defer></script>
+<script>
+    var recaptchaValid2 = 0;
+    $("#g-recaptcha-response-1").attr("required", true);
+
+    var onloadCallback2 = function () {
+        grecaptcha.render('g-recaptcha2', {
+            'sitekey': $("#g-recaptcha2").data("sitekey"),
+            'callback': correctCaptcha2
+        });
+    };
+
+    var correctCaptcha2 = function (response) {
+        //alert($('#g-recaptcha').length);
+        var response2 = grecaptcha.getResponse();
+        if (response.length == 0) {
+            recaptchaValid2 = 0;
+        } else {
+            recaptchaValid2 = 1;
+        }
+        setTimeout(function () {
+            recaptchaValid2 = 0;
+            $(".responseCaptcha").val(recaptchaValid2);
+            grecaptcha.reset();
+        }, 15000);
+
+        $(".responseCaptcha").val(recaptchaValid2);
+    };
+
+</script>
+    <script type="text/javascript">
+     $('#email_message').hide();
+        $(function () {
+            $("#toggle_pwd").click(function () {
+                $(this).toggleClass("fa-eye fa-eye-slash");
+               var type = $(this).hasClass("fa-eye-slash") ? "text" : "password";
+                $("#id_password").attr("type", type);
+            });
+        });
+        document.getElementById('contact').addEventListener('input', function (e) {
+    var x = e.target.value
+      .replace(/\D/g, '')
+      .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+    e.target.value = !x[2]
+      ? x[1]
+      : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '')
+  })
+   $(document).ready(function() {
+    $('#id_email').blur(function() {
+      var useremail = $(this).val();
+      var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if(!regex.test(useremail)) {
+          $('#id_email').focus();
+          //$('#email_message_f').attr('hidden', false);
+          $('#email_message').text("Invalid Email Format");
+          $('#email_message').show();
+          $("#id_email").css('border', '1px solid red');
+          console.log("False");
+
+      }
+      else{
+      //$("#id_email").css('border', '1px solid #dedede');
+      //$('#email_message').hide();
+      $.ajax({
+        url: '/accounts/validate_email/',
+        data: {
+          'id_email': useremail
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            //alert("This email address already in use");
+
+            $('#id_email').focus();
+            //$('#email_message').attr('hidden', false);
+            $('#email_message').text("This email is already in use.");
+            $('#email_message').show();
+             $('.emaillogin').removeClass('d-none');
+            $("#id_email").css('border', '1px solid red');
+          }
+          else {
+            $("#id_email").css('border', '1px solid #dedede');
+            $('#email_message').hide();
+             $('.emaillogin').addClass('d-none');
+          }
+        }
+      });
+      }
+    });
+
+  });
+
+    </script>
+
+
+<script>
+
+  const select = document.getElementById("providertype");
+  const input = document.getElementById("extraInput");
+  select.addEventListener("change", function() {
+    if (this.value === "Associated PA, APRN") {
+      input.style.display = "block";
+      document.getElementById("doctor_ref_number").required = true;
+      //document.getElementById("primary_care_doctor_name").required = true;
+    } else {
+      input.style.display = "none";
+      document.getElementById("doctor_ref_number").required = false;
+      document.getElementById("primary_care_doctor_name").required = false;
+    }
+  });
+</script>
+
+<script type="text/javascript">
+        const endpoint = '/api/refby/';
+
+        function verify_refby(id, fieldid) {
+                        var cname =  "prp";
+                        var cvalue =  $("#doctor_ref_number").val();
+                        //alert(cvalue);
+            $.ajax({
+                method: 'POST',
+                data: {'ref_name': $("#doctor_ref_number").val(), fieldid: fieldid},
+                url: endpoint,
+                success: function (response_data) {
+                    //alert(response_data.message);
+                    var response_data = response_data;
+                    if(response_data.success){
+                        $("#primary_care_office_name").val(response_data.primary_care_office_name);
+                        $("#primary_care_doctor_name").val(response_data.primary_care_doctor_name);
+                        $("#error_office_name").html(response_data.message);
+                        $("#error_office_name").removeClass('text-danger');
+                        $("#error_office_name").addClass('text-success');
+                        $("#flag").val('V');
+                        var d = new Date();
+
+                      d.setTime(d.getTime() + (1*24*60*60*1000));
+                      var expires = "expires="+ d.toUTCString();
+                      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                    }else{
+                        document.cookie = cname + "=" + cvalue + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                        $("#error_office_name").html(response_data.message);
+                         $("#primary_care_office_name").val('');
+                        $("#primary_care_doctor_name").val('');
+                        $("#error_office_name").removeClass('text-success');
+                        $("#error_office_name").addClass('text-danger');
+                        $("#flag").val('NV');
+                    }
+
+                }
+            });
+        }
+
+    </script>
+
+
+
+{% endblock %}

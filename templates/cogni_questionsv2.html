@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <section class="forward_sec" xmlns="http://www.w3.org/1999/html">
+        <div class="container">
+            <div class="row">
+
+                <div class="forward_quest_outer">
+
+                    <div class="container" style="width:100%; margin: 0 auto;" id="questions">
+
+
+                        <form id="ques_form_submit" method="post" action="/questions/cogni_questionsv2">
+                            {% csrf_token %}
+                            {% for question in questions %}
+                                <div class="col-md-12" id="question_{{ question.question_slug }}"
+                                     style="display: block;">
+                                    <div class="forward_login_process preventlink">
+                                        <h2>{{ ans_sr }}. {{ question.question|safe }}</h2></div>
+<!--Starting from here -->
+
+                                      <div class="col-md-12 inso">
+
+                                        {% if question.id == 56 %}
+
+                                            <input  required type="radio" value="Day" name="option1"
+                                                     onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+                                            <label>Day</label>
+                                      </div>
+
+                                      <div class="col-md-12 inso">
+
+                                             <input  required type="radio" value="Evening" name="option1"
+                                                       onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+                                            <label>Evening</label>
+                                      </div>
+
+                                            <div class="col-md-12 inso">
+
+                                            <input  required type="radio" value="Overnight" name="option1"
+                                                      onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+
+                                            <label>Overnight</label>
+                                    </div>
+                                            <div class="col-md-12 inso">
+                                                <input  required type="radio" value="AlternatinShifts" name="option1"
+                                                          onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+
+                                                <label>Alternating Shifts</label>
+
+
+                                    </div>
+     <input    type="hidden" value="Yes" name="ans"
+                                                    id="ans{{ question.id }}1">
+                                              {% elif question.id == 57 %}
+
+                                            <input  required type="radio" value="0-1 Year " name="option1"
+                                                   id="ans{{ question.id }}1"  onclick="radioSubmit();" >
+                                            <label>0-1 Year </label>
+
+                                    </div>
+
+                                      <div class="col-md-12 inso">
+
+                                            <input  required type="radio" value="1-2 Years " name="option1"
+                                                   id="ans{{ question.id }}1"  onclick="radioSubmit();" >
+                                            <label>1-2 Years</label>
+                                    </div>
+
+                                       <div class="col-md-12 inso">
+
+                                             <input  required type="radio" value="2-5 Years" name="option1"
+                                                   id="ans{{ question.id }}1"  onclick="radioSubmit();" >
+
+                                            <label>2-5 Years</label>
+                                    </div>
+
+                                       <div class="col-md-12 inso">
+
+                                             <input  required type="radio" value="5-10 Years" name="option1"
+                                                   id="ans{{ question.id }}1"  onclick="radioSubmit();" >
+
+                                            <label>5-10 Years</label>
+                                    </div>
+
+                                          <div class="col-md-12 inso">
+
+                                              <input  required type="radio" value="More than 10 Years" name="option1"
+
+                                                   id="ans{{ question.id }}1"  onclick="radioSubmit();" >
+                                           <label>More than 10 Years</label>
+     <input    type="hidden" value="Yes" name="ans"
+                                                    id="ans{{ question.id }}1">
+
+                                    </div>
+
+                                {% else %}
+
+                                    <div class="col-md-12 inso">
+
+                                        {% if answer_radiovalue == 1 %}
+                                            <input selected  required type="radio" value="Yes" name="ans"
+                                                   onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+                                            <label>Yes</label>
+                                        {% else %}
+                                            <input  required type="radio" value="Yes" name="ans"
+                                                   onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+                                            <label>Yes</label>
+                                        {% endif %}
+
+                                    </div>
+
+                                    <div class="col-md-12 inso">
+                                        {% if answer_radiovalue == 0 %}
+                                            <input  required type="radio" value="No" name="ans"
+                                                   onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+                                            <label>No</label>
+
+                                        {% else %}
+                                            <input   required type="radio" value="No" name="ans"
+                                                   onclick="radioSubmit();"
+                                                   id="ans{{ question.id }}1">
+                                           <label>No</label>
+                                        {% endif %}
+
+                                    </div>
+{% endif %}
+                                <!--Ends -->
+
+
+                                <input type="hidden" id="ans_sr" name="ans_sr" value="{{ ans_sr }}">
+                                <input type="hidden" id="sr" name="sr" value="{{ sr }}">
+                                <input type="hidden" id="question" name="question"
+                                       value="{{ question.id }}">
+                                <input type="hidden" id="offset" name="offset" value="{{ offset }}">
+                                <input type="hidden" id="deal_breaker_id" name="deal_breaker_id"
+                                       value="{{ deal_breaker_id }}">
+                                <input type="hidden" id="yes_counter" name="yes_counter"
+                                       value="{{ yes_counter }}">
+                                <input type="hidden" id="no_counter" name="no_counter"
+                                       value="{{ no_counter }}">
+                                <input type="hidden" id="answer_array" name="answer_array"
+                                       value="{{ answer_array }}">
+                                <input type="hidden" id="answer_radiovalue" name="answer_radiovalue"
+                                       value="{{ answer_radiovalue }}">
+                            {% endfor %}
+                            <div class="next-prev-btn-container">
+                            <button type="submit" class="btn btn-primary m-1"
+                                    style="display: none;float: inline-start;" name="next"
+                                    id="next"
+                                    value="next">Next
+                            </button>
+                            {% if ans_sr > 1 %}
+                               <!-- <button type="submit" class="btn btn-primary m-1"
+                                        style="display: block;float: inline-start;" name="prev"
+                                        id="prev"
+                                        value="Prev">Back
+                                </button>-->
+                            {% endif %}
+
+</div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+{% endblock %}
+
+{% block jqueryScript %}
+    <script>
+
+        $("#prev").click(function () {
+            {#$('[value="Yes"]').prop("checked",true);#}
+        });
+
+
+    $('html, body').animate({
+        scrollTop: parseInt($(".login_banner").offset().top)
+    }, 0);
+
+    function goBack() {
+            {#window.history.back();#}
+        }
+
+        function radioSubmit() {
+            $("#next").trigger("click");
+        }
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .days-menu ul li a button.green {
+            background: #00a115;
+        }
+
+        .days-menu ul li a button.red {
+            background: #eb0606;
+        }
+        .paid {
+        color: green;
+        }
+        .pending {
+        color : orange;
+        }
+        .cancel {
+        color: red;
+        }
+        .invoiceStaus {
+        border-radius: 50px;
+        }
+
+
+.invoiceTable {
+  text-align: center;
+}
+
+.invoiceTable td a {
+  text-align: center;
+  background-color: #3e3e3e;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 50px;
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+.form-group {
+    position: relative;
+}
+
+ .searchBtn {
+    position: absolute;
+    right: 3px;
+    border-radius: 80px;
+    top: 3px;
+    width: 39px;
+    height: 39px;
+    background-color: #00a115;
+    outline: none;
+    border: 1px solid;
+}
+
+.form-group input {
+    padding: 11px 14px;
+    border-radius: 50px;
+    outline: none;
+}
+
+
+
+    </style>
+
+
+     <section class="forward_sec">
+        <div class="container">
+
+
+                        <div class="table-responsive" id="provider-table">
+                            <table class="table invoiceTable text-capitalize">
+                                <thead>
+                                    <tr>
+                                        <th>S.no</th>
+                                        <th>Invoice Date</th>
+                                        <th>Invoice Number</th>
+                                        <th>Invoice Status</th>
+                                        <th>Invoice</th>
+
+
+
+                                    </tr>
+                                        {% for item in invoice %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <!-- <td>{{ ref.doctor_ref_number }}</td> -->
+                                                <td>{{ item.invoice_date }}</td>
+                                                <td>{{ item.number }}</td>
+                                                <td> <span class="invoiceStatus">
+                                                    {{ item.invoice_status }}
+                                                </span> </td>
+<!--{{ item.invoice_url }}-->
+                                               <td> <a href="/payments/report/{{ item.invoice_id }}">View Invoice</a></td>
+                                            </tr>
+                                        {%  endfor %}
+                                </thead>
+                                <tbody>
+
+
+                                </tbody>
+                            </table>
+                            {% if total_invoice < 4 %}
+                            <p>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                            </p>
+                            {% endif %}
+                        </div>
+
+
+
+
+          </div>
+
+
+    </section>
+
+{% endblock %}

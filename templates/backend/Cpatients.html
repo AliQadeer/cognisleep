@@ -1,0 +1,123 @@
+{% extends "backend/base.html" %}
+{% block content %}
+
+<div class="content-wrap">
+            <div class="main">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-8 p-r-0 title-margin-right">
+                            <div class="page-header">
+                                <div class="page-title">
+                                    <h1>Current Active Patient's</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+		<div class="dashboard-wrapper">
+			<div class="graphs"><a href="#"><span>Graph</span></a></div>
+             <div id="w0" class="grid-view">
+
+            <div class="row col-sm-12">
+                <form>
+                    <div class="form-row align-items-center">
+                        <div class="col-sm-3">
+                            <label for="inlineFormInput">Date From</label>
+
+                            <input type="date" class="form-control" name="date_from" id="date_from" placeholder="Date From">
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="inlineFormInput">Date To</label>
+                            <input type="date" class="form-control" name="date_to" id="date_to" placeholder="Date To">
+                        </div>
+                        <div class="col-sm-3">
+                                <label for="inlineFormInput">Name / Email / Contact </label>
+                                <input type="text" class="form-control" id="mysearch" placeholder="Search" onkeydown="if (event.keyCode == 13)
+                        event.preventDefault();document.getElementById('btn_search').click();">
+                        </div>
+                        <div class="col-sm-1">
+                            <br>
+                            <button type="button" class="btn btn-primary mb-2" onclick="grid_data(document.getElementById('search').value)" id="btn_search">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+                        <div class="modal fade" id="myModal" role="dialog" style="">
+            <div class="modal-dialog modal-sm">
+
+              <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4 class="modal-title">This action is not reversable!  Are you sure you want to proceed?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="btn-group col-md-12">
+                            <button type="button" class="btn btn-primary btn-lg col-sm-6" onclick="delete_patient_record()">Yes</button><button type="button" class="btn btn-lg col-sm-6" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div><table class="table table-striped table-bordered" id="table_rows">
+					<thead class="thead-dark">
+						<tr><th scope="col">First Name</th><th scope="col">Last Name</th><th scope="col">User Name</th><th scope="col">Contact</th><th scope="col">Email</th><th scope="col">Date</th><th scope="col">Time</th><th scope="col">report</th><th scope="col">View</th><th scope="col">Delete</th>
+						</tr>
+					</thead>
+				<tbody>
+				<tr class="tr"><td>dp2register</td><td>dp2register</td><td>dp2register dp2register</td><td>1111111111</td><td>cognistone1@yopmail.com</td><td>2019-07-10</td><td>05:03:00</td><td><a href="cogni_patient_report.php?email=cognistone1@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=cognistone1@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="cognistone1@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="cognistone1@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>directfname</td><td>directlname</td><td>directfname directlname</td><td>1111111111</td><td>cognitestone@yopmail.com</td><td>2019-07-10</td><td>04:55:00</td><td><a href="cogni_patient_report.php?email=cognitestone@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=cognitestone@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="cognitestone@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="cognitestone@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>Haroon</td><td>Rasheed</td><td>Haroon Rasheed</td><td>1111111111</td><td>cogniflow2@yopmail.com</td><td>2019-07-08</td><td>02:39:00</td><td><a href="cogni_patient_report.php?email=cogniflow2@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=cogniflow2@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="cogniflow2@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="cogniflow2@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>Haroon</td><td>Rasheed</td><td>Haroon Rasheed</td><td>1111111111</td><td>cogniflow1@yopmail.com</td><td>2019-07-08</td><td>01:49:00</td><td><a href="cogni_patient_report.php?email=cogniflow1@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=cogniflow1@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="cogniflow1@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="cogniflow1@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>1</td><td>test</td><td>1 test</td><td>9233301399</td><td>mansoor777@yopmail.com</td><td>2019-06-26</td><td>07:54:00</td><td><a href="cogni_patient_report.php?email=mansoor777@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=mansoor777@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="mansoor777@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="mansoor777@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>taimoor</td><td>haroon</td><td>taimoor haroon</td><td>5555555555</td><td>testingseason123@yopmail.com</td><td>2019-06-26</td><td>01:45:00</td><td><a href="cogni_patient_report.php?email=testingseason123@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=testingseason123@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="testingseason123@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="testingseason123@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>taimoor</td><td>haroon</td><td>taimoor haroon</td><td>5555555555</td><td>testingseason1@yopmail.com</td><td>2019-06-26</td><td>01:41:00</td><td><a href="cogni_patient_report.php?email=testingseason1@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=testingseason1@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="testingseason1@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="testingseason1@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>ds</td><td>haq</td><td>ds haq</td><td>9232430139</td><td>pmedia4u@yahoo.com</td><td>2019-06-24</td><td>04:11:00</td><td><a href="cogni_patient_report.php?email=pmedia4u@yahoo.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=pmedia4u@yahoo.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="pmedia4u@yahoo.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="pmedia4u@yahoo.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>taimoor</td><td>haroon</td><td>taimoor haroon</td><td>5555555555</td><td>taimoorharoon2000@yopmail.com</td><td>2019-06-24</td><td>03:42:00</td><td><a href="cogni_patient_report.php?email=taimoorharoon2000@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=taimoorharoon2000@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="taimoorharoon2000@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="taimoorharoon2000@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr>
+				<tr class="tr"><td>taimoor</td><td>haroon</td><td>taimoor haroon</td><td>5555555555</td><td>taimoorharoon200@yopmail.com</td><td>2019-06-24</td><td>03:36:00</td><td><a href="cogni_patient_report.php?email=taimoorharoon200@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-file" aria-hidden="true"></i></a></td><td><a href="current_active_patient_full_details.php?email=taimoorharoon200@yopmail.com" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a></td><td><a id="taimoorharoon200@yopmail.com" data-toggle="modal" onclick="set_delete_email(this.id)" value="taimoorharoon200@yopmail.com" data-target="#myModal" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
+				</tr></tbody></table>
+        <div class="page-no-div">
+            <h5 class="current_page_no" id="current_page_no">1</h5>
+            <h5 class="total_pages" id="total_pages">/5</h5>
+        </div>
+        <div id="pag_link"><ul class="pagination"><li class="prev" onclick="previouse_pagination_button()"><span>«</span></li><li class=""><a onclick="pagination_data(0,1)">1</a></li><li class=""><a onclick="pagination_data(10,2)">2</a></li><li class=""><a onclick="pagination_data(20,3)">3</a></li><li class="next"><a onclick="next_pagination_data()" data-page="1">»</a></li></ul></div>
+
+      </div>
+
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+
+{% endblock %}

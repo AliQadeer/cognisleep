@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        @media(min-width: 1024px) {
+
+        section.forward_sec {
+    height: calc(100vh - 346px) !important;
+    display: flex;
+    align-items: center;
+}
+}
+    </style>
+
+
+
+    <section class="forward_sec" style="height: 800px !important;">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12 text-center">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label"></label>
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+              {% if link is not None %}
+                <div class="col-md-12 text-center">
+                    <a href="{{ link }}">{{ link_text }}</a>
+                </div>
+            {% endif %}
+            </div>
+
+    </section>
+
+
+{% endblock %}

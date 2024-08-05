@@ -1,0 +1,673 @@
+<script>
+    var lastWakeUptime = "N/A";
+    var lastPrescribedTime = "N/A";
+    var lastWeekOutbedTime = "N/A";
+    var lastWeekSE = "N/A";
+    var lastAdjustment = "N/A";
+    var calculatWeeek = 1;
+    var hasWeekSE = true;
+
+    $("#video_7").on("ended",function () {
+        const endpoint = '{{base_url}}/dashboard/api/v-session-complete/';
+         $.ajax({
+            method: 'POST',
+            data: {'user_id':'{{ request.user.id }}'},
+            url: endpoint,
+            dataType: "json",
+            success: function (response_data) {
+                if(response_data.success){
+                    if(response_data.successMsg)
+                        window.location.reload();
+                }
+            },
+            error: function (request, status, error) {
+                console.log(error);},
+        });
+    
+    });
+    
+
+
+
+// Mansoor new code
+
+
+function prescribe_bed_time()
+        { 
+
+           var woke_up_time =  $(".wokeup").html();
+           var total_time_sleep = $("span.totalsleep").html()
+
+            
+
+            // woke_up_time = document.getElementById("woke_up_time").value;
+            // total_time_sleep =  document.getElementById("total_time_sleep").value;
+            
+
+           // var total_sleep_time_24_formate = convert_to_24_hours(total_time_sleep); 
+            var total_sleep_time_in_minutes = time_in_minutes(total_time_sleep);
+            
+            
+            var woke_up_time_24_formate = convert_to_24_hours(woke_up_time); 
+            var woke_up_time_in_minutes = time_in_minutes(woke_up_time_24_formate);
+            
+            //alert(woke_up_time_24_formate);
+            //alert(total_sleep_time_in_minutes);
+            
+            var diff = woke_up_time_in_minutes-total_sleep_time_in_minutes;
+            var Prescriobed_bed_time= '';
+            if(diff < 0)
+            {
+                diff = diff + 1440;
+                Prescriobed_bed_time = convert_to_time(diff);
+            }
+            else
+            {
+                Prescriobed_bed_time = convert_to_time(diff);
+            }
+            //Prescriobed_bed_time = convert_to_time(diff);
+            // alert(Prescriobed_bed_time);
+            
+            return Prescriobed_bed_time
+            
+        }
+        
+        function time_in_minutes(time)
+        {  
+            var a = time.split(':'); 
+            var minutes = (+a[0]) * 60 + (+a[1]);
+            return minutes;
+        }
+        
+        function convert_to_time(minutes) {
+            //alert(minutes);
+            var num = minutes;
+            var hours = (num / 60);
+            var rhours = Math.floor(hours);
+            var minutes = (hours - rhours) * 60;
+            var rminutes = Math.round(minutes);
+            
+            if(rminutes < 10)
+            {
+                rminutes = '0'+rminutes;
+            }
+            var time = rhours + ":" + rminutes;
+            tConvert (rhours,rminutes);
+            return  tConvert (rhours,rminutes);
+        }
+        
+        function tConvert (h,m) {
+            var hours = h ; // gives the value in 24 hours format
+            var AmOrPm = hours >= 12 ? 'pm' : 'am';
+            hours = (hours % 12) || 12;
+            var minutes = m ;
+            var finalTime = "Prescribed Bed Time  - " + hours + ":" + minutes + " " + AmOrPm;  // return adjusted time or original string
+            return finalTime;
+        }
+        
+        
+        function convert_to_24_hours(time)
+        {
+            
+            //alert(time);
+            var hours = Number(time.match(/^(\d+)/)[1]);
+            var minutes = Number(time.match(/:(\d+)/)[1]);
+            
+            if(hours == 0 && minutes == 0)
+            {
+              //  alert(hours+' '+minutes);
+                return "00:00";
+            }else
+            {
+                console.log(time.match(/\s(.*)$/));
+                var hours   = Number(time.match(/^(\d+)/)[1]);
+                var minutes = Number(time.match(/:(\d+)/)[1]);
+                var AMPM    = time.match(/\s(.*)$/)[1];
+                if (AMPM === "PM" && hours < 12) hours = hours + 12;
+                if (AMPM === "AM" && hours === 12) hours = hours - 12;
+                var sHours   = hours.toString();
+                var sMinutes = minutes.toString();
+                if (hours < 10) sHours = "0" + sHours;
+                if (minutes < 10) sMinutes = "0" + sMinutes;
+                return (sHours + ":" + sMinutes);
+                
+            }
+            //alert(sHours + ":" + sMinutes);
+        }
+
+
+
+
+
+
+// 
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    $(".getWeekData").click(function () {
+    
+        var weekID = $(this).data('week');
+        $(".activeWeek").removeClass("activeWeek");
+        $(this).parent().addClass('activeWeek');
+        getWeekData(weekID)
+    });
+    
+    getWeekData();
+    recursiveGetWeekData();
+   
+    
+    function recursiveGetWeekData(){
+        if(hasWeekSE == true && calculatWeeek < 8){
+            getWeekData(calculatWeeek,1);
+            calculatWeeek++;
+            //$("span.previewWeekSE").html(lastWeekSE);
+            //$("span.lastWeekWakeupTime").html(lastWakeUptime);
+           // $("span.lastPrescribedTime").html(lastPrescribedTime);
+            if(lastWakeUptime != "N/A" && lastWakeUptime != ""){
+                //console.log("=================================================================");
+              //  console.log("lastPrescribedTime:"+lastWeekOutbedTime);
+                lastPrescribedTime = suggestedSleepTime(lastWeekOutbedTime,lastAdjustment);
+                lastPrescribedTime = convertTime24To12(lastPrescribedTime);
+                lastPrescribedTime = lastPrescribedTime.replace("-","");
+                
+                // if(lastPrescribedTime.length > 5) {
+                //     $("span.lastPrescribedTime").html(lastPrescribedTime.slice(0, -1));
+                // }else{
+                //     $("span.lastPrescribedTime").html(lastPrescribedTime);
+                // }
+
+                 // $("span.lastPrescribedTime").html(prescribe_bed_time(lastWeekOutbedTime,lastAdjustment));
+            }
+
+           
+            
+
+
+            recursiveGetWeekData();
+
+           
+        }
+
+        
+    }
+    
+    function getWeekData(weekID = 1,noHtml = 0){
+
+        var isData = false;
+
+        {% if patient > 0 %}
+        const endpoint = '{{base_url}}/dashboard/api/view-diary/'+weekID+"/"+"{{patient}}/";
+        {% else %}
+        const endpoint = '{{base_url}}/dashboard/api/view-diary/'+weekID+"/0/";
+        {% endif %}
+        var isAsync = true;
+        if(noHtml==1)
+            isAsync = false;
+         $.ajax({
+            method: 'POST',
+            data: {'weekNm': 1},
+            async : isAsync,
+            url: endpoint,
+            dataType: "json",
+            success: function (response_data) {
+                var response_data = response_data;
+                var htmlDays = "";
+                var averageWokeupTime = 0;
+                var averageOutofbedTime = 0;
+                //var averageNapTime = 0;
+                var averageInbedTime = 0;
+                var averageAsleepTime = 0;
+                var averageSleepEfficiency = 0;
+                var getAverageOutofbedTime2 = "";
+                if(response_data.success){
+                    var weekData = JSON.parse(response_data.week_data);
+                
+                    for (var i = 0; i < weekData.length; i++){
+                        isData = true
+                        htmlDays += "<tr>";
+                        htmlDays += "<td>"+(i+1)+"</td>";
+                        //htmlDays += "<td>"+((typeof weekData[i].fields.time_went_to_bed === 'undefined' || weekData[i].fields.time_went_to_bed == null) ? " "  : weekData[i].fields.date )+"</td>";
+                        htmlDays += "<td>"+convertTime24To12(isNullOrWhitespace(weekData[i].fields.time_went_to_bed))+"</td>";
+                        htmlDays += "<td>"+convertTime24To12(isNullOrWhitespace(weekData[i].fields.lights_out ))+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.minutes_fall_asleep)+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.no_of_times_awakend)+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.total_time_awakened)+"</td>";
+                        htmlDays += "<td>"+convertTime24To12(isNullOrWhitespace(weekData[i].fields.time_got_up))+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.minutes_fellback_sleep)+"</td>";
+                        htmlDays += "<td>"+convertTime24To12(isNullOrWhitespace(weekData[i].fields.out_of_bed))+"</td>";
+                        htmlDays += "<td>"+convertTime24To12(isNullOrWhitespace(weekData[i].fields.desire_wakeup_time))+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.number_of_naps)+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.totlatime_napping_minutes)+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.time_in_bed)+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.total_sleep_time)+"</td>";
+                        htmlDays += "<td>"+isNullOrWhitespace(weekData[i].fields.sleep_efficiency)+"</td>";
+    
+
+                        htmlDays += "</tr>";
+                    }
+    
+    
+                    //wokeup average time calculation
+                    var getAverageWokeupTime = ((averageWokeupTime/7));
+                    getAverageWokeupTime = getAverageWokeupTime.toString().split(".");
+                    var wokeupSec = Math.trunc((parseFloat("0."+getAverageWokeupTime[1])*60).toString().substring(0,2));
+                    var wokeupHrs = Math.trunc(getAverageWokeupTime[0]);
+                    getAverageWokeupTime= offsetify(wokeupHrs)+":"+offsetify(wokeupSec);
+                    getAverageWokeupTime= convertTime24To12(getAverageWokeupTime);
+                    //end wokeup average time calculation
+    
+                    
+    
+    
+                    //Out of Bed average time calculation
+                    var getAverageOutofbedTime = ((averageOutofbedTime/7));
+                    getAverageOutofbedTime = getAverageOutofbedTime.toString().split(".");
+                    var wokeupSec = Math.trunc((parseFloat("0."+getAverageOutofbedTime[1])*60).toString().substring(0,2));
+                    var wokeupHrs = Math.trunc(getAverageOutofbedTime[0]);
+                    getAverageOutofbedTime= offsetify(wokeupHrs)+":"+offsetify(wokeupSec);
+                    getAverageOutofbedTime2 = getAverageOutofbedTime;
+                    getAverageOutofbedTime= convertTime24To12(getAverageOutofbedTime);
+                    //end Out of bed average time calculation
+    
+    
+                    //Nap Time average time calculation
+                   // var getAverageNapTime = ((averageNapTime/7));
+                   // getAverageNapTime = getAverageNapTime.toString().split(".");
+                   // var wokeupSec = Math.trunc((parseFloat("0."+getAverageNapTime[1])*60).toString().substring(0,2));
+                   // var wokeupHrs = Math.trunc(getAverageNapTime[0]);
+                   // getAverageNapTime= offsetify(wokeupHrs)+":"+offsetify(wokeupSec);
+                    //end NapTime average time calculation
+    
+    
+                    //In Bed average time calculation
+                    var getAverageInbedTime = ((averageInbedTime/7));
+                    getAverageInbedTime = getAverageInbedTime.toString().split(".");
+                    var wokeupSec = Math.trunc((parseFloat("0."+getAverageInbedTime[1])*60).toString().substring(0,2));
+                    var wokeupHrs = Math.trunc(getAverageInbedTime[0]);
+                    getAverageInbedTime= offsetify(wokeupHrs)+":"+offsetify(wokeupSec);
+                    //end In bed average time calculation
+    
+                    //Asleep average time calculation
+                    var getAverageAsleepTime = ((averageAsleepTime/7));                    
+                    getAverageAsleepTime = getAverageAsleepTime.toString().split(".");
+                    var wokeupSec = Math.abs(60-Math.trunc((parseFloat("0."+getAverageAsleepTime[1])*60).toString().substring(0,2)));
+                    var wokeupHrs = Math.trunc(getAverageAsleepTime[0]);
+                    getAverageAsleepTime= offsetify(wokeupHrs)+":"+offsetify(wokeupSec);
+                   
+                    //end Asleep average time calculation
+                    //averageSleepEfficiency = (averageSleepEfficiency/7).toString().substring(0,5);
+                    //lastWeekSE = averageSleepEfficiency+"%";
+
+                    var adjustment = getAdjustment(averageSleepEfficiency);
+                    if(noHtml == 0){
+                        
+                                if(isData){
+                                    $('.wokeup').html(getAverageWokeupTime);
+                                    $('span.outofbed').html(getAverageOutofbedTime);
+                                    //$('span.naptime').html(getAverageNapTime);
+                                    $('span.totalinbed').html(getAverageInbedTime);
+                                    $('span.totalsleep').html(getAverageAsleepTime);
+                                    $('span.adjustment').html(adjustment);
+                                    $('span.avresleep').html(averageSleepEfficiency+"%");
+                                    $(".viewsleepdiary .table tbody").html(htmlDays);
+                                    $("span.lastPrescribedTime").html(prescribe_bed_time());
+                                }else{
+                                    $("span.lastPrescribedTime").html("-");
+                                    $(".viewsleepdiary .table tbody").html(htmlDays);
+                                    $('.wokeup').html("-");
+                                    $('span.outofbed').html("-");
+                                //$('span.naptime').html(getAverageNapTime);
+                                $('span.totalinbed').html("-");
+                                $('span.totalsleep').html("-");
+                                $('span.adjustment').html("-");
+                                $('span.avresleep').html("-");
+                                
+                                }
+                               
+                               
+                                // $('span.outofbed').html(getAverageOutofbedTime);
+                                // //$('span.naptime').html(getAverageNapTime);
+                                // $('span.totalinbed').html(getAverageInbedTime);
+                                // $('span.totalsleep').html(getAverageAsleepTime);
+                                // $('span.adjustment').html(adjustment);
+                                // $('span.avresleep').html(averageSleepEfficiency+"%");
+                                
+
+                                
+                           
+                     }else{
+                         if(hasWeekSE){
+                            console.log(averageSleepEfficiency);
+                            lastWeekSE = averageSleepEfficiency+"%";
+                            lastWakeUptime = getAverageOutofbedTime;
+                            lastWeekOutbedTime = getAverageOutofbedTime2;
+                            lastAdjustment = adjustment;
+                         }
+                     }
+                }else{
+                    isData = false
+                    alert("Something Wrong!")
+                }
+            },
+            error: function (request, status, error) {
+                console.log(error);},
+        });
+    
+    }
+    
+    function suggestedSleepTime(time,lastAdjustmentTime){
+        if(time.toString().includes(":")){
+        //    time = "6:30";
+          //  lastAdjustmentTime= "1:30";
+        var dividedTime = time.split(":");
+        var hrs = parseInt(dividedTime[0]);
+        var mins = parseInt(dividedTime[1])/60;
+        var getTimeVal = (hrs + mins);
+    
+        var lastAdjustmentTime = lastAdjustmentTime.split(":");
+        var hrsAdj = parseInt(lastAdjustmentTime[0]);
+        var minsAdj = parseInt(lastAdjustmentTime[1])/60;
+        var getAdjValTime = (hrsAdj + minsAdj);
+    
+    
+        var totalAdjTime = (getTimeVal+getAdjValTime);
+    
+        var suggestedTime  = 8-Math.abs(totalAdjTime);
+        suggestedTime = 24 - Math.abs(suggestedTime);
+        if(suggestedTime.toString().includes(".")){
+            var suggestedTimeArr = suggestedTime.toString().split(".");
+            var hrsAdj = parseInt(suggestedTimeArr[0]);
+            var minsAdj = (suggestedTimeArr[1]*60).toFixed(2);
+            suggestedTime = (hrsAdj +":"+ minsAdj);
+            suggestedTime = suggestedTime.toString().substring(0, 5);
+        }else{
+            suggestedTime = suggestedTime.toString().substring(0, 5)+":00";
+        }
+       // console.log("==================================");
+       // console.log("Time:"+time);
+       // console.log("total time before round: "+getTimeVal);
+       //
+       //
+       // var roundV = getTimeVal.toFixed(5);
+       // console.log("Round Val: "+roundV);
+    //
+       // var fullround = (getTimeVal-roundV);
+       // console.log("for mode value: "+fullround);
+       // console.log("for mode value 2: "+((hrs + mins)-roundV));
+       // var modd =  mod(fullround,1);
+       // console.log("After Mod: "+modd);
+       // -
+       // console.log("After Mod plush: "+(modd+1.25));
+    
+       //console.log("==================================");
+       //console.log("Get Time: "+getTimeVal);
+       //console.log("Get ADjusment Time: "+getAdjValTime);
+       //console.log("Get ADj + Time: "+(getTimeVal+getAdjValTime));
+       var roundV = (8/24).toFixed(5);
+      // console.log("Round Val: "+roundV);
+    
+       var afterRound = (24-roundV);
+       afterRound = afterRound.toString().split(".");
+       //var suggestedTime = (afterRound[0]+":"+(parseFloat("0."+afterRound[1])*60).toFixed(0));
+       
+      // console.log("Final Time: "+suggestedTime );
+    //
+      // console.log("Time:"+time);
+      // console.log("total time before round: "+getTimeVal);
+      
+      
+    
+    
+       var fullround = (getTimeVal-roundV);
+      // console.log("for mode value: "+fullround);
+       //console.log("for mode value 2: "+((hrs + mins)-roundV));
+       var modd =  mod(fullround,1);
+      // console.log("After Mod: "+modd);
+      
+      // console.log("After Mod plush: "+(modd+1.25));
+        return suggestedTime;
+    }else{
+        return time;
+    }
+    
+    }
+    
+    
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+      }
+    
+    function convertTime24To12 (time) {
+        if(time != ""){
+            time = time.split(":");
+            time = (parseInt(time[0]) < 10 && time[0].length == 1) ? "0"+time[0]+":"+time[1] : time[0]+":"+time[1];
+            ;
+        // Check correct time format and split into components
+        time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+       
+
+
+
+        if (time.length > 1) { // If time format correct
+          time = time.slice (1);  // Remove full string match value
+          time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+          time[0] = +time[0] % 12 || 12; // Adjust hours
+        }
+        return time.join (''); // return adjusted time or original string
+        }else{
+           return "";
+        }
+      }
+    
+    function getAdjustment(total_sleep_efficiency){
+            if(total_sleep_efficiency >= 89.99)
+                return "23:45";
+            else if(total_sleep_efficiency >= 84.99)
+                return "0:00";    
+            else if(total_sleep_efficiency >= 79.99)
+                return "0:15";    
+            else if(total_sleep_efficiency >= 74.99)
+                return "0:30";    
+            else if(total_sleep_efficiency >= 69.99)
+                return "0:45";    
+            else if(total_sleep_efficiency >= 64.99)
+                return "1:00";    
+            else if(total_sleep_efficiency >= 59.99)
+                return "1:15";    
+            else if(total_sleep_efficiency >= 54.99)
+                return "1:30";    
+            else if(total_sleep_efficiency >= 49.99)
+                return "1:45";    
+            else if(total_sleep_efficiency >= 0.00)
+                return "2:00";
+            else
+                return "N/A";    
+    }
+    
+    function offsetify(t){
+        return t < 10 ? '0' + t : t;
+    }
+    
+    function averageWokeUp(wokeTime){
+        var wokeupTimeAv = wokeTime.split(":");
+        var wokeupTimeSEHr = parseInt(wokeupTimeAv[0]);
+        var wokeupTimeMin = parseInt(wokeupTimeAv[1]);
+        var wokeupAvr = (wokeupTimeSEHr+(wokeupTimeMin/60));
+        return wokeupAvr;
+    }
+    
+    function sleepEfficiency(se){//(bedTime,sleepTime,total_wakeup){
+       // var bedTimeSE = bedTime.split(":");
+       // var bedTimeSEHr = parseInt(bedTimeSE[0]);
+       // var bedTimeSEMin = parseInt(bedTimeSE[1]);
+       // var bedTimeEff = (bedTimeSEHr+bedTimeSEMin/60);
+       // var sleepTimeSE = sleepTime.split(":");
+       // var sleepTimeSEHr = parseInt(sleepTimeSE[0]);
+       // var sleepTimeSEMin = parseInt(sleepTimeSE[1]);
+       // var sleepTimeEff = (sleepTimeSEHr+sleepTimeSEMin/60);
+    
+       // new calculation
+       //var bedTimeSE = bedTime.split(":");
+       //var bedTimeSEHr = parseInt(bedTimeSE[0]);
+       //var bedTimeSEMin = parseInt(bedTimeSE[1]);
+       //var bedMinutesC = (bedTimeSEHr * 60) + bedTimeSEMin;
+       //var bedTimeEff = (bedTimeSEHr+bedTimeSEMin/60);
+   
+       //var sleepTimeSE = sleepTime.split(":");
+       //var sleepTimeSEHr = parseInt(sleepTimeSE[0]);
+       //var sleepTimeSEMin = parseInt(sleepTimeSE[1]);
+       //var sleepMinutesC = (sleepTimeSEHr * 60) + sleepTimeSEMin;
+       //var sleepTimeEff = (sleepTimeSEHr+sleepTimeSEMin/60);
+       //total_wakeup = parseInt(total_wakeup)
+       return (se); //(((sleepMinutesC-total_wakeup)/bedMinutesC).toFixed(2) * 100).toFixed(0);
+      //  return ((sleepTimeEff/bedTimeEff).toFixed(2) * 100).toFixed(0);
+    }
+    
+    function timeDiff(startTime,endTime){
+        
+        var startDate = "01/01/2007 " + startTime;
+        var nextDay = startTime.split(":")[0];
+        var nextDay2 = endTime.split(":")[0];
+        if(parseInt(nextDay) > 12 && parseInt(nextDay2) < 12 )
+        var endDate = "01/02/2007 " + endTime;
+        else
+        var endDate = "01/01/2007 " + endTime;
+        startDate = new Date(startDate);
+        endDate = new Date(endDate);
+      //  console.log("StartDate:", startDate);
+      //  console.log("EndDate:", endDate);
+        var timediff = (startDate - endDate) / 1000;
+        if (isNaN(timediff)) return NaN;
+       // console.log("TimeDifference:", timediff);
+        var diffabs = Math.abs(Math.floor(timediff));
+      //  console.log("DifferenceAbsolute:", diffabs);
+        var days = Math.floor(diffabs / (24 * 60 * 60));
+     //   console.log("Days:", days);
+        var leftSec = diffabs - days * (24 * 60 * 60);
+      //  console.log("LeftSec:", leftSec);
+        var hrs = Math.floor(leftSec / (60 * 60));
+        var leftSec = leftSec - hrs * (60 * 60);
+     //   console.log("Hours:", hrs);
+        var min = Math.floor(leftSec / (60));
+      //  console.log("Minutes:", min);
+        var totaldays =
+          days +
+          " " +
+          "Days" +
+          " " +
+          hrs +
+          " " +
+          "Hours" +
+          " " +
+          min +
+          " " +
+          "Minutes";
+          hrs = parseInt(hrs);
+          min = parseInt(min);
+        //console.log("TotalDays:", totaldays);
+        if(min > 0){
+            if(hrs > 9){
+                hrs= (24-hrs);
+            hrs= (hrs-1);
+        }
+        }else{
+            if(hrs > 9)
+                hrs= (24-hrs);
+        }
+        if(min < 10){
+            min = "0"+min;
+        }
+        var diffT = (hrs)+":"+min;
+        return diffT;
+    }
+    
+    
+    function timed(start,end){
+        var time1 = start;
+        var time2 = end;
+        if ( time1.match(/^[0-9]{4}$/g) && time2.match(/^[0-9]{4}$/g) )
+        {
+            //lets calculate the difference. But values consist of four digits.
+            var time1Seconds = toSeconds(time1.substr(0,2), time1.substr(2));
+            var time2Seconds = toSeconds(time2.substr(0,2), time2.substr(2));
+    
+            if (!time1Seconds || !time2Seconds)
+            {
+                //input is not correct.
+                return false;
+            }
+    
+            var difference = time1Seconds - time2Seconds;
+            if (difference < 0)
+            {
+                difference = Math.abs(difference);
+            }
+            var hours = parseInt(difference/3600) 
+            hours = hours < 10 ? "0" + hours : hours;
+            var minutes =  parseInt((difference/3600) % 1 *60)
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            return hours + ":" + minutes;
+           // document.getElementById("DIFF").value =  hours + ":" + minutes;
+        }
+    }
+    
+    function toSeconds(hours, minutes)
+    {
+        var seconds = 0;
+        if ( (hours >= 0 && hours < 24) && (minutes >= 0 && minutes < 60))
+        {
+            seconds += (parseInt(hours)*3600) + (parseInt(minutes)*60);
+            return seconds
+        }
+        else
+        {
+            return false;
+        }
+    
+    }
+    
+    
+    function isNullOrWhitespace( input ) {
+    
+    if (typeof input === 'undefined' || input == null) return "";
+    
+    return input;
+    }
+    $('.locker-img').on('click', function (e) {
+        if ($(e.target).is('textarea')) return
+        var state = $('.locker-img').attr('data-state')
+        state = state == 'closed-door' ? 'opened-door' : 'closed-door';
+        if(state == 'opened-door'){
+            var time  = localStorage.getItem('time');
+            if(time){
+                var timeElapsed=(+ new Date() - parseInt(time))/1000;
+              //  if(timeElapsed<86400){
+              //      alert('You cannot add more negative thoughts before 24 hours')
+              //      return;
+              // // }
+            }
+        }
+        else{
+            if($('.locker-form textarea').val()!==''){
+                localStorage.setItem('time',+ new Date())
+            }
+        }
+        $('.locker-img img').removeClass('show');
+        $('.locker-img img.' + state).addClass('show')
+        $('.locker-img').attr('data-state', state)
+        $('.locker-form textarea').val('')
+    })
+
+
+</script>

@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <style>
+    .input-group-addon {
+    padding: 15px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #827d7d;
+    border-radius: 0 4px 4px 0;
+    position: inherit;
+    right: 0;
+}
+.form-group input.form-control {
+    float: right;
+    height: auto !important;
+    padding: 10px;
+}
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #827d7d;
+    outline: 0;
+    box-shadow: none;
+}
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+        .packageFrame {
+            border: 1px solid #eadcdc;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px 1px rgb(64 60 67 / 16%);
+            border-radius: 0 50px;
+        }
+        .packageFrame h2 {
+            color: #fff;
+            background:#7ace4b;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px !important;
+            margin:0;
+        }
+        .packageFrame p {
+            font-size: 20px;
+            border-bottom: 1px solid #ddd;
+            margin: 0;
+            padding: 10px 20px;
+        }
+        .packageFrame p:hover {
+         background:#f9f9f9;
+         transition:all 0.5s ease 0s;
+        }
+        .packageFrame p strong {
+            margin: 0 15px 0 0;
+            text-align:left;
+            FONT-WEIGHT: 600;
+        }
+        .packageFrame p span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #06971F;
+            text-align: right;
+            float: right;
+        }
+        .packageFrame p:nth-of-type(2n+1) {
+          background-color: #f9f9f9;
+        }
+        .packageFrame a {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background: #230c9a;
+            overflow: hidden;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            width: 220px;
+            margin: 20px auto;
+            border: 2px solid #230c9a;
+            border-radius: 25px 0;
+        }
+        .packageFrame a:hover {
+            background: #fff;
+            color: #230c9a;
+            transition:all 0.5s ease 0s;
+        }
+        .packageFrame.yellow h2 {
+            background: #dada06;
+        }
+        .packageFrame.yellow p.dicPrice {
+            background: #d0d00d !important;
+        }
+        .packageFrame.red h2 {
+            background: #d71a1a;
+        }
+        .packageFrame.red p.dicPrice {
+            background: #c51c1c !important;
+        }
+        p.pkgDetails strong {
+            width: 100% !important;
+            text-align: center !important;
+            display: block;
+        }
+        p.pkgDetails span {
+            font-weight: normal;
+            color: #000;
+            text-align: justify;
+            margin: 12px 0;
+            FONT-SIZE: 17PX;
+            LINE-HEIGHT: 25PX;
+            width: 100%;
+            text-align: center;
+        }
+
+    </style>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .days-menu ul li a button.green {
+            background: #00a115;
+        }
+
+        .days-menu ul li a button.red {
+            background: #eb0606;
+        }
+    </style>
+
+
+
+
+     <section class="forward_sec">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="bold_heading">
+                    <h2 class="text-center">CogniSleep Subscription Packages</h2>
+                </div>
+
+            </div>
+        </div>
+        <div class="container">
+          <div class="row">
+              <div class="col-md-5 offset-md-1 m-auto col-sm-6">
+                  <form action="/payments/chk_ses/" method="post">
+
+                      {% csrf_token %}
+
+
+
+                      <input type="hidden" id="price_id" name="price_id" value="price_1LQCvxKxLHATWwe7Xr4x5izB">
+                      <div class="package-box">
+                      <div class="package-header">
+                          <div class="package-name">
+                               <h2 class="mb-0">Basic Package</h2>
+                              <input type="hidden" id="pkg_name" name="pkg_name" value="Prime Package">
+                          </div>
+                          <div class="price-box">
+                              <h2 class="mb-0"><sup>$</sup>149 / Month</h2>
+                              <input type="hidden" id="pkg_price" name="pkg_price" value="149">
+                          </div>
+                      </div>
+                      <div class="package-body">
+                          <div class="package-content">
+                              <p class="pkgDetails">Access the CogniSleep Provider dashboard. Manage and analyze the progress of patients. Provide the appropriate medical advice by reviewing their sleeping patterns.</p>
+                              <ul>
+                                  <li>Patient can be tracked</li>
+                                  <li>Analyze daily and weekly sleep patterns<span> Yes</span></li>
+                                  <li>Find out when the patient is having sleep issues<span> Yes</span></li>
+                                  <li>Problem area are highlighted with alert<span> Yes</span></li>
+                                  <li>Free Trial Period<span> 1 Month</span></li>
+                                  <li>Minimum Subscription Limit<span> 1 Month</span></li>
+
+                              </ul>
+                          </div>
+                      </div>
+                      <div class="package-footer">
+                          <!--<a href="/payments/customer_subscription">Subscribe</a>-->
+                          <a href="/accounts/provider_registration/" class="button">Sign up</a>
+                      </div>
+
+                          <!--<a href="#" data-modal="myModal1" class="popUpBtn craeteNewPackage">Select Package</a>-->
+                  </div>
+                  </form>
+              </div>
+              <div class="col-md-5 col-sm-6 offset-md-1 m-auto">
+                    <form action="/payments/chk_ses/" method="post">
+
+                      {% csrf_token %}
+
+
+
+                      <input type="hidden" id="price_id" name="price_id" value="price_1LQEGmKxLHATWwe7xpXgtrod">
+                  <div class="package-box">
+                      <div class="package-header">
+                          <div class="package-name">
+                               <h2 class="mb-0">Advance Package</h2>
+                              <input type="hidden" id="pkg_name" name="pkg_name" value="Advance Package">
+                          </div>
+                          <div class="price-box">
+                              <h2 class="mb-0"><sup>$</sup>199 / Month</h2>
+                              <input type="hidden" id="pkg_price" name="pkg_price" value="199">
+                          </div>
+                      </div>
+                      <div class="package-body">
+                          <div class="package-content">
+                              <p class="pkgDetails">Access the CogniSleep Provider dashboard. Manage and analyze the progress of patients. Provide the appropriate medical advice by reviewing their sleeping patterns.</p>
+                              <ul>
+                                  <li>Patient can be tracked</li>
+                                  <li>Analyze daily and weekly sleep patterns<span> Yes</span></li>
+                                  <li>Find out when the patient is having sleep issues<span> Yes</span></li>
+                                  <li>Problem area are highlighted with alert<span> Yes</span></li>
+                                  <li>Free Trial Period<span> 15 Days</span></li>
+                                  <li>Minimum Subscription Limit<span> 1 Month</span></li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div class="package-footer">
+                          <a href="/accounts/provider_registration/" class="button">Sign up</a>
+                      </div>
+                      <!--<a href="#" data-modal="myModal1" class="popUpBtn craeteNewPackage">Select Package</a>-->
+                  </div>
+              </div>
+              <!--<div class="col-md-3 col-sm-3">
+              </div>-->
+            </form>
+          </div>
+        </div>
+
+    </section>
+
+
+{% endblock %}
+
+
+
+

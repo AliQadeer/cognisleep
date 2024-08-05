@@ -1,0 +1,126 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        .pd-40 {
+            padding: 0 30px;
+        }
+
+
+section.forward_sec {
+    padding: 20px 0;
+}
+    .backBtn {
+
+    left: 0;
+    background-color: #00a115;
+    border: none;
+    border-radius: 50px;
+    width: 36px;
+    height: 36px;
+    z-index: 9999;
+    top: 20px;
+}
+
+.backBtn:hover {
+    background-color: #79ce4a;
+}
+    </style>
+
+
+
+
+
+
+    <section class="forward_sec">
+        <div class="container-fluid pd-40">
+             <div class="position-relative">
+                 <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+             </div>
+            <div class="row">
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+                <ul class="nav nav-tabs justify-content-center">
+
+
+
+
+                     <li id="view_sleep_diary" class="" style=""><a class="tablinks" href="/dashboard/patient/view-diary/0/{{patient}}/">Sleep Report</a>
+                    </li>
+                    {% if request.user.package != 3 %}
+                    <li id="progress" class="" style=""><a class="tablinks" href="/dashboard/progress/{{patient}}">Patient Progress</a>
+                    </li>
+                    {% endif %}
+                      <li id="dash" class="active" style=""><a class="tablinks" href="/dashboard/accountdetails/{{patient}}/">Account Details</a>
+                    </li>
+                </ul>
+
+                <div class="dashboard_form dashboard2 tabcontent" id="responsivez0">
+                   
+                     
+
+
+                    <div class="container">
+                        <h1 class="defaultHead text-align-center">ACCOUNT DETAILS</h1>
+
+                    <form method="POST" action="/accounts/change_password/">
+
+                        {% csrf_token %}
+
+                        <div class="form-group row">
+                           
+                            <div class="col-md-3 col-lg-4">
+                                 <label class="control-label">First name:</label>
+                                <input type="text" readonly value="{{ userdata.first_name }}" id="first_name"
+                                       name="first_name" disabled="" class="form-control">
+                            </div>
+                            
+                            <div class="col-md-3 col-lg-4">
+                                <label class="control-label">Last name:</label>
+                                <input type="text" readonly value="{{ userdata.last_name }}" id="last_name"
+                                       name="last_name" disabled="" class="form-control">
+                            </div>
+                           
+                            <div class="col-md-3 col-lg-4">
+                                 <label class="control-label">Email:</label>
+                                <input type="text" readonly value="{{ email }}" id="email" name="email" disabled="" class="form-control">
+                            </div>
+                             
+                            <div class="col-md-3 col-lg-4">
+                                <label class="control-label">Username:</label>
+                                <input type="text" readonly value="{{ userdata.first_name }} {{ userdata.last_name }}" id="name" name="name" disabled="" class="form-control">
+                            </div>
+                            
+                            <div class="col-md-3 col-lg-4">
+                                <label class="control-label">Package:</label>
+                                <input name="contact" readonly type="text" value="{{ userdata.package_no }}" id="package" name="package" disabled="" class="form-control">
+                            </div>
+                            
+                            <div class="col-md-3 col-lg-4" >
+                                <label class="control-label">Phone:</label>
+                                <input name="contact" readonly type="text" value="{{ userdata.contact_no }}"
+                                       id="contact_no" name="contact_no" disabled="" class="form-control">
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+                       
+
+{% endblock %}
+
+{% block jqueryScript %}
+{% include "dashboard-js.html" %}
+{% endblock %}

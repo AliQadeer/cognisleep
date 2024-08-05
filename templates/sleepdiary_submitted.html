@@ -1,0 +1,102 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+.space_50{
+    margin-top:50px;
+}
+        .return-btn {display: inline-block;margin: 150px 0;background: #230c9a;color: #fff !important;padding: 10px 20px;border-radius: 5px;font-family: Montserrat, sans-serif;}
+
+@media(min-width: 1024px) {
+
+        section.forward_sec {
+<!--    height: calc(100vh - 346px) !important;-->
+    display: flex;
+    align-items: center;
+}
+}
+
+</style>
+
+
+ <section class="forward_sec">
+        <div class="container" >
+            <div class="row">
+                <div class="col-md-8 m-auto">
+                    <div class="mainImage text-center">
+                       <img style="height:150px;transform: scaleX(-1);margin-bottom: 20px;" src="/static/assets/images/sheep.PNG">
+                    </div>
+                    <div class="provider_login_form">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <h3 class="mb-2 py-0 text-blue">{{ message }}</h3>
+                         {% endfor %}
+                    {% endif %}
+                    </div>
+
+                    <div class="text-center mt-4">
+                                <div class="form-group">
+                                    <div class="alertMessage">
+                                        <div class="alert alert-{{ message.tags }} text-center">
+<!--                                            <p style="color: #08a01a;">{{ message }}</p>-->
+                                            {% if ma %}
+                                            <a class="backHome bg-blue btn space_50" href="/dashboard/ma_patient_dashboard/{{patient}}/">Return to Dashboard</a>
+                                            {% else %}
+                                            <a class="backHome bg-blue btn space_50"  href="/dashboard/">Return to Dashboard</a>
+                                            {% endif %}
+<!--                                        <a href="/dashboard" class="backHome bg-blue btn">Return to Dashboard</a>-->
+                                        </div>
+                                    </div>
+                                </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+    </section>
+<!--    <section class="forward_sec" style="height: 800px !important;">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+
+<!--                <div class="col-md-12 text-center">-->
+
+<!--                    {% if messages %}-->
+<!--                        {% for message in messages %}-->
+<!--                            <div class="form-group">-->
+<!--                                <label class="col-md-3 col-lg-3 control-label"></label>-->
+<!--                                <div class="col-md-12 col-lg-12">-->
+<!--                                    <p><br>-->
+<!--                                    <br>-->
+<!--                                        <br></p>-->
+<!--                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>-->
+
+
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        {% endfor %}-->
+<!--                    {% endif %}-->
+<!--                </div>-->
+<!--                <div class="col-md-12 text-center" >-->
+<!--                    <a class="return-btn my-0"  href="/dashboard/">Return to Dashboard</a>-->
+<!--                    <p>-->
+<!--                    <br>-->
+<!--                    <br>-->
+<!--                        <br></p>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--    </section>-->
+
+
+{% endblock %}

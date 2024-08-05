@@ -1,0 +1,1057 @@
+{% extends 'base_crop.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+ .videoBox button.clear, .videoBox button.turnCamera {
+    display: none;
+} 
+  {% comment %} .patient_regist_form img {
+    height: auto;
+    object-fit: cover;
+    margin: auto;
+  } {% endcomment %}
+
+  .take_btn button {
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+
+  .gap-15 {
+    gap: 15px;
+  }
+
+  {% comment %} .provider_registeration form input {
+    margin-bottom: 0;
+  } {% endcomment %}
+
+  video {
+    display: none;
+    width: 100%;
+  }
+
+  .uploadedImage img {
+    max-width: 100%;
+  }
+
+  .take_btn {
+    display: flex;
+    gap: 15px;
+
+  }
+
+  .crop_style {
+    font-size: 12px !important;
+    padding: 12px 13px !important;
+}
+
+.take_btn .openCrop, .take_btn .croppedBtn {
+    display: none;
+}
+
+
+img#eye {
+    position: absolute;
+    top: 60% !important;
+    transform: translateY(-12px);
+    right: 20px;
+    font-size: 21px;
+    color: #999999;
+    width: 29px;
+}
+/* Hide Calendar Icon In Chrome */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+
+ .modal-backdrop.fade.in {
+    opacity: 1;
+  }
+
+  .modal.fade.in {
+    display: block !important;
+    opacity: 1 !important;
+    z-index: 9999999999 !important;
+  }
+
+  .modal-backdrop.fade.in:not(:last-child) {
+    display: none;
+  }
+
+  .modal-backdrop.fade.in {
+    z-index: 9999999;
+  }
+
+  .modal-content {
+    width: 100% !important;
+  }
+
+canvas {
+    max-width: 100%;
+}
+
+img {
+    max-width: 100%;
+}
+
+
+body {
+    padding: 0 !important;
+}
+
+.checkAlign {
+    top: 0 !important;
+    margin-right: 5px !important;
+}
+
+
+.agreementOpen > div {
+    top: 50px;
+}
+
+.form-checkbox input {
+    width: auto;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+@media(max-width: 799px) {
+
+.take_btn {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+display: inline !important;
+}
+
+</style>
+
+<script type="text/javascript">
+  const endpoint = '/api/refby/';
+
+  function verify_refby(id, fieldid) {
+    var cname = "prp";
+    var cvalue = document.getElementById("doctor_ref_number").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', endpoint);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        var response_data = JSON.parse(xhr.responseText);
+        if (response_data.success) {
+          document.getElementById("primary_care_office_name").value = response_data.primary_care_office_name;
+          document.getElementById("primary_care_doctor_name").value = response_data.primary_care_doctor_name;
+          document.getElementById("error_office_name").innerHTML = response_data.message;
+          document.getElementById("error_office_name").classList.remove('text-danger');
+          document.getElementById("error_office_name").classList.add('text-success');
+
+          var d = new Date();
+          d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));
+          var expires = "expires=" + d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        } else {
+          document.cookie = cname + "=" + cvalue + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+          document.getElementById("error_office_name").innerHTML = response_data.message;
+          document.getElementById("primary_care_office_name").value = '';
+          document.getElementById("primary_care_doctor_name").value = '';
+          document.getElementById("error_office_name").classList.remove('text-success');
+          document.getElementById("error_office_name").classList.add('text-danger');
+        }
+      }
+    };
+
+    var params = 'ref_name=' + encodeURIComponent(document.getElementById("doctor_ref_number").value) + '&fieldid=' + encodeURIComponent(fieldid);
+    xhr.send(params);
+  }
+
+
+</script>
+<script type="text/javascript">
+//api/ValidateEmail
+
+ function validateEmailAndChangeFocus() {
+  var idEmailInput = document.getElementById('id_email');
+  var otherElement = document.getElementById('id_password1');
+  var useremail = idEmailInput.value;
+  const endpoint = '/accounts/api/ValidateEmail/';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', endpoint);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      if (data.success) {
+        idEmailInput.style.border = '1px solid red';
+        document.getElementById('email_message').innerHTML = "This email is already in use.";
+        document.getElementById('email_message').style.display = "block";
+        document.querySelector('.emaillogin').classList.remove('d-none');
+        idEmailInput.focus(); // Change focus to the other element
+      } else {
+        idEmailInput.style.border = '1px solid #dedede';
+        document.getElementById('email_message').style.display = "none";
+        document.querySelector('.emaillogin').classList.add('d-none');
+        otherElement.focus();
+      }
+    }
+  };
+  var params = 'id_email=' + encodeURIComponent(useremail);
+  xhr.send(params);
+}
+
+// Call the function whenever you want to validate the email and change the focus
+
+</script>
+<style>
+    @media(min-width: 1024px) {
+        .provider_registeration form input {
+            margin-bottom: 5px;
+        }
+    }
+
+
+
+
+.take_btn {
+display: flex;
+gap: 15px;
+}
+.gap-15 {
+  gap: 15px;
+}
+.take_btn button {
+  font-size: 12px !important;
+  white-space: nowrap;
+}
+
+.backBtn:hover {
+    background-color: #79ce4a;
+}
+</style>
+    <section class="provider_login_sec">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="titleBoxArea position-relative text-center my-md-4">
+                      <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                      <div class="provider_login_form" >
+                          <h3 class="defaultHead">REGISTRATION</h3>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="provider_registeration_form">
+                        <div class="provider_registeration patient_regist_form">
+                            <!--<h5 class="alight_center">We're pleased to see that you're taking the steps necessary to treat your insomnia.
+                                Please fill out the information below to continue.</h5>-->
+                            <h6 class="text-left my-3">ACCOUNT DETAILS</h6>
+
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                            <form method="POST" action=""  enctype="multipart/form-data" >
+                                {% csrf_token %}
+
+                                <div class="form-group row">
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        <h5>First Name</h5>
+                                        <input   type="text" required id="first_name" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('First name field should be alpha only')"
+                                               name="first_name" value="{{ request.session.guest_first_name|default_if_none:"" }}">
+                                    </div>
+
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        <h5>Last Name</h5>
+                                        <input   type="text" required  id="last_name" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Last name field should be alpha only')"
+                                               name="last_name" value="{{ request.session.guest_last_name|default_if_none:"" }}">
+                                    </div>
+                                    <div class="col-sm12 col-md-2 col-lg-2">
+                                        <h5>DOB</h5>
+                                        <input   type="date"  required id="dob" min="1923-09-12" max="2005-09-12"
+                                               name="dob" value="{{ request.session.dob|default_if_none:"" }}" readonly>
+                                    </div>
+                                    <div class="col-sm12 col-md-2 col-lg-2">
+                                        <h5>Contact Number</h5>
+                                        <input   type="text" required id="contact_no"
+                                               name="contact_no" value="{{ request.session.guest_phone|default_if_none:"" }}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        {{ form.message.errors }}
+                                        {{ form.email|as_crispy_field }}
+                                        <span  id="email_message" style="font-weight: bold; color: red"></span>
+                                        <a class="emaillogin d-none" href="/accounts/login/" >Please login</a>
+                                    </div>
+
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        {{ form.message.errors }}
+                                        {{ form.password1|as_crispy_field }}
+                                    </div>
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        {{ form.message.errors }}
+                                        {{ form.password2|as_crispy_field }}
+                                        <span toggle="#password-field" class="toggle-password" onclick="passeye()"><img
+                                          src="/static/assets/images/3025-200.png" id="eye" style="z-index: 1;top: 3px;"></span>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm12 col-md-4 col-lg-4">&nbsp;
+                                    </div>
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        <b style="color:red;" id="password_error"></b>
+                                        <b style="color:red;" id="password_error2"></b>
+                                        <b style="color:red;" id="password_error3"></b>
+                                     {% if error is not None and verifiedRefId is None  %}  <br> <b style="color:red;" >{{error}}</b> {% endif %}
+                                    </div>
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        &nbsp;
+                                    </div>
+                                </div>
+                    <div class="clearfix"></div>
+                                <div class="row">
+                                   <div class="col-md-12">
+                                    <p>Tip: If taking photo with your webcam, move the license back and forth until the text
+                                      comes into focus. Then click to take photo and crop to the license size.</p>
+                                   </div>
+                                  <div class="col-sm-12 col-md-6 col-lg-6" style="margin-top: 20px;">
+                                    <div class="input-groups">
+                                      <span class="input-group-btn ">
+
+                                        <h5>Drivers License Front</h5>
+                                        <div class="videoBox">
+                                          <!-- template.html -->
+                                          <!-- Add a button to trigger the image capture -->
+
+                                          <div class="d-flex flex-wrap flex-md-nowrap gap-15 align-items-center mb-3">
+                                            <div class="take_btn d-none">
+                                              <button class="showBox" id="capture-button-2" type="button">Start Camera</button>
+                                              <button class="clear" type="button" id="clear-btn-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                              <button type="button" class="turnCamera" id="switch-camera-2"><i class="fa fa-refresh"></i></button>
+                                                <button type="button" class="btn btn-primary openBox d-none" data-target=".modalOpen" data-toggle="modal" id="crop-2">Open Crop</button>
+                                            </div>
+                                            <div class="input-group">
+                                              <span class="input-group-btn">
+                                                <input type="hidden" required value="" class="requiredFiled hidden_required_3">
+                                                <input type="file" name="driving_license_front_img" accept="image/*"
+                                                  id="driving_license_front_img" />
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="take-photo">
+                                            <!-- Add a video element to display the webcam video -->
+                                            <video class="showBox" id="capture-video-2" autoplay playsinline></video>
+                                            <!--                      &lt;!&ndash; Add a canvas element to capture the image &ndash;&gt;-->
+                                            <canvas class="showBox" id="capture-canvas-2"
+                                              style="display:none;"></canvas>
+
+                                            <div class="original_image">
+                                                <input type="hidden" id="hidden-image-2">
+                                            </div>
+
+                                            <div class="image_33">
+                                              <img class="imagecaptureBox"  id="captured-image-2">
+                                            </div>
+                                            <input type="hidden" class="captureImageUrl crop_hidden_2" name="front_image">
+                                            <!-- Add a div element to display the image file name -->
+                                          </div>
+                                        </div>
+                                    </div>
+                                  </div>
+
+
+                                  <div class="col-sm-12 col-md-6 col-lg-6" style="margin-top: 20px;">
+                                    <div class="input-groups">
+                                      <span class="input-group-btn ">
+
+                                        <h5>Drivers License Back</h5>
+                                        <div class="videoBox">
+                                          <!-- template.html -->
+                                          <!-- Add a button to trigger the image capture -->
+
+                                          <div class="d-flex flex-wrap flex-md-nowrap gap-15 align-items-center mb-3">
+                                            <div class="take_btn d-none">
+                                              <button class="showBox" id="capture-button-3" type="button">Start Camera</button>
+                                              <button class="clear" type="button" id="clear-btn-3"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                              <button type="button" class="turnCamera" id="switch-camera-3"><i class="fa fa-refresh"></i></button>
+                                                <button type="button" class="btn btn-primary openBox d-none" data-target=".modalOpen" data-toggle="modal" id="crop-3">Open Crop</button>
+                                            </div>
+                                            <div class="input-group">
+                                              <span class="input-group-btn">
+                                                <input type="hidden" required value="" class="requiredFiled hidden_required_3">
+                                                <input type="file" name="driving_license_back_img" accept="image/png, image/jpeg" id="driving_license_back_img" />
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="take-photo">
+                                            <!-- Add a video element to display the webcam video -->
+                                            <video class="showBox" id="capture-video-3" autoplay width="560" height="420" playsinline></video>
+                                            <!--                      &lt;!&ndash; Add a canvas element to capture the image &ndash;&gt;-->
+                                            <canvas class="showBox" id="capture-canvas-3" width="560" height="420"
+                                              style="display:none;"></canvas>
+
+                                            <div class="original_image">
+                                                <input type="hidden" id="hidden-image-3">
+                                            </div>
+
+                                            <div class="image_33">
+                                              <img class="imagecaptureBox"  id="captured-image-3">
+                                            </div>
+                                           <input type="hidden" class="captureImageUrl crop_hidden_3" name="back_image">
+                                            <!-- Add a div element to display the image file name -->
+                                          </div>
+
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <h4 style="margin-top: 25px;" class="mb-3 text-left h6">PROVIDER DETAILS</h4>
+                                <div class="row">
+
+                                     <div class="col-sm12 col-md-4 col-lg-4">
+                                        <h5>Provider Referral Id</h5>
+                                         <input   value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}'   type="text"  required
+                                               id="doctor_ref_number" name="doctor_ref_number"
+                                        onblur="verify_refby(this.value,'office_name');"
+
+                                        >
+                                         <p class="mb-3" style="font-size: 12px;line-height: 1.5;">Input the Referral ID you received from your provider at your last appointment.</p>
+                                         <div style="margin-top:10px;">
+                                             <span class="text-danger" id="error_office_name">{% if verifiedRefId is not None  %}  {{verifiedRefId}} {% endif %}</span>
+                                         </div>
+                                    </div>
+
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        <h5>Provider Office</h5>
+                                        <input   value='{{ request.session.allform.primary_care_office_name|default_if_none:"" }}' readonly  type="text" required=""  oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Office Name field should be alpha only')"
+                                               id="primary_care_office_name" name="primary_care_office_name"
+                                               >
+
+                                    </div>
+
+                                    <div class="col-sm12 col-md-4 col-lg-4">
+                                        <h5>Provider Name</h5>
+                                        <input  value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}' readonly type="text" required="" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                                               id="primary_care_doctor_name" name="primary_care_doctor_name"
+                                               >
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="form-group d-flex align-items-center flex-wrap">
+                                    <input type="checkbox" class="form-check-input m-0 checkAlign" id="terms">
+                                            <label class="form-check-label w-auto" for="terms">Consent for treatment</label>
+
+                                </div>
+
+                                <div class="form-group create_account_button d-none">
+                                  <button class="login_buttonz validation_Check" href="#" type="button">Continue</button>
+                                    <button class="login_buttonz submitForm d-none" type="submit">Continue</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Modal -->
+    <div class="modal fade modalOpen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-secondary">
+            <h5 class="modal-title" id="modalLabel">Cropper</h5>
+            <button type="button" class="bg-transparent close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="img-container">
+              <img id="image" src="" alt="Picture">
+            </div>
+          </div>
+          <div class="modal-footer bg-secondary justify-content-center">
+            <button type="button" class="btn btn-success" id="button" data-dismiss="modal">Crop</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- agreement  -->
+    <div class="modal fade agreementOpen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content p-3">
+          <div class="modal-body">
+            <div class="agreementContent">
+                <h3 class="text-capitalize text-center">Cognisleep Consent for treatment</h3>
+                <p>Cognisleep is a sleep therapy program that is used to treat Chronic insomnia. Cognisleep is based on the ioral therapy for insomnia, also called CBT-I.</p>
+                <p>CBT-I has been found to improve insomnia symptoms in up to 80% of individuals with Chronic insomnia,and 90% of the patients have been able to reduce or stop using sleep medications (Sleep Health Foundation publication Feb 14, 2023).</p>
+
+                <p>
+                    CBT-I has been found to improve insomnia symptoms in up to 80% of individuals with Chronic insomnia,and 90% of the patients have been able to reduce or stop using sleep medications (Sleep Health Foundation publication Feb 14, 2023).
+                </p>
+
+                <p>
+                    Sleeping pills are associated with significant side effects, and they don’t address the core problem of Chronic insomnia. Sleeping pills are best used for a short time and not for an extended period of time. Sleeping pills have been linked to memory loss, daytime grogginess, or sleepiness, and in some cases, addiction, to name a few. The longer sleeping is taken, the more likely you may develop significant side effects (Sleep Foundation publication July 17, 2023)
+                </p>
+
+                <p>
+                    Chronic insomnia is developed over time due to a combination of predisposing, precipitating, and perpetuating factors. Predisposing factors include advancing age, family history of insomnia, female sex, a certain lifestyle, and stress or worry. Precipitating factors include Acute stress, illness, jet lag, or a psychiatric condition (such as an episode of depression) that may lead to poor sleep. The result is that the patient develops Perpetuating factors which include behaviors and negative thoughts as well as negative emotions that maintain the poor sleep cycle. Behaviors involve poor sleep habits, primarily napping and spending extended time in bed trying to force sleep, which dysregulates the sleep–wake cycle and disturbs the sleep drive.
+                </p>
+                <p>
+                    Negative thoughts and emotions often include unhealthy beliefs about sleep and undue worries, which perpetuate sleep problems. To break the cycle for good, it requires a step-to-step approach that deals with the core of Chronic insomnia. (Spielman AJ, et al. A behavioral perspective on insomnia treatment. Psychiatric Clinics of North America. 1987; 10:541–553
+                </p>
+                <p>
+                    Cognisleep addresses the factors that contribute to chronic insomnia. Cognisleep consists of 6 weekly treatment sessions. While You may go at your own pace, we strongly encourage our patients to finish the program within 6-8 weeks, as it is more effective when used this way
+                </p>
+                <p>
+                    The therapy has five main components: Consolidation of sleep, Stimulus control, Cognitive therapy, Instructions on Sleep hygiene, and various uses of Relaxation techniques.
+                </p>
+                <p>
+                    Certain people may experience a temporary increase in drowsiness at the initiation of treatment, but it is short-term. We encourage patients undergoing Cognisleep treatment to avoid operating a motor vehicle or any other heavy machinery during this period if feeling sleepy
+                </p>
+               <div class="form-checkbox">
+                   <input type="checkbox" name="sign" id="agreementCheck">
+                   <p>
+                       By clicking this box, I understand and agree with the above statements. I consent to Cognisleep treatment at <span id="medicalPractice" class="font-weight-bold"></span> under the supervision of <span id="doctorName" class="font-weight-bold"></span>.
+                   </p>
+               </div>
+            </div>
+          </div>
+         <!--  <div class="modal-footer bg-secondary justify-content-center">
+            <button type="button" class="btn btn-success" id="button" data-dismiss="modal">Crop</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+      <div class="loaderBox d-none">
+                    <div class="custom-loader"></div>
+                </div>
+
+{% endblock content %}
+
+
+{% block jqueryScript %}
+
+<script>
+
+ $("#terms").on("change", function () {
+    let officeName = jQuery('input[name="primary_care_office_name"]').val();
+    let doctorName = jQuery('input[name="primary_care_doctor_name"]').val();
+
+    $('#doctorName').text(doctorName);
+     $('#medicalPractice').text(officeName);
+      // If the checkbox is checked, open the modal
+      if ($(this).prop("checked")) {
+        $(".agreementOpen").modal("show");
+
+      } else {
+        // If the checkbox is not checked, close the modal (if open)
+        $(".agreementOpen").modal("hide");
+
+      }
+    });
+
+ $("#agreementCheck").on("change", function () {
+      // If the checkbox is checked, open the modal
+      if ($(this).prop("checked")) {
+        $(".agreementOpen").modal("hide");
+        $('.create_account_button').removeClass('d-none');
+      } else {
+        // If the checkbox is not checked, close the modal (if open)
+        $(".agreementOpen").modal("show");
+        $('.create_account_button').addClass('d-none');
+      }
+    });
+
+
+$( "#id_email" ).focusout(function() {
+    validateEmailAndChangeFocus();
+});
+    function closeWebCamera() {
+  if (videoStream) {
+    videoStream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    console.log("Web camera closed successfully!");
+  }
+}
+
+    function captureImage(captureButtonId, captureVideoId, captureCanvasId, capturedImageId, imageNameInputId, switchButtonId, clearButtonId, hiddenImageId, cropBoxId) {
+      // The JavaScript for the page
+      const captureButton = document.getElementById(captureButtonId);
+      const captureVideo = document.getElementById(captureVideoId);
+      const captureCanvas = document.getElementById(captureCanvasId);
+      const capturedImage = document.getElementById(capturedImageId);
+      const imageNameDiv = document.getElementById(imageNameInputId);
+      const switchButton = document.getElementById(switchButtonId);
+      const clearButton = document.getElementById(clearButtonId);
+      const hiddenImage = document.getElementById(hiddenImageId);
+      const cropBox = document.getElementById(cropBoxId);
+let videoStream;
+  // Set up the click event for the capture button
+  clearButton.addEventListener('click', function () {
+    captureVideo.srcObject = null;
+    videoStream = null;
+
+    // Call getUserMedia with the updated facingMode constraint
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+      .then(function (stream) {
+        videoStream = stream;
+        captureVideo.srcObject = stream;
+      })
+      .catch(function (error) {
+        console.error('Error accessing the webcam:', error);
+      });
+    });
+
+
+
+
+
+      // Set up the click event for the capture button
+      captureButton.addEventListener('click', function () {
+        // Start the video stream if it has not been started yet
+          clearButton.style.display = 'none';
+          switchButton.style.display = 'block';
+          captureVideo.style.display = 'block';
+        if (!videoStream) {
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+            .then(function (stream) {
+              videoStream = stream;
+              captureVideo.srcObject = stream;
+            })
+            .catch(function (error) {
+              console.error('Error accessing the webcam:', error);
+            });
+            clearButton.style.display = 'none';
+            switchButton.style.display = 'block';
+        }
+
+
+
+        // Start the video
+        captureVideo.play();
+               let vidWidth = captureVideo.offsetWidth;
+        let vidHeight =  captureVideo.offsetHeight;
+        // Draw the video frame to the canvas
+         captureCanvas.width = vidWidth;
+        captureCanvas.height = vidHeight;
+
+        captureCanvas.getContext('2d').drawImage(captureVideo, 0, 0);
+
+
+        // Generate a unique file name for the captured image
+        // const imageName = 'captured-image-' + Date.now() + '.jpg';
+
+        // document.getElementById(imageNameInputId).value = imageName;
+
+        // // Set the file name as the text of the image name div
+        // imageNameDiv.innerText = imageName;
+
+        // Set the captured image as the src of the captured image img
+       // capturedImage.width = captureCanvas.width;
+       // capturedImage.height = captureCanvas.height;
+
+
+
+        capturedImage.src = captureCanvas.toDataURL('image/jpg');
+        // capturedImage.style.width = `${vidWidth}px`
+        // capturedImage.style.height = `${vidHeight}px`
+            capturedImage.width = captureCanvas.width;
+           capturedImage.height = captureCanvas.height;
+
+        hiddenImage.value = capturedImage.src;
+        localStorage.setItem('image', capturedImage.src);
+
+        captureVideo.pause();
+        videoStream.getTracks().forEach(function (track) {
+          captureButton.style.display = 'none';
+          clearButton.style.display = 'block';
+          switchButton.style.display = 'none';
+          captureVideo.style.display = 'none';
+          cropBox.classList.remove('d-none');
+          track.stop(); });
+
+
+        // Remove the click event for the capture button to prevent further captures
+        captureButton.removeEventListener('click', this);
+      });
+
+      // Set up the click event for the switch camera button
+      switchButton.addEventListener('click', function () {
+        // Stop the current video stream
+        videoStream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+
+        // Switch the camera by changing the video constraints
+        const videoConstraints = captureVideo.srcObject.getVideoTracks()[0].getConstraints();
+        console.log(videoConstraints);
+        if (videoConstraints.facingMode === 'user') {
+          videoConstraints.facingMode = 'environment';
+        } else {
+          videoConstraints.facingMode = 'user';
+        }
+
+        console.log(videoConstraints);
+
+        // Restart the video stream with the new constraints
+        navigator.mediaDevices.getUserMedia({ video: videoConstraints})
+          .then(function (stream) {
+            videoStream = stream;
+            captureVideo.srcObject = stream;
+          })
+          .catch(function (error) {
+            console.error('Error accessing the webcam:', error);
+          });
+      });
+
+      clearButton.addEventListener('click', function() {
+        clearButton.style.display = 'none';
+        switchButton.style.display = 'block';
+      });
+
+    }
+
+
+  // Set up the capture image function for the first instance
+  captureImage('capture-button-2', 'capture-video-2', 'capture-canvas-2', 'captured-image-2', 'image-name-input-2', 'switch-camera-2', 'clear-btn-2', 'hidden-image-2', 'crop-2');
+  captureImage('capture-button-3', 'capture-video-3', 'capture-canvas-3', 'captured-image-3', 'image-name-input-3', 'switch-camera-3', 'clear-btn-3', 'hidden-image-3', 'crop-3');
+
+     window.addEventListener('DOMContentLoaded', function () {
+      var image = document.getElementById('image');
+      var cropper;
+      var result = document.getElementById('result');
+       var button = document.getElementById('button');
+
+      $('.modalOpen').on('shown.bs.modal', function () {
+        cropper = new Cropper(image, {
+          autoCropArea: .5,
+        });
+      }).on('hidden.bs.modal', function () {
+        cropper.destroy();
+      });
+
+       button.onclick = function () {
+        const croppedCanvas = cropper.getCroppedCanvas();
+        const imageUrl = croppedCanvas.toDataURL();
+        jQuery('.activeCrop .imagecaptureBox').attr('src', imageUrl);
+        jQuery('.activeCrop .captureImageUrl').val(imageUrl);
+        jQuery('.modal-backdrop').remove();
+
+      };
+    });
+
+
+    jQuery('.openBox').click(function(){
+    jQuery('.videoBox').removeClass('activeCrop');
+    jQuery(this).parents('.videoBox').addClass('activeCrop')
+    let originalImage = jQuery(this).parents('.videoBox').find('.original_image input').val();
+    jQuery('#image').attr('src', originalImage);
+
+})
+
+
+<!--     jQuery('.provider_registeration form input').change(function (event) {-->
+
+<!--    var files = jQuery(this)[0].files;-->
+<!--     for (var i = 0; i < files.length; i++) {-->
+<!--    var file = files[i];-->
+
+<!--    // Check file type-->
+<!--    if (!file.type.includes('image/')) {-->
+<!--      alert('Please select only image files.');-->
+<!--      jQuery(this).val('');-->
+<!--    }-->
+<!--    else {-->
+<!--        var imageUrl = URL.createObjectURL(event.target.files[0]);-->
+<!--      if (imageUrl != '') {-->
+<!--        // closeWebCamera();-->
+<!--        jQuery(this).parents('.videoBox').find('video').hide();-->
+<!--        jQuery(this).parents('.videoBox').find('.turnCamera').hide();-->
+<!--        jQuery(this).parents('.videoBox').find('.clear').show();-->
+<!--        jQuery(this).parents('.videoBox').find('.openBox').removeClass('d-none');-->
+<!--        jQuery(this).parents('.videoBox').find('.showBox').hide();-->
+<!--        jQuery(this).parents('.videoBox').find('.captureImageUrl').val(URL.createObjectURL(event.target.files[0]));-->
+<!--      jQuery(this).parents('.videoBox').find('.imagecaptureBox').attr('src', URL.createObjectURL(event.target.files[0]));-->
+<!--      jQuery(this).parents('.videoBox').find('.original_image input').val(URL.createObjectURL(event.target.files[0]));-->
+<!--      jQuery(this).parents('.videoBox').find('.input-group-btn > input.requiredFiled').val(imageUrl);-->
+<!--    }-->
+<!--    }-->
+<!--}-->
+
+<!--  })-->
+jQuery('.provider_registeration form input').change(function (event) {
+  var files = jQuery(this)[0].files;
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+
+    // Check file type
+    if (!file.type.includes('image/')) {
+      alert('Please select only image files.');
+      jQuery(this).val('');
+    } else {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var dataURL = e.target.result;
+
+        jQuery(this).parents('.videoBox').find('video').hide();
+        jQuery(this).parents('.videoBox').find('.turnCamera').hide();
+        jQuery(this).parents('.videoBox').find('.clear').show();
+        jQuery(this).parents('.videoBox').find('.openBox').removeClass('d-none');
+        jQuery(this).parents('.videoBox').find('.showBox').hide();
+        // Perform actions with the data URL
+        jQuery(this).parents('.videoBox').find('.imagecaptureBox').attr('src', dataURL);
+        jQuery(this).parents('.videoBox').find('.captureImageUrl').val(dataURL);
+        jQuery(this).parents('.videoBox').find('.original_image input').val(dataURL);
+        jQuery(this).parents('.videoBox').find('.input-group-btn > input.requiredFiled').val(dataURL);
+      }.bind(this);
+      reader.readAsDataURL(file);
+    }
+  }
+});
+
+
+  jQuery('.clear').click(function () {
+    jQuery(this).parents('.take_btn').find('.showBox').show();
+    jQuery(this).parents('.videoBox').find('.openBox').addClass('d-none');
+    jQuery(this).parents('.videoBox').find('video').show();
+    jQuery(this).parents('.videoBox').find('input[type="file"]').val('');
+    jQuery(this).parents('.videoBox').find('.imagecaptureBox').removeAttr('src');
+  });
+
+  jQuery('.showBox').click(function(){
+    jQuery(this).text('Take Photo');
+  })
+
+  jQuery('.validation_Check').click(function () {
+    // Hide loader by default
+    jQuery('.loaderBox').addClass('d-none');
+
+    // Perform additional field validation
+    var firstName = $('#first_name').val().trim();
+    var lastName = $('#last_name').val().trim();
+    var dob = $('#dob').val().trim();
+    var contactNo = $('#contact_no').val().trim();
+
+    // Check if any of the fields are empty
+    if (!firstName || !lastName || !dob || !contactNo) {
+        alert('Please check your data. All fields are required.');
+        return; // Stop further execution
+    }
+
+    // Perform password validation
+    var pass = $('#id_password1').val();
+    var confirm_pass = $('#id_password2').val();
+
+    // Check if passwords match
+    if (pass != confirm_pass) {
+        var errorMessage = "Password didn't match";
+        $("#password_error").html(errorMessage).css('color', 'red');
+        return;
+    }
+
+    var password_regex = /^(?=.*\d)(?=.*[~!@#$%^*()_\-+=|\\{}[\]:;<>?/])(?=.*[A-Za-z])(?=.*[a-z])\S{8,}$/;
+
+    // Check password against regex
+    if (pass.length < 8 || !password_regex.test(pass)) {
+        var errorMessage = "*Password should be minimum 8 characters and must contain at least one digit, one special character, one uppercase letter, and one lowercase letter";
+        $("#password_error").html(errorMessage).css('color', 'red');
+        return;
+    } else {
+        // If password meets criteria, hide the error message
+        $("#password_error").html("").css('color', 'red');
+    }
+
+
+    // Password validation passed, show loader
+    jQuery('.loaderBox').removeClass('d-none');
+
+    // Other validations and actions
+    jQuery('.captureImageUrl').each(function(){
+        var getValue = jQuery(this).val();
+        var storeValue = jQuery(this).parents('.videoBox').find('.imagecaptureBox').attr('src');
+        if(getValue == '') {
+            jQuery(this).val(storeValue);
+        }
+    });
+
+    var required_2 = jQuery('.crop_hidden_2').val();
+    var required_3 = jQuery('.crop_hidden_3').val();
+    if (required_2 != '' && required_3 != '') {
+        // Trigger form submission
+        jQuery('.submitForm').trigger('click');
+    } else {
+        alert('Upload Fields are required.');
+        // Hide loader if validation fails
+        jQuery('.loaderBox').addClass('d-none');
+    }
+});
+
+
+  jQuery('.close').click(function() {
+    jQuery('.modal-backdrop').remove();
+  })
+
+   $(document).ready(function () {
+    webcam_check_func();
+  });
+
+  function webcam_check_func() {
+    var hasWebcam = false;
+    var device = [];
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+
+      navigator.enumerateDevices = function (callback) {
+        navigator.mediaDevices.enumerateDevices().then(callback);
+      };
+      navigator.enumerateDevices(function (devices) {
+        devices.forEach(function (my_device) {
+
+          if (my_device.kind === 'videoinput') {
+            // debugger;
+            hasWebcam = true;
+          }
+        }
+        );
+        //alert("Has Web Camera -->" + hasWebcam);
+        jQuery('.take_btn').removeClass('d-none');
+      });
+    }
+
+  }
+
+
+
+function passeye() {
+    var x = document.getElementById("id_password1");
+    var y = document.getElementById("id_password2");
+    if (x.type === "password") {
+        x.type = "text";
+        y.type = "text";
+        return false;
+    } else {
+        x.type = "password";
+        y.type = "password";
+    }
+}
+
+document.getElementById('contact_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+
+document.getElementById('practice_phone_number').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+
+document.getElementById('fax_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+$(document).ready( function() {
+        $(document).on('change', '.btn-file :file', function() {
+        var input = $(this),
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [label]);
+        });
+
+        $('.btn-file :file').on('fileselect', function(event, label) {
+
+            var input = $(this).parents('.input-group').find(':text'),
+                log = label;
+
+            if( input.length ) {
+                input.val(log);
+            } else {
+                //if( log ) alert(log);
+            }
+
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img-upload').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function(){
+            readURL(this);
+        });
+    });
+
+    $(document).ready(function() {
+    $('#first_name').focus();
+  });
+</script>
+
+
+<script>
+  // Get the current date
+  var currentDate = new Date();
+
+  // Calculate the minimum date (100 years ago)
+  var minDate = new Date();
+  minDate.setFullYear(currentDate.getFullYear() - 100);
+
+  // Calculate the maximum date (18 years ago)
+  var maxDate = new Date();
+  maxDate.setFullYear(currentDate.getFullYear() - 18);
+
+  // Convert the minimum and maximum dates to the required format (YYYY-MM-DD)
+  var minDateString = minDate.toISOString().slice(0, 10);
+  var maxDateString = maxDate.toISOString().slice(0, 10);
+
+  // Set the min and max attributes of the input element
+  document.getElementById("dob").setAttribute("min", minDateString);
+  document.getElementById("dob").setAttribute("max", maxDateString);
+</script>
+<script>
+    // Get the date input element
+const dateInput = document.getElementById("dob");
+
+// Disable manual input
+dateInput.addEventListener("keydown", function (e) {
+    e.preventDefault();
+});
+
+// Enable the input when the date picker icon is clicked
+dateInput.addEventListener("click", function () {
+    dateInput.removeAttribute("readonly");
+});
+
+// Disable the input again when the date picker loses focus
+dateInput.addEventListener("blur", function () {
+    dateInput.setAttribute("readonly", "true");
+});
+
+</script>
+
+{% endblock %}

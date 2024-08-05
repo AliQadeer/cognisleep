@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, Helvetica, sans-serif;
+            user-select: none;
+        }
+
+        html {
+            font-size: 10px;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+
+        .certificate {
+            width: 1000px;
+            font-size: 10px;
+            border: 1px solid #000;
+            padding: 5em;
+            font-size: 10px;
+            position: relative;
+        }
+
+        .certificate * {
+            z-index: 3;
+            position: relative;
+        }
+
+        .certificate .watermark {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 80%;
+            opacity: .05;
+        }
+        .poqdisable{
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 999;
+        }
+
+        .certificate h1 {
+            font-size: 5em;
+            text-align: center;
+            text-transform: uppercase;
+            color: #230C9A;
+            margin-bottom: 4rem;
+        }
+
+        .certificate .text {
+            text-align: center;
+            max-width: 70%;
+            margin: 0 auto;
+            font-size: 2.5em;
+            margin-bottom: 4rem;
+        }
+
+        .certificate .text p {
+            margin-bottom: 2rem;
+        }
+
+        .certificate .text p.name-field {
+            padding-bottom: .5rem;
+            border-bottom: 1px solid #000;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2em;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .certificate .text p.date-field {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #000;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .cert-footer .logo-img {
+            width: 200px;
+        }
+
+        .cert-footer .doctor-img {
+            width: 140px;
+        }
+        .print-btn-cont button {
+            border-radius: 5px;
+            background: #230c9a;
+            display: inline-block;
+            text-align: center;
+            color: #fff;
+            font-weight: 400;
+            font-family: "Montserrat", sans-serif;
+            padding: 11px 35px;
+            text-transform: uppercase;
+            font-size: 16px;
+            border: 0;
+            cursor: pointer;
+        }
+        
+        .print-btn-cont {
+            text-align: center;
+            padding-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        .headLogo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.text-phase {
+    font-size: 2.5em;
+}
+
+   .u-text {
+   padding-bottom: 1rem;
+    border-bottom: 1px solid #000;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    }
+
+    .phoneNumber {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+}
+        
+        @media print{
+            .print-btn-cont{
+                display:none;
+            }
+        }
+    </style>
+    <style type="text/css" media="print">
+        @page {
+            size: landscape;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="print-btn-cont">
+        <button id="print-btn">Print</button>
+    </div>
+    <div class="wrapper">
+        <div class="certificate">
+            <img src="{% static 'assets/images/icons/logo-1.svg' %}" class="watermark" />
+            <div class="poqdisable"></div>
+            <div class="headLogo text-center">
+                <img src="{% static 'assets/images/logo-1.svg' %}" class="logo-1.png" width="400" />
+            </div>
+            <h1>Certificate of completion</h1>
+            <div class="text">
+                <p class="normal-text">This certifies that</p>
+                <p class="name-field" style="text-transform: capitalize;">{{name}}</p>
+                <p class="normal-text">Has completed the CogniSleep Program for Insomnia on:</p>
+                <p class="date-field">{{ date }}</p>
+                <span>Date</span>
+            </div>
+            <div class="cert-footer">
+               <div class="footer-content">
+                <p class="text-phase">Supervised by</p>
+                <p class="text-phase u-text">{{provider_name.provider_name}}</p>
+                 <div class="phoneNumber">
+                      <p class="text-phase">Phone:</p>
+                     <p class="text-phase u-text">+1 (833) 346-2929 </p>
+                 </div>
+            </div>
+               <div class="medla">
+                    <img src="{% static 'assets/images/certificate.png' %}" class="doctor-img" />
+               </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('print-btn').onclick=function(){
+            window.print();
+        }
+    </script>
+</body>
+
+</html>

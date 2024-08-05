@@ -1,0 +1,822 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+<head>
+   <!--   <script>
+        var cururl = window.location.href;
+        if(cururl.includes("http:")){
+          cururl = cururl.replace("http:", "https:");
+          window.location.href = cururl;
+        }
+    </script>-->
+    <meta charset="UTF-8"/>
+    <title>{{ title }} </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="profile" href="https://gmpg.org/xfn/11"/>
+    <link rel="icon" href="{% static "assets/favicon.ico" %}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "assets/bootstrap/dist/css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'assets/owl-carousel/dist/assets/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/owl-carousel/dist/assets/owl.theme.default.min.css' %}">
+    <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'assets/css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static "assets/css/responsive.css" %}"/>
+
+<style>
+    header * {
+    overflow: unset !important;
+}
+
+.header-actions a, .header-actions button {
+    display: block;
+    width: 100% !important;
+    text-transform: uppercase;
+    font-size: 15px;
+}
+
+.header-actions a i {
+    padding-right: 8px;
+}
+
+.header-actions .dropdown-menu.show {
+    display: block;
+    width: 100%;
+}
+
+.header-actions {
+    margin-bottom: 10px;
+}
+
+
+footer {
+    background-color: #e8f4f5;
+    color: #888889;
+}
+
+.site-footer .title {
+    margin-bottom: 1rem;
+    font-size: 18px;
+    color: #080842;
+}
+
+footer#site-footer p {
+    color: #888889;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.form_footer input {
+    background-color: transparent;
+    border: none;
+    border-radius: 0 !important;
+    border-bottom: 1px solid #2d2d82;
+    width: 100%;
+    padding: 7px 20px;
+    outline: none;
+}
+
+.site-footer-bottom {
+    background: #2e2e83;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.quick-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.quick-links ul li {
+    margin-bottom: 10px;
+}
+
+.quick-links ul li a {
+    color: #888889;
+    font-size: 14px;
+}
+
+
+.newsletterForm {
+    position: relative;
+}
+
+.submitBtn {
+    position: absolute;
+    top: 6px;
+    right: 0;
+}
+
+.submitBtn button {
+    border: none;
+    background-color: transparent;
+    color: #0f9648;
+}
+
+.site-info p {
+    color: #fff !important;
+}
+
+ul.likeusonul {
+    margin: 0;
+}
+
+.socialMediaIcons ul {
+    list-style: none;
+    padding: 0;
+}
+
+.socialMediaIcons ul li a {
+    font-size: 18px;
+    border: 1px solid #0f9648;
+    color: #fff;
+    border-radius: 50px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0f9648;
+}
+
+.socialMediaIcons ul li {display: inline-block;margin-right: 18px;}
+
+.socialMediaIcons ul li a:hover {
+    background-color: transparent;
+    border: 1px solid;
+    color: #0f9648;
+    transition: .5s;
+}
+
+section#text-2 p {
+    font-size: 13px;
+}
+
+.site-footer-top {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.submit_btn {
+    background-color: #0f9648;
+    color: #fff;
+}
+
+.submit_btn:hover {
+    background-color: #067e38;
+    color: #fff;
+}
+
+
+
+@media(max-width: 799px) {
+.logo img {
+    width: 225px !IMPORTANT;
+    height: auto;
+}
+
+header button.navbar-toggler {
+    position: absolute;
+    right: 0;
+    top: -53px;
+    border: none;
+    outline: none;
+}
+
+}
+</style>
+</head>
+
+<body class="{% if request.user.id is not None %} logged-in {% endif %}">
+<header class="py-0">
+    <div class="container-fluid">
+        <div class="row align-items-center pt-0">
+            <div class="col-md-12 col-lg-3 col-sm-12">
+                <div class="logo">
+                    <a href="/" title="CogniSleep" rel="home">
+                       <img src="{% static "assets/images/logo-1.svg" %}" data-original="{% static "assets/images/logo-1.svg" %}" data-fixed="{% static "assets/images/logo-trimmed.png" %}" class="w-100" alt="">
+                        </a>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-9 col-sm-12">
+
+                <div class="mnu">
+                        <span class="hamburger hamburger--collapse">
+          <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+                        </span>
+                        </span>
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse respon navbar-main" id="navbarSupportedContent">
+                            <div class="fstrip mb-0">
+                                <div "btn"class="col-md-12 col-sm-12 dvr">
+                                   <div class="row justify-content-md-end">
+                                            <div class="col-sm-3 col-lg-3">
+                                                <div class="header-actions">
+                                                    <a href="/calculator/" class="btn bg-dark text-white"><i class="fa fa-calculator"></i> Sleep
+                                                        Calculator</a>
+                                                </div>
+                                            </div>
+                                            {% if user.is_authenticated %}
+                                            <!--<div class="col-sm-3 col-lg-3">
+                                                <div class="header-actions">
+                                                    <a href="/questions/cogni_questions" class="btn bg-success text-white"><i class="fa fa-calendar"></i>
+                                                        Take test now</a>
+                                                </div>
+                                            </div>-->
+                                            <div class="col-sm-3 col-lg-3">
+                                                <div class="header-actions">
+                                                    <a href="/dashboard" class="btn bg-blue">Dashboard</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3 col-lg-3">
+                                                <div class="header-actions">
+                                                    <a href="/accounts/logout" class="btn btn-secondary">Logout</a>
+                                                </div>
+                                            </div>
+                                            {% else %}
+                                            <!--<div class="col-sm-3 col-lg-3">
+                                                <div class="header-actions">
+                                                    <a href="/questions/cogni_questions" class="btn bg-success text-white"><i class="fa fa-calendar"></i>
+                                                        take test now</a>
+                                                </div>
+                                            </div>-->
+                                            <div class="col-sm-3 col-lg-3">
+                                                <div class="header-actions">
+                                                    <div class="dropdown">
+                                                          <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Login / Register
+                                                          </button>
+                                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item" href="/accounts/login/">Patient</a>
+                                                            <a class="dropdown-item" href="/accounts/provider_login/">Provider</a>
+                                                          </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                 </div>
+                            </div>
+
+                            <div class="navi">
+                                <div class="col-sm-12 col-md-12 nopad">
+                                    <div class="menu-header-menu-container">
+                                        <ul class="nav navbar-nav">
+                                             {% if page_Sel == "patient" %}
+                                                <li class="nav-item active"><a href="/patients">Patients</a></li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/patients">Patients</a></li>
+                                            {% endif %}
+
+                                            <!--{% if page_Sel == "employers" %}
+                                                <li class="nav-item active"><a href="/employers">Employers</a></li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/employers">Employers</a></li>
+                                            {% endif %}-->
+
+
+                                            {% if page_Sel == "providers" %}
+                                                <li class="nav-item active"><a
+                                                        href="/providers">Providers/Physicians</a></li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/providers">Providers/Physicians</a></li>
+                                            {% endif %}
+
+                                            {% if page_Sel == "cogni_science<sup>TM</sup>" %}
+                                                <li class="nav-item active"><a href="/cogni_science">Cogni Science<sup>TM</sup></a>
+                                                </li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/cogni_science">Cogni Science<sup>TM</sup></a></li>
+                                            {% endif %}
+
+                                            <!--{% if page_Sel == "pricing" %}
+                                                <li class="nav-item active"><a href="/pricing/6/">Plans &amp;
+                                                    Pricing</a></li>
+                                                </li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/pricing/6/">Plans &amp; Pricing</a></li>
+                                            {% endif %}-->
+
+                                            {% if page_Sel == "about" %}
+                                                <li class="nav-item active"><a href="/about">About Us</a></li>
+                                                </li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/about">About Us</a></li>
+                                            {% endif %}
+
+                                            {% if page_Sel == "faq" %}
+                                                <li class="nav-item active"><a href="/faq">FAQ</a></li>
+                                                </li>
+                                            {% else %}
+                                                <li class="nav-item"><a href="/faq">FAQ</a></li>
+                                            {% endif %}
+                                        {% if page_Sel == "contactus" %}
+                                            <li class="nav-item active" ><a href="/contactus" >Contact</a></li>
+                                        {% else %}
+                                            <li class="nav-item"><a href="/contactus" >Contact</a></li>
+                                        {% endif %}
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                </div>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+    </div>
+</header>
+{% if request.session.payment is not None and request.session.payment is False %}
+<div  class="alert alert-danger" style="    overflow: hidden;margin-top: 156px;text-align: center;" role="alert">
+        Your payment is not successful please try again <a href="https://www.cognisleep.com/accounts/payment/">click here</a>
+</div>
+{% endif %}
+
+{% if request.user.id is not None and request.user.isverified is not True %}
+<div  class="alert alert-danger" style="    overflow: hidden;margin-top: 156px;text-align: center;" role="alert">
+        Please verify your account <a href="https://www.cognisleep.com/accounts/patient_verification/">click here</a>
+</div>
+{% endif %}
+
+
+<section class="banner_sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-12 col-sm-12 banner_sec_caption text-right">
+                <div class="d-inline-block">
+                    <h1><span style="color:#79ce4a;font-weight: 600;">Get the sleep you deserve</span></h1>
+                    <p>Change the way you think about sleep to overcome insomnia<br></p>
+                    <p>If you have been referred by a physician, please <div class="banbtn"> <a href="/accounts/patientregform/" class="cust-btn">Click Here</a> </div></p>
+                </div>
+            </div>
+<div class="col-lg-4 col-md-12 col-sm-12  banner-video">
+                <div class="d-inline-block">
+                    <div class="">
+
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#drModal" class="text-center">
+    <div class="blur"></div>
+                            <div class="play-btn"></div>
+                            <img style="max-width: 100%;width: 100%;" src="{% static 'assets/images/cogni_banner.png' %}" class="" alt="">
+                        </a>
+                        <p align="center" style="font-width: bolder;">Meet Dr. Cogni</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+</section>
+
+<section class="first_sec">
+    <div class="container">
+        <div class="row">
+
+            <h2 class="wow fadeIn text-center" style=""><span style="color:#08a01a;">Sleep Physician Created | Based On Science | Easy To Use Approach
+            </h2>
+            <p>CogniSleep partners with physicians to help you harness the power of your thoughts through Cognitive
+                Behavioral Therapy (CBT-I): a program backed by clinical studies and years of research.</p>
+        </div>
+    </div>
+</section>
+<section class="second_sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 wow fadeInLeft" style="visibility: visible; animation-name: fadeInLeft;">
+                <h2 class="text-center">Six weeks may be all you need </h2>
+                <p></p>
+                <p class="text-center">If you have problems falling asleep or staying asleep, CogniSleep can help you.
+                    It’s a provider-guided program that can help you develop the skills necessary to combat insomnia in
+                    as few as 6 weeks without the use of sleeping pills. </p>
+                <p></p>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section class="third_sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 text-center wow fadeInDown"
+                 style="visibility: visible; animation-name: fadeInDown;">
+                <h2>We understand your sleeplessness</h2>
+            </div>
+            <div class="col-sm-12 col-lg-4 col-md-4 wow zoomIn hidden-sm"
+                 style="visibility: visible; animation-name: zoomIn;">
+                <div class="dc"><img width="583" height="462"
+                                     src="https://www.pedimhealthcare.com/img/team/Head%20Shot%20-%20Dacelin%20St.%20Martin,%20MD,%20FAAP.jpg"
+                                     class="attachment-large size-large wp-post-image img-responsive img-thumbnail"
+                                     alt="">
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-12 wow fadeInRight">
+
+
+                <p>This program was designed by Dr. Dacelin St. Martin, a triple Board Certified Physician, respected in the fields of Sleep Medicine, Pediatrics, and Internal Medicine. Here are a few words from him about CogniSleep:  “CogniSleep is a revolutionary program for insomnia that has proven to be extremely effective. It is based on the principles of Cognitive Behavioral Therapy for Insomnia, or CBT-I, and has been proven to be more effective than sleeping pills; has results than can last a lifetime; and has no side effects. I strongly encourage all insomnia sufferers to try CogniSleep.”</p>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="help_sec"  style="background: none;">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 wow fadeInLeft" style="visibility: visible; animation-name: fadeInRight;">
+                <h3>Easy to follow yet scientifically effective</h3>
+               <ul>
+                   <li>6 Sessions</li>
+                   <li>Average 10 Minutes Each</li>
+                   <li>Learn to Identify Insomnia Triggers</li>
+                   <li>Adopt a Plan to Help You Overcome Insomnia</li>
+               </ul>
+                <p></p>
+
+            </div>
+            <div class="col-sm-12 offset-md-1 col-md-5 hidden-xs">
+                <div class="mobil">
+                    <img width="640" height="627" src="{% static 'assets/images/4thsection.PNG' %}"
+                         class="attachment-large size-large wp-post-image" alt=""/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="help_sec"  style="background: none;">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12 col-md-12 wow fadeInRight" style="visibility: visible; animation-name: fadeInRight;">
+                <h2 class="text-center">The many types of insomnia that we treat</h2>
+
+            </div>
+        </div>
+
+        <div class="row insomniaitems">
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="insomniaitem">
+                    <img src="{% static 'assets/images/icons/man-sleep.png' %}" width="100" height="100"/>
+                    <p>Difficulty falling asleep</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="insomniaitem">
+                    <img src="{% static 'assets/images/icons/medicondition.png' %}" width="100"
+                         height="100"/>
+                    <p>Difficulty staying asleep</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="insomniaitem">
+                    <img src="{% static 'assets/images/images_daysleep.png' %}" width="100" height="100"/>
+                    <p>Reliance on sleep aids</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="insomniaitem">
+                    <img src="{% static 'assets/images/sleeping-dream-010-512.png' %}" width="100" height="100"/>
+                    <p>Daytime sleepiness</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--<section class="slide_sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 mrg">
+                <h1 class="hilight_text">On The Go</h1>
+                <h2 class="text-center"><span style="color:#08a01a;">Cogni Sleep</span><br>On The Go</h2>
+            </div>
+            <div class="col-sm-12 col-md-12 mrg" style="position: relative;">
+                <div class="owl-carousel owl-responsive-ab">
+                    <img src="{% static 'assets/images/mob1.jpg' %}" class="mobile-image">
+                    <img src="{% static 'assets/images/mob2.jpg' %}" class="mobile-image">
+                    <img src="{% static 'assets/images/mob3.jpg' %}" class="mobile-image">
+                    <img src="{% static 'assets/images/mob4.jpg' %}" class="mobile-image">
+                    <img src="{% static 'assets/images/mob5.jpg' %}" class="mobile-image">
+                </div>
+                <img src="{% static 'assets/images/mobb.png' %}" class="mobile-screen">
+            </div>
+        </div>
+
+    </div>
+
+</section>-->
+<!--<section class="help_sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <a class="btn btn-primary btn-lg text-center" href="/questions/cogni_questions">Start Sleeping Today</a>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>-->
+<section class="locate_sec">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-sm-12 col-md-3 col-lg-4">
+                <div class="call-to-action-item call-to-action-contact-1">
+                    <div class="call-to-action-icon">
+                        <img src="{% static 'assets/images/icon-pin-2.png' %}" alt="">
+                    </div>
+                    <div class="call-to-action-action">
+                        <p class="call-to-action-content">6405 W Gulf To Lake Hwy <span class="d-md-block">Crystal River, FL 34429</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3 col-lg-4">
+                <div class="call-to-action-item call-to-action-contact-1">
+                    <div class="call-to-action-icon">
+                        <img src="{% static 'assets/images/icon-phone-2.png' %}" alt="">
+                    </div>
+                    <div class="call-to-action-action">
+                        <h4 class="call-to-action-title">Call Us Now at</h4>
+                        <p class="call-to-action-content">+1 (833) 346-2929</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-3 col-lg-4">
+                <div class="call-to-action-item call-to-action-contact-1">
+                    <div class="call-to-action-icon">
+                        <img src="{% static 'assets/images/icon-mail.png' %}" alt="">
+                    </div>
+                    <div class="call-to-action-action">
+                        <h4 class="call-to-action-title"><a style="color:white;" href="/contactus/">Email Us</a></h4>
+                    </div>
+                </div>
+            </div>
+           {% comment %} <div class="col-sm-12 col-md-3 col-lg-3">
+                <div class="call-to-action-item call-to-action-contact-1">
+                    <div class="call-to-action-icon">
+                        <img src="{% static 'assets/images/icon-calendar-2.png' %}" alt="">
+                    </div>
+                    <!--<div class="call-to-action-action">
+                        <h4 class="call-to-action-title">Take test now</h4>
+
+                    </div>-->
+                </div>
+            </div>{% endcomment %}
+        </div>
+    </div>
+</section>
+<footer id="site-footer" class="site-footer">
+    <div class="site-footer-top ">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div id="widget-1" class="footer-widget">
+                        <h3 class="title">CogniSleep Disclaimer</h3>
+                        <div class="content">
+                            <p class="mb-0">
+                                It is the intent of Cognisleep to help patients who suffer from insomnia. The program is  meant to be used after an initial evaluation by a trained, qualified medical professional. It is not meant to replace or substitute the judgment of a qualified medical professional. Instead, it is supplemental support in the overall management of a patient with insomnia. CogniSleep is a way to re-train your brain, but it cannot cure all sleep disorders, including, but not limited to, sleep apnea, restless leg syndrome, narcolepsy, or depression. These issues must be addressed by a medical or mental health professional. If this program asks you to do anything that has previously been advised against by a medical professional, please contact your healthcare provider before following the program. If during the course of the program you develop any life-threatening conditions, such as suicidal thoughts or other related conditions, please call 988 if you are in the United States.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3">
+                   <div class="widget-2">
+                      <h3 class="title">Quick Links</h3>
+                      <div class="quick-links">
+                         <ul>
+                           <li><a href="https://cognisleep.com/">Home</a></li>
+                            <li><a href="/providers">Providers/Physicians</a></li>
+                            <li><a href="/faq">FAQs</a></li>
+                            <li><a href="#">Terms and Conditions</a></li>
+                            <li><a href="/contactus">Contact</a></li>
+                         </ul>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3">
+                    <section id="" class="">
+                        <h3 class="title">Newsletter Sign Up</h3>
+                        <div class="">
+                            <p>Stay updated with latest news from Cogni Sleep.</p>
+                        </div>
+                        <div class="form_footer">
+                       <form id="sub_form" autocomplete="off">
+                               <div class="newsletterForm">
+                                   <div class="form-group">
+                                      <input id="sub_email" type="email" class=" title=" email="" "="" placeholder="Enter Your Email">
+                                   </div>
+                                 
+                                </div>
+                                <input type="hidden" name="wp_capture_action" value="1 ">
+                                <div style="margin-top: 13px;" id="g-recaptcha"  class="g-recaptcha" data-sitekey="6Lf37LQUAAAAAIHIJDdoPYLF0pLXZ_zFwqbV2AAn"></div>
+                                  <div class="submitBtns">
+                                      <button name="Submit" type="submit" class="submit_btn btn">Submit</button>
+                                   </div>
+                                                               <div class="socialMediaIcons">
+                                   <ul>
+                                      <li><a href="https://www.facebook.com/cognisleep"><i class="fa fa-facebook"></i></a></li>
+                                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                      <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                   </ul>
+                                </div>
+                                    <p class="text-success mb-0" style="display: none;" id="sub_msg">Thank you for signing up! We will be in contact shortly</p>
+                                    <p class="text-red mb-0" style="display: none;" id="sub_msg1">Please, fill the form properly</p>
+                            </form>
+                        </div>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class=”container”>
+                              <div class=”row”>
+                                 <div class="copyright" style="text-align: center;">
+                                <span>Copyright &copy;</span>
+                                <span id="currentYear"></span>
+                                <span> | </span>
+                                <span>Cognisleep.com</span>
+                                <span> | </span>
+                                <span>Cognisleep, LLC</span>
+                            </div>
+                              </div>
+                            </div>
+
+</footer>
+
+<script type="text/javascript " src="https://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="{% static 'assets/owl-carousel/dist/owl.carousel.min.js' %}"></script>
+<script src="{% static 'assets/js/script.js' %} "></script>
+<script type="application/javascript ">
+    var recaptchaValid = 0;
+    $("#g-recaptcha-response").attr("required",true);
+    var onloadCallback = function() {
+    grecaptcha.render('g-recaptcha', {
+      'sitekey' : $("#g-recaptcha").data("sitekey"),
+      'callback' : correctCaptcha
+    });
+  };
+    var correctCaptcha = function(response) {
+        //alert($('#g-recaptcha').length);
+        var response2 = grecaptcha.getResponse();
+        if(response2.length == 0){
+            recaptchaValid = 0;
+        }else{
+            recaptchaValid = 1;
+        }
+        setTimeout(function () {
+            recaptchaValid = 0;
+            grecaptcha.reset();
+        },15000)
+    };
+    $("#sub_form").submit(function (event) {
+        event.preventDefault();
+             const endpoint = '/api/subs/';
+             var pattern = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            var emailAddress = $("#sub_email").val();
+            if($("#sub_email").val() == "" || $("#sub_name").val() == ""){
+                       $("#sub_msg").hide();
+                       $("#sub_msg1").show();
+                       $("#sub_msg1").html("Please, fill the form properly");
+            }else if(pattern.test(emailAddress)){
+                        $("#sub_msg").hide();
+                       $("#sub_msg1").show();
+                       $("#sub_msg1").html("Email Address is not valid!");
+            }else if(recaptchaValid == 0){
+                    $("#sub_msg").hide();
+                       $("#sub_msg1").show();
+                       $("#sub_msg1").html("Recaptcha is not verified!");
+        }else {
+                   $("#sub_msg").hide();
+                   $("#sub_msg1").hide();
+                   if(recaptchaValid == 1){
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var response_data = JSON.parse(this.responseText);
+                                        if(response_data.success){
+                                          $("#sub_msg").show();
+                                            $("#sub_msg1").hide();
+                                        }else{
+                                           $("#sub_msg").hide();
+                                           $("#sub_msg1").show();
+                                           $("#sub_msg1").html(response_data.message);
+                                        }
+                                        recaptchaValid = 0;
+                        }
+                      };
+                    xhttp.open("POST", endpoint, true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("g-recaptcha-response="+recaptchaValid+"&email="+$("#sub_email").val()+"&name="+$("#sub_name").val());
+                    }
+            }
+    });
+
+    $(".owl-carousel.mobile-carousel").owlCarousel({
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+        loop: true,
+        margin: 10,
+        responsiveClass: true,
+        nav: false,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true,
+                loop: true
+            },
+            600: {
+                items: 1,
+                nav: true,
+                loop: true
+            },
+            1025: {
+                items: 5,
+                nav: true,
+                loop: true
+            }
+        }
+    });
+
+
+    $(".testimonial-sliders").owlCarousel({
+        autoplay: false,
+        autoplayTimeout: 3000,
+        loop: false,
+        nav: false,
+        items: 1
+    });
+
+</script>
+
+<!--Modal: modalYT-->
+<!-- Modal -->
+<div class="modal fade" id="drModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <!-- <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>-->
+
+      <div class="modal-body" style="padding: 0;">
+          <center>
+              <video style="width: 100%;" src="{% static "assets/images/front_video.mp4" %}" class="int_vid_two" id="video_0"
+                     name="video"
+              controls="" controlslist="nodownload"></video>
+          </center>
+      </div>
+      <div class="modal-footer text-center create_account_button " style="justify-content: center;" >
+        <button type="button modalcloseVid" onclick="$('video').trigger('pause')"  style="padding: 9px 20px;font-size: 13px;background-color: #200b94;border-color: #3d6725;color: white !important;" class="btn warning" data-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div><!--Modal: modalYT-->
+ <!-- Start of LiveChat (www.livechatinc.com) code
+<script>
+
+  $('#drModal').on('shown.bs.modal', function(){
+    $('.int_vid_two')[0].play();
+});
+window.__lc = window.__lc || {};
+window.__lc.license = 8809926;
+;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[LiveChatWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.livechatinc.com/tracking.js",t.head.appendChild(n)}};!n.__lc.asyncInit&&e.init(),n.LiveChatWidget=n.LiveChatWidget||e}(window,document,[].slice))
+</script>
+<noscript><a href="https://www.livechatinc.com/chat-with/8809926/" rel="nofollow">Chat with us</a>, powered by <a href="https://www.livechatinc.com/?welcome" rel="noopener nofollow" target="_blank">LiveChat</a></noscript>
+End of LiveChat code -->
+<script>
+    var currentYear = new Date().getFullYear();
+        document.getElementById("currentYear").textContent = currentYear;
+</script>
+</body>
+</html>

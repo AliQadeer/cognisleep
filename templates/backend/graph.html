@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8 p-r-0 title-margin-right">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Graph</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-4">
+
+                    <div class="input-group custom-daterangepicker-p">
+                        <div class="input-group-addon ">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input class="form-control pull-right" name="date-range" id="date-range">
+
+                        <span class="fa fa-arrow-down"><span>
+                    </div>
+
+                </div>
+                <input type="hidden" id="id_start_date" name="id_start_date">
+                <input type="hidden" id="id_end_date" name="id_end_date">
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-success pull-left" name="date_range_btn"
+                            onclick="loadChartData();">Go
+                    </button>
+                </div>
+
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view pt-3 pb-3">
+                    <div class="content-bg">
+                        <h4>Line chart</h4>
+                        <div id="line-chart"></div>
+
+                    </div>
+                    <div class="content-bg mt-2">
+                        <h4>Bar chart</h4>
+                        <div id="bar-chart"></div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+    var series_data = [];
+    var pointstart = 0;
+    const endpoint = '/api/chart/data/';
+
+    function loadChartData() {
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            method: 'post',
+            url: endpoint,
+            headers: {
+                "X-CSRFToken": '{{ csrf_token }}'
+            },
+            data: {
+                "st_date": $("#id_start_date").val(), "en_date": $("#id_end_date").val(),
+            },
+            success: function (response_data) {
+
+                if (response_data.success == "true") {
+                    series_data = response_data.series;
+                    pointstart = response_data.pointstart;
+                    console.log(series_data);
+
+                    setChart();
+                    setChart_bar();
+                }
+
+            }
+        })
+        ;
+    }
+
+
+    $.ajax({
+        method: 'GET',
+        url: endpoint,
+        success: function (response_data) {
+
+            if (response_data.success == "true") {
+                series_data = response_data.series;
+                console.log(series_data);
+
+                setChart();
+                // setChart_bar();
+            }
+
+        }
+    })
+    ;
+
+
+    function setChart() {
+        Highcharts.chart('line-chart', {
+
+            title: {
+                text: 'Patients Data'
+            },
+            xAxis: {
+                categories: []
+            },
+
+            series: series_data
+        });
+    }
+
+    function setChart_bar() {
+        Highcharts.chart('bar-chart', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Patients Data'
+            },
+            xAxis: {
+                title: {
+                    text: ' Number'
+                },
+                tickInterval: 1
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Axis name',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' '
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+
+            credits: {
+                enabled: false
+            },
+            series: series_data
+        });
+
+    }
+
+    $('#date-range').daterangepicker(
+        {
+            alwaysShowCalendars: true,
+            opens: "right",
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment()
+        },
+        function (start, end) {
+            $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            $("#id_start_date").val(start.format('YYYY-MM-D'));
+            $("#id_end_date").val(end.format('YYYY-MM-D'));
+
+        }
+    );
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,289 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    table.ciq_table {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+table.ciq_table td, table.ciq_table th {
+    padding: 10px;
+}
+
+table.ciq_table p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+table.ciq_table th {
+    text-align: center;
+    font-weight: 700;
+    background-color: #2d2d82;
+    color: #fff;
+}
+
+.optionBox {
+    margin-top: 15px;
+}
+
+.titleBox h1 {
+    color: #2d2d82;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.text-unchanged {
+    background-color: #8ecdea;
+    font-weight: bold;
+    color: #000;
+}
+
+.text-green {
+    background-color: #00ff00;
+    font-weight: bold;
+    color: #000;
+}
+
+.text-redish {
+    background-color: #ff0000;
+    font-weight: bold;
+    color: #000;
+}
+
+.reportInfo {
+
+    justify-content: space-around;
+    margin-bottom: 15px;
+
+}
+
+.reportInfo p {
+    margin-bottom: 0;
+    color: #000;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.reportInfo p span {
+    color: #2e2e83;
+}
+</style>
+
+    <section class="ciqReport py-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="position-relative titleBoxArea">
+                    <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="titleBox">
+                        <h1>Ciq Report</h1>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="reportInfo row">
+                        <div class="col-md-6">
+                            <p>Patient Name: <span>{{ patient_name }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Provider Name: <span>{{ provider_name }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Pre Date: <span>{{ date1 }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Post Date: <span>{{ date2 }}</span></p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="ciq_table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S.NO</th>
+                                    <th>PRE_QUESTIONS</th>
+                                    <th>POST_QUESTIONS</th>
+                                    <th>RESULT</th>
+                                </tr>
+                            </thead>
+                            {% if post %}
+                            <tbody>
+                            {% for item, items, pre, post in zipped %}
+                                <tr>
+                                    <td class="text-center">Q{{ forloop.counter }}</td>
+                                    <td>{{ item.question }}
+                                        <div class="d-flex justify-content-between">
+                                            {% if pre.select == 1 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option1 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option1 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if pre.select == 2 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option2 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option2 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if pre.select == 3 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option3 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option3 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if pre.select == 4 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option4 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option4 }} </p>
+
+                                            </div>
+                                                {% endif %}
+
+                                    </div>
+                                    </td>
+                                    <td>{{ item.question }}
+                                        <div class="d-flex justify-content-between">
+                                            {% if post.select == 1 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option1 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option1 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if post.select == 2 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option2 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option2 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if post.select == 3 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option3 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option3 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if post.select == 4 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option4 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option4 }} </p>
+
+                                            </div>
+                                                {% endif %}
+
+                                        </div>
+                                        </td>
+                                    {% if items.result == 'Unchanged' %}
+                                    <td class="text-unchanged">
+                                        {{ items.result }}
+                                    </td>
+                                    {% endif %}
+                                    {% if items.result == 'Improved' %}
+                                    <td class="text-green">
+                                        {{ items.result }}
+                                    </td>
+                                    {% endif %}
+                                    {% if items.result == 'Worsened' %}
+                                    <td class="text-redish">
+                                        {{ items.result }}
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                            {% else %}
+                            <tbody>
+                            {% for item, pre in zipped %}
+                                <tr>
+                                    <td class="text-center">Q{{ forloop.counter }}</td>
+                                    <td>{{ item.question }}
+                                        <div class="d-flex justify-content-between">
+                                            {% if pre.select == 1 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option1 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option1 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if pre.select == 2 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option2 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option2 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if pre.select == 3 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option3 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option3 }} </p>
+
+                                            </div>
+                                                {% endif %}
+                                            {% if pre.select == 4 %}
+                                            <div class="optionBox">
+                                                <p  class="text-danger">{{ item.option4 }} </p></div>
+                                            {% else %}
+                                            <div class="optionBox">
+                                                <p>{{ item.option4 }} </p>
+
+                                            </div>
+                                                {% endif %}
+
+                                    </div>
+                                    </td>
+                                  {% if forloop.counter == 1 %}
+                                    <td rowspan="15" class="text-center">Post Results will appear after the post questions submission.
+</td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block jqueryScript %}
+{% include "dashboard-js.html" %}
+{% endblock %}

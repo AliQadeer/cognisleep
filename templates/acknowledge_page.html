@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="forward_sec" xmlns="http://www.w3.org/1999/html">
+        <div class="container">
+            <div class="row">
+
+                <div class="text-center">
+                    <h2> ACKNOWLEDGEMENT </h2>
+                    <p>
+                        CogniSleep is therapeutic tool that needs to be used under the supervision of a trained medical
+                        professional and is not a replacement for a traditional face to face visit with a therapist.
+                    </p>
+                    <input type="hidden" id="sel_price" name="sel_price" value="{{ pid }}" />
+                    <input type="checkbox" id="chk_ackg" name="chk_ackg" onclick="ackg_Sel();">&nbsp; I Acknowledge
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+{% block jqueryScript %}
+
+    <script>
+
+        function ackg_Sel() {
+
+            if ($("#chk_ackg").is(':checked')) {
+                if($("#sel_price").val() == 1){
+                       window.location.href = "/accounts/patientregform/";
+                }else {
+                    window.location.href = "/accounts/patientnform/" + $("#sel_price").val();
+                }
+            } else {
+                // Code in the case checkbox is NOT checked.
+            }
+        }
+
+    </script>
+
+{% endblock %}

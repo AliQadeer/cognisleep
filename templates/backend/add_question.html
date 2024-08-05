@@ -1,0 +1,373 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    .actionBtns a {
+        padding: 3px 0;
+        display: inline-block;
+        cursor: pointer;
+        color: #868e96 !important;
+    }
+
+    .actionBtns a:hover {
+        color: #5eb82d !important;
+    }
+
+    .actionBtns a i {
+        color: #343957;
+    }
+
+    .tableActions {
+        left: -45px !important;
+        border-radius: 10px;
+    }
+
+    .rounded-pills {
+        border-radius: 50px;
+    }
+
+    .pending {
+        background-color: orange;
+        color: #fff;
+    }
+
+    .cancel {
+        background-color: red;
+        color: #fff;
+    }
+
+    .active {
+        background-color: #5eb82d;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    select[name="status"] option {
+        background-color: #fff;
+        font-weight: 600;
+        color: #000;
+    }
+
+    select[name="status"] {
+        border: none;
+        width: 100%;
+        padding: 6px;
+        border-radius: 7px;
+        font-weight: 600;
+    }
+
+    .fade.show {
+        display: block !important;
+    }
+
+    .fade {
+        opacity: 1;
+    }
+
+    div#statusPopup .modal-body {
+        text-align: center;
+        font-size: 24px;
+        text-transform: capitalize;
+        padding: 0;
+        margin-bottom: 15px;
+    }
+
+    div#statusPopup .modal-footer {
+        justify-content: center;
+        border: none;
+        padding: 0;
+    }
+
+    div#statusPopup .modal-footer button {
+        padding: 7px 30px;
+        font-size: 16px;
+    }
+
+    div#statusPopup .modal-content {
+        padding: 22px 0;
+    }
+
+    .bg-green,
+    .callout.callout-success,
+    .alert-success,
+    .label-success,
+    .modal-success .modal-body {
+        background-color: #49b902 !important;
+    }
+
+    .form-group label {
+        width: 100%;
+    }
+
+    /* api css work  */
+
+    table#myTable td, table#myTable th {
+    padding: 10px;
+    font-size: 14px;
+}
+
+table#myTable td:first-child {
+    text-align: center;
+}
+
+table#myTable td span:not(:last-child) {
+    padding-right: 10px;
+    border-right: 2px solid;
+    margin-right: 10px;
+}
+
+table#myTable td span {
+    line-height: 29px;
+}
+
+.add_question {
+    display: none;
+}
+
+.questionAddSuccess {
+    margin: auto;
+    background-color: #9acd32cf;
+    color: #Fff;
+    padding: 10px;
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+.questionAddSuccess p {
+    margin-bottom: 0;
+}
+
+.questionReject {
+    margin: auto;
+    background-color: #f44336c4;
+    color: #Fff;
+    padding: 10px;
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+.questionReject p {
+    margin-bottom: 0;
+}
+
+</style>
+
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-5">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Add Ciq Question</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-md-right">
+                    <div class="page-header">
+                        <div class="form-group">
+                            <button class="btn btn-primary" id="addQuestion">Add Question</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /# column -->
+
+                <!-- /# column -->
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view">
+
+                    <div class="add_question">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-2">
+                                        Type: <span>*</span>
+                                        <select name="type" class="postData form-control mb-3" id="is-pre-input">
+                                            <option>Select Type:</option>
+                                            <option value="pre">Pre Question</option>
+                                            <option value="post">Post Question</option>
+                                        </select>
+                                       
+                                    </label>
+                                </div>
+                            
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-2">
+                                        Year: <span>*</span>
+                                        <input name="year" id="year" class="year form-control mb-3" rows="4">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-2">
+                                        Add Question: <span>*</span>
+                                        <textarea name="question" id="question" class="question form-control mb-3"
+                                            rows="8">
+                                        </textarea>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="mb-2">
+                                        Options: <span>*</span>
+                                        <input type="text" id="option1-input" class="option1 form-control mb-3"
+                                            placeholder="Add Option 1">
+                                        <input type="text" id="option1-input2" class="option2 form-control mb-3"
+                                            placeholder="Add Option 2">
+                                        <input type="text" id="option1-input3" class="option3 form-control mb-3"
+                                            placeholder="Add Option 3">
+                                        <input type="text" id="option1-input4" class="option4 form-control mb-3"
+                                            placeholder="Add Option 4">
+                                    </label>
+                                </div>
+                            </div>  
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button class="btn btn-primary" onclick="saveQuestion();">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% comment %} toast  {% endcomment %}
+
+                    <div class="questionAddSuccess text-center d-none">
+                        <p>Your question has been successfully added.</p>
+                    </div>
+
+                    <div class="questionReject text-center d-none">
+                        <p>Question Added Failed. Please try again</p>
+                    </div>
+
+                    <!-- table data  -->
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table-bordered w-100" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Q.No</th>
+                                            <th>Question</th>
+                                            <th>Options</th>
+                                            <th>Year</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const saveQuestion = () => {
+        const url = 'https://cognidev.thqcompany.com/questions/save_question';
+        const questionName = document.querySelector('.question');
+        const postData = document.querySelector('.postData');
+        const year = document.querySelector('.year');
+        const optionValue1 = document.querySelector('.option1');
+        const optionValue2 = document.querySelector('.option2');
+        const optionValue3 = document.querySelector('.option3');
+        const optionValue4 = document.querySelector('.option4');
+
+        const data = {
+            name: questionName.value,
+            is_pre: postData.value == 'pre' ? 'True' : 'False',
+            is_post: postData.value == 'post' ? 'True' : 'False',
+            year: year.value,
+            options: [
+                { name: optionValue1.value },
+                { name: optionValue2.value },
+                { name: optionValue3.value },
+                { name: optionValue4.value }
+            ]
+        };
+
+        // Make POST request
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Question saved successfully!');
+                    jQuery('.questionAddSuccess').removeClass('d-none');
+                    setTimeout(function(){
+                        location.reload();
+                    }, 1000);   
+                } else {
+                    console.error('Error:', response.status);
+                    jQuery('.questionReject').removeClass('d-none');
+                    setTimeout(function(){
+                        location.reload();
+                    }, 1000);   
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+
+
+    // Get a reference to the table element
+    const table = document.querySelector('#myTable');
+
+    // Fetch data from the API
+    fetch('https://cognidev.thqcompany.com/questions/cogni_questions')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Loop through the data and insert it into the table
+            data.forEach(item => {
+                const row = table.insertRow();
+                const cell0 = row.insertCell(0);
+                const cell1 = row.insertCell(1);
+                const cell2 = row.insertCell(2);
+                const cell3 = row.insertCell(3);
+
+                cell0.textContent = item.id;
+                cell1.textContent = item.name;
+                cell2.textContent = '';
+                item.options.forEach(option => {
+                    const span = document.createElement('span');
+                    span.innerText = option.name;
+                    cell2.appendChild(span);
+                });
+
+                cell3.textContent = item.year;
+                // Add more cells for additional columns
+            });
+        });
+
+
+jQuery('#addQuestion').click(function(){
+    jQuery('.add_question').show();
+})
+
+
+    setTimeout(function () {
+        jQuery('.page-title > div').hide();
+    }, 3000)
+</script>
+{% endblock %}

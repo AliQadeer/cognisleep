@@ -1,0 +1,163 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+@media print {
+    .doctor-card-container {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
+
+</style>
+
+
+
+<section class="forward_sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="text-center">
+                        Please save your Referral ID number. This is the number you will provide to your patients so that they can access the program.<br> Please only share this number with your CogniSleep patients.
+                    </p>
+                </div>
+                <div class="col-sm-12" >
+                    <div  >
+                        <h3 class="doctor-card-heading">Please print this page. </h3>
+                        <div class="card" id="doctorcard-container">
+                            <div class="card-title">
+                                <div>
+                                    <img src="{{ userdata.provider_image }}" class="img-responsive" style="width:150px;margin: 0 auto;">
+                                </div>
+                                <div style="margin-top:20px;"><b>Doctor Name:</b> | {{ userdata.first_name }} {{ userdata.last_name }} </div>
+                                <div style="margin-top: -13px;">
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <div style=""><b style="color: #1f0b93;">Referral ID :</b> {{ userdata.provider_ref }} </div>
+                                <div style=""><b style="color: #1f0b93;">Referral Contact :</b>
+                                    <br> {{ userdata.contact_no }}</div>
+                            </div>
+                            <div class="" id="card-footer">www.cognisleep.com</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <a href="/payments"><button class="btn btn-lg" style="background-color: #f0f0f0;color: #b24926;">Select Your Subscription Package</button></a>
+                                <button onclick="printElem('doctorcard-container');" value="print a div!" class="btn btn-lg" style="background-color: #f0f0f0;">Print Card</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+{% block jqueryScript %}
+<script>
+    function printElem(divId) {
+
+    var content = document.getElementById(divId).innerHTML;
+    var mywindow = window.open('', 'Print', 'height=600,width=800');
+
+    mywindow.document.write('<html><head><title>Print</title>');
+    mywindow.document.write('<style>.doctor-card-heading {\n' +
+        '    color: #ffffff;\n' +
+        '    margin: 0px auto 20px auto;\n' +
+        '    border-radius: 8px;\n' +
+        '    padding: 10px;\n' +
+        '    background: #00a115;\n' +
+        '    font-size: 14px;\n' +
+        '    line-height: 2;\n' +
+        '    text-align: center;\n' +
+        '}' +
+        '' +
+        '.card {\n' +
+        '    border: 1px solid lightgray;\n' +
+        '    padding: 15px;\n' +
+        '    margin-bottom: 20px;\n' +
+        '    border-radius: 10px;\n' +
+        '}\n' +
+        '.card {\n' +
+        '    position: relative;\n' +
+        '    display: -ms-flexbox;\n' +
+        '    display: flex;\n' +
+        '    -ms-flex-direction: column;\n' +
+        '    flex-direction: column;\n' +
+        '    min-width: 0;\n' +
+        '    word-wrap: break-word;\n' +
+        '    background-color: #fff;\n' +
+        '    background-clip: border-box;\n' +
+        '    border: 1px solid rgba(0,0,0,.125);\n' +
+        '    border-radius: .25rem;\n' +
+        '}\n' +
+        '*, ::after, ::before {\n' +
+        '    box-sizing: border-box;\n' +
+        '}\n' +
+        'user agent stylesheet\n' +
+        'div {\n' +
+        '    display: block;\n' +
+        '}' +
+        '#card-footer {\n' +
+        '    background: #00a115;\n' +
+        '    width: 100%;\n' +
+        '    height: 30px;\n' +
+        '    text-align: center;\n' +
+        '    color: white;\n' +
+        '    line-height: 28px;\n' +
+        '    font-size: 24px;\n' +
+        '}' +
+        '.card-title {\n' +
+        '    display: flex;\n' +
+        '    flex-direction: column;\n' +
+        '    padding: 1em;\n' +
+        '    align-items: center;\n' +
+        '    text-align: center;\n' +
+        '    word-break: break-all;\n' +
+        '    color: #b24926;\n' +
+        '}' +
+        '.card-title {\n' +
+        '    margin-bottom: .75rem;\n' +
+        '}\n' +
+        '*, ::after, ::before {\n' +
+        '    box-sizing: border-box;\n' +
+        '}' +
+        '.card-info {\n' +
+        '    display: flex;\n' +
+        '    padding: 2em;\n' +
+        '}' +
+        '.card-info>div:nth-child(2) {\n' +
+        '    text-align: right;\n' +
+        '}\n' +
+        '\n' +
+        '.card-info>div {\n' +
+        '    flex: 1;\n' +
+        '    color: #00a115;\n' +
+        '}' +
+        '</style></head><body >');
+    mywindow.document.write(content);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close();
+    mywindow.focus()
+    mywindow.print();
+    //mywindow.close();
+    return true;
+
+}</script>
+
+{% endblock %}

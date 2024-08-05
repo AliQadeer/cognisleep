@@ -1,0 +1,269 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    .actionBtns a {
+    padding: 3px 0;
+    display: inline-block;
+    cursor: pointer;
+    color: #868e96 !important;
+}
+
+.actionBtns a:hover {
+color: #5eb82d !important;
+}
+
+.actionBtns a i {
+    color: #343957;
+}
+
+.tableActions {
+    left: -45px !important;
+    border-radius: 10px;
+}
+
+.rounded-pills {
+    border-radius: 50px;
+}
+
+.pending {
+    background-color: orange;
+    color: #fff;
+}
+
+.cancel {
+    background-color: red;
+    color: #fff;
+}
+
+.active {
+    background-color: #5eb82d;
+    color: #fff;
+    font-weight: 600;
+}
+
+select[name="status"] option {
+    background-color: #fff;
+    font-weight: 600;
+    color: #000;
+}
+
+select[name="status"] {
+    border: none;
+    width: 100%;
+    padding: 6px;
+    border-radius: 7px;
+    font-weight: 600;
+}
+.fade.show {
+    display: block !important;
+}
+
+.fade {
+    opacity: 1;
+}
+
+div#statusPopup .modal-body {
+    text-align: center;
+    font-size: 24px;
+    text-transform: capitalize;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+div#statusPopup .modal-footer {
+    justify-content: center;
+    border: none;
+    padding: 0;
+}
+
+div#statusPopup .modal-footer button {
+    padding: 7px 30px;
+    font-size: 16px;
+}
+
+div#statusPopup .modal-content {
+    padding: 22px 0;
+}
+
+.bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+    background-color: #49b902 !important;
+}
+
+.see-more-btn{
+background-color: #5eb82d;
+border-radius: 7px;
+padding: 10px;
+color: #fff;
+font-weight: 700;
+}
+
+.see-more-btn:hover {
+background-color: #62ce1f ;
+color: #fff;
+}
+
+
+</style>
+
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row" style="margin-bottom: -38px;">
+                <div class="col-lg-12 p-r-0 title-margin-right">
+                    <div class="page-header">
+                        <button  style=" margin-top: -2px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i>Back</button>
+                        <div class="page-title">
+                            <h1>Non Verified Providers</h1>
+                               {% if messages %}
+                                {% for message in messages %}
+                                    <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- /# column -->
+
+                <!-- /# column -->
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view">
+
+                    <div class="row col-sm-12">
+
+                        <form method="post" action="/backend/nonverifiedprovider/">
+                            {% csrf_token %}
+                            <div class="form-row align-items-center">
+
+                                <div class="col-sm-9">
+                                    <label for="mysearch">Name / Email </label>
+                                    <input type="text" class="form-control" id="mysearch" name="mysearch"
+                                           placeholder="Search"
+                                           value="{{ mysearch }}">
+                                </div>
+                                <div class="col-sm-1">
+                                    <br>
+                                    <input type="submit" class="btn btn-primary mb-2" value="Search" style="margin-top: 12px;">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    {% if all_current_active_patients.has_other_pages %}
+                    <ul class="pagination">
+                        {% if all_current_active_patients.has_previous %}
+                        <li><a href="?page={{ all_current_active_patients.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in all_current_active_patients.paginator.page_range %}
+                        {% if all_current_active_patients.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if all_current_active_patients.has_next %}
+                        <li><a href="?page={{ all_current_active_patients.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+
+                    <div class="modal fade" id="myModal" role="dialog" style="">
+                        <div class="modal-dialog modal-sm">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                    <h4 class="modal-title">This action is not reversable! Are you sure you want to
+                                        proceed?</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="btn-group col-md-12">
+                                        <button type="button" class="btn btn-primary btn-lg col-sm-6"
+                                                onclick="del_p();">Yes
+                                        </button>
+                                        <input type="hidden" id="pid">
+                                        <button type="button" class="btn btn-lg col-sm-6" data-dismiss="modal">No
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered" id="table_rows">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" hidden>User_Id</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Package</th>
+                            <th scope="col">Referral ID</th>
+                            <th scope="col">Supervising ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Action</th>
+                            <!--<th scope="col">Action</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for current_user in all_current_active_patients %}
+
+                        <tr class="tr">
+                            <td hidden class="hiddenFeild">{{ current_user.user_id }}</td>
+                            <td>{{ current_user.first_name }}</td>
+                            <td>{{ current_user.last_name }}</td>
+                            <td>{{ current_user.email }}</td>
+                            <td>{{ current_user.package_type }}</td>
+                            <td>{{ current_user.provider_ref }}</td>
+                            {% if current_user.flag == "V" %}
+                            <td style="background:#88d95c;     color: black;">{{ current_user.primary_care_doctor_id }}</td>
+                            {% endif %}
+                            {% if current_user.flag == "NV" %}
+                            <td style="background:#ef4545;     color: black;">{{ current_user.primary_care_doctor_id }}</td>
+                            {% endif %}
+                            {% if current_user.flag == "" %}
+                            <td>{{ current_user.primary_care_doctor_id }}</td>
+                            {% endif %}
+                            <td>{{ current_user.date }}</td>
+                            <td>
+                            <a href="/backend/register_provider_verify/{{ current_user.user_id }}" class="see-more-btn">See Details</a>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(function(){
+    jQuery('.page-title > div').hide();
+}, 3000)
+</script>
+{% endblock %}

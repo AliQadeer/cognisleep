@@ -1,0 +1,233 @@
+{% extends "backend/base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+        section.forward_sec {
+    padding: 50px 0;
+}
+.dashboard_form.dashboard2.tabcontent {
+    margin-top: 30px;
+}
+.tabcontent {
+}
+.dashboard_form {
+    float: left;
+    width: 100%;
+}
+ul.nav.nav-tabs li.active a {
+    color: white !important;
+    cursor: default;
+    background-color: #00a115 !important;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding: 10px 30px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+ul.nav.nav-tabs li a {
+    color: #333 !important;
+    font-size: 15px;
+    text-transform: uppercase;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding: 10px 23px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: 500;
+    display: inline-block;
+}.dashboard2 h1.text-align-center {
+    padding: 20px 0;
+    float: left;
+    width: 100%;
+}
+
+.dashboard_form h1 {
+    color: #373757;
+}
+.text-align-center {
+    text-align: center;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Montserrat", sans-serif;
+}
+h1 {
+    color: #fff;
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 47px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+ul.nav.nav-tabs {
+    float: left;
+    width: 100%;
+    padding: 20px 0 0px;
+    margin-bottom: 0px;
+}
+ul.nav.nav-tabs li a {
+    color: #333 !important;
+    font-size: 15px;
+    text-transform: uppercase;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    padding: 10px 23px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+a {
+    text-decoration: none !important;
+    /* color: #fff!important; */
+}
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+.dashboard_form form input {
+    float: left;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    margin-bottom: 20px;
+}
+.dashboard_form form .form-group {
+    float: left;
+    width: 100%;
+}
+.dashboard_form form .form-group label {
+    text-align: right;
+    padding-top: 8px;
+    font-weight: 600;
+}
+
+.col-md-3, .col-sm-3, .col-lg-3, .col-xl-3, .col-xs-3 {
+    float: left;
+}
+.col-md-8, .col-sm-8, .col-lg-8, .col-xl-8, .col-xs-8 {
+    float: left;
+}
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.dashboard_form form input {
+    float: left;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    margin-bottom: 20px;
+}
+.dashboard_form form .form-group label {
+    text-align: right;
+    padding-top: 12px;
+    font-weight: 600;
+}
+@media (max-width: 768px){
+    .dashboard_form form .form-group label {
+    text-align: left;
+}
+}
+    </style>
+
+
+
+
+
+
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+            <div class="row">
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+                <ul class="nav nav-tabs">
+
+
+
+
+                     <li id="view_sleep_diary" class="" style=""><a class="tablinks" href="/backend/patient-admin/view-diary/0/{{patient}}/">Sleep Report</a>
+                    </li>
+                    {% if request.user.package != 3 %}
+                    <li id="progress" class="" style=""><a class="tablinks" href="/backend/progress-admin/{{patient}}">Your Progress</a>
+                    </li>
+                    {% endif %}
+                      <li id="dash" class="active" style=""><a class="tablinks" href="/backend/accountdetails-admin/{{patient}}/">Account Details</a>
+                    </li>
+                </ul>
+
+                <div class="dashboard_form dashboard2 tabcontent" id="responsivez0">
+                   
+                     
+
+
+                    <h1 class="text-align-center">ACCOUNT DETAILS</h1>
+
+                    <form method="POST" action="/accounts/change_password/">
+
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label" >First name:</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" readonly value="{{ userdata.first_name }}" id="first_name"
+                                       name="first_name" disabled="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label" style="float:left;">Last name:</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" readonly value="{{ userdata.last_name }}" id="last_name"
+                                       name="last_name" disabled="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Email:</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" readonly value="{{ email }}" id="email" name="email" disabled="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Username:</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" readonly value="{{ userdata.first_name }} {{ userdata.last_name }}" id="name" name="name" disabled="" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Package:</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input name="contact" readonly type="text" value="{{ userdata.package_no }}" id="package"
+                                       name="package" disabled="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Phone:</label>
+                            <div class="col-md-8 col-lg-8" >
+                                <input name="contact" readonly type="text" value="{{ userdata.contact_no }}"
+                                       id="contact_no" name="contact_no" disabled="" class="form-control">
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+
+{% endblock %}
+
+{% block jqueryScript %}
+{% include "dashboard-js.html" %}
+{% endblock %}

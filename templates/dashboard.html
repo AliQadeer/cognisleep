@@ -1,0 +1,856 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        ul.nav.nav-tabs {
+        float: unset;
+        flex-wrap: nowrap;
+    }
+
+        #detailss a .content-val {
+            width: 100%;
+        }
+
+        ul.nav.nav-tabs li a {
+            padding: 10px 15px !important;
+            font-size: 12px;
+        }
+
+        p.mainTitle {
+    font-size: 14px;
+    position: absolute;
+    left: 5px;
+    right: 0;
+    text-align: center;
+    top: -60px;
+    color: #000;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+    margin: 0 20px;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.bg-yellow span.lastPrescribedTime {
+    font-weight: 600;
+}
+
+.bg-blue span.lastPrescribedTime, .bg-green span.previewWeekSE, .bg-greaish span.previewWeekSE {
+    font-weight: 600;
+    color: #fff;
+}
+
+
+.bg-blue {
+    background-color: #230c9a;
+}
+
+.bg-green {
+    background-color: #55b321;
+}
+
+.bg-greaish {
+    background-color: #444342;
+}
+
+.pd-40 {
+            padding: 0 30px;
+        }
+.space_25{
+    padding-top: 25px;
+}
+
+        /* Popup container - can be anything you want */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+    </style>
+
+
+
+
+
+
+    <section class="forward_sec">
+        <div class="container-fluid pd-40">
+            <div class="row">
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+               <div class="desktopTab d-md-block d-none m-auto">
+                <ul class="nav nav-tabs justify-content-center">
+
+                    {% if request.user.package != 3 %}
+                        {% if ma %}
+                            {% if sleep_diary_entries == 0 %}
+                      <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="javascript:void();">Videos</a></li>
+                    {% else %}
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} magoVideos({{patient}}); {% else %}magoVideos(0){% endif %}" >Videos</a></li>
+                    {% endif %}
+                    {% else %}
+                             {% if sleep_diary_entries == 0 %}
+                                <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="javascript:void();">Videos</a></li>
+                            {% else %}
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">Videos</a></li>
+                            {% endif %}
+                    {% endif %}
+                    {% endif %}
+
+                       {% if sleep_diary_entries not in rest_day %}
+                        {% if ma %}
+                    <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} magoDiary({{patient}}); {% else %}magoDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% else %}
+                        <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} goDiary({{patient}}); {% else %}goDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                            {% if ma %}
+                    <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} maviewDiary({{patient}}); {% else %}maviewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                            {% else %}
+                          <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} viewDiary({{patient}}); {% else %}viewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                        {% endif %}
+                      {% if request.user.package != 3 %}
+                        {% if ma %}
+                    <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} magoDashboardsub({{patient}}); {% else %}magoDashboardsub(0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% else %}
+                        <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} goDashboardsub('progress',{{patient}}); {% else %}goDashboardsub('progress',0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+
+                        </li>
+                        {% if ma %}
+                    <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/ma-relaxation/{{patient}}"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% else %}
+                         <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/relaxation"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% endif %}
+                            {% if ma %}
+                    <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} magoNtl({{patient}}); {% else %}magoNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                            {% else %}
+                        <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+                        <li id="detailss"  style="">
+                        <a class="bg-green">
+                            <div class="content-val"><span class="tooltipp">Previous week's sleep efficiency</span>
+                            <span class="previewWeekSE">{{avgsleep}}%</span></div>
+                        </a>
+                        </li>
+                       <span class="d-flex position-relative">
+                           <p class="mainTitle">Sleep Restriction</p>
+                            <li id="detailss"  style="">
+                            <a class="bg-blue">
+                                <div class="content-val"><span class="tooltipp">Prescribed Bedtime</span><span class="lastPrescribedTime">{{avgbedtime}}</span></div>
+                            </a>
+                            </li>
+                            <li id="detailss" style="">
+                            <a class="bg-yellow">
+                                <div class="content-val"><span class="tooltipp">Suggested Wake Up</span><span class="lastPrescribedTime">{{sug_time}}</span></div>
+                            </a>
+                            </li>
+                       </span>
+
+                    </ul>
+               </div>
+
+               {% comment %} mobile tabs  {% endcomment %}
+
+               <div class="mobieTabs d-md-none m-auto">
+                <ul class="nav nav-tabs justify-content-center">
+                    {% if patient == 0 %}
+{#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+{#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+{#                        Us</a></li>#}
+                    {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                       aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                    </li>{% endcomment %}
+                     {% endif %}
+
+                    <li class="" style="">
+                    <a class="tabsColor">
+                        <div class="content-val_mobile">
+                        <span class="previewWeekSE">{{avgsleep}}%</span>
+                        <span class="toolData">Previous week's sleep efficiency</span></div>
+                    </a>
+                    </li>
+                    <li  style="">
+                        <a class="tabsColor">
+                            <div class="content-val_mobile">
+                                <span class="lastPrescribedTime">{{avgbedtime}}</span>
+                                <span class="toolData">Prescribed Bedtime</span></div>
+                        </a>
+                        </li>
+                        <li  style="">
+                        <a class="tabsColor">
+                            <div class="content-val_mobile">
+                                <span class="lastPrescribedTime">{{sug_time}}</span>
+                                <span class="toolData">Suggested Wake Up</span>
+                            </div>
+                        </a>
+                        </li>
+
+                        <li class="ntlTabs" style="">
+                            <a class="tabsColor" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                <div class="content-val_mobile">
+                                    <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span>
+                                    <span class="toolData">Negative Thought Lockbox<sup>TM</sup></span>
+                                </div>
+                            </a>
+                        </li>
+
+                </ul>
+                </div>
+
+                <div class="dashboard_form dashboard2 tabcontent text-center" id="responsivez0">
+
+                   {% if answer_videos == 0 %}
+
+                     <h1 class="text-center mt-2 space_25">Welcome to CogniSleep !</h1>
+                    <p class="text-center">Welcome to your program! Once started, You will have approximately {{week}} weeks to complete your program.<br> It is
+                        very important to complete each day’s sleep diary accurately to ensure the best results while
+                        using the program.
+                    </p>
+
+                    <div class="create_account_button text-align-center space_25">
+                        {% if ma %}
+                        <a class="" href="/dashboard/ma_videos/0/{{patient}} ">Get Started</a>
+                        {% else %}
+                        <a class="" href="javascript:void(0)" onclick="goVideos({% if request.user.role_id is 1 %}{{ userdata.user_id }}{% endif %});">Get Started</a>
+                        {% endif %}
+                    </div>
+                    <hr>
+
+                    {% else %}
+                        {% if view == 0 %}
+                                <div class="welcome-screen"><h1 class="text-center">Welcome Back!</h1>
+                        <div class="status-box">
+                            <div class="c-col">
+                        <h4>Last Session Activity</h4><div class="text">
+                            <p><b>Status:</b> Completed</p>
+                            <p><b>Video:</b> Session {{lweek}}</p>
+                            <p><b>Sleep Diary Entry:</b> {{entry}} </p>
+                        </div>
+                        </div><div class="c-col">
+                        <h4>Next Step</h4>
+                            <div class="text">
+                            <p><b>Make your sleep diary entry for:</b></p>
+                            <p>Week {{Weeks}} Day {{days}}</p>
+                            <p><b>{{next_entry_date}}</b></p>
+<!--                            <a href="/dashboard/diary/{{next_session_week}}/0" class="btn bg-success text-white mt-3 bg-theme-green">Complete It Now</a>-->
+                                {% if ma %}
+                                <a href="/dashboard/ma_diary/{{next_session_week}}/{{patient}}" class="btn bg-success text-white mt-3 bg-theme-green">Complete It Now</a>
+                                {% else %}
+                            <a href="/dashboard/diary/{{next_session_week}}/0" class="btn bg-success text-white mt-3 bg-theme-green">Complete It Now</a>
+                                {% endif %}
+                            </div>
+                        </div><div class="c-col">
+                        <h4>Status</h4><div class="text">
+                            <p><b>Program Started: </b>{{sleepdiary_startDate}}</p>
+                            <p><b>Projected End: </b>{{sleepdiary_endDate}}</p>
+
+                        </div>
+                        <div class="quote">
+                        <p>{{ quote }}</p></div>
+                        </div>
+                                 <div class="c-col">
+                                <h4>Provider</h4>
+                                <div class="providerImage">
+                                     <img src="{{provider_data.provider_image}}">
+                                </div>
+                                <div class="providerInfo">
+                                    <p>{{provider_data.provider_name}}</p>
+                                <p>{{provider_data.provider_contact}}</p>
+                                </div>
+                            </div>
+                    </div>
+                         {%  elif view == 1 %}
+                                    <div class="welcome-screen"><h1 class="text-center">Welcome Back!</h1>
+                        <div class="status-box">
+                            <div class="c-col">
+                        <h4>Last Session Activity</h4><div class="text">
+                            <p><b>Status:</b> Completed</p>
+                            <p><b>Video:</b> Session {{lweek}}</p>
+                            <p><b>Sleep Diary Entry:</b> {{entry}} </p>
+                        </div>
+                        </div><div class="c-col">
+                        <h4>Next Step</h4>
+                            <div class="text">
+                            <p><b>Watch Video for:</b></p>
+                            <p>Session {{Weeks}}</p>
+                            <p><b>{{next_entry_date}}</b></p>
+                                {% if ma %}
+                                 <a href="/dashboard/ma_videos/{{video_view}}/{{patient}}" class="btn bg-success text-white mt-3 bg-theme-green">Complete It Now</a>
+                                {% else %}
+                            <a href="/dashboard/videos/{{video_view}}" class="btn bg-success text-white mt-3 bg-theme-green">Complete It Now</a>
+                                <!--<a class="tablinks" data-toggle="tab" href="#menu1"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">Complete Now</a>-->
+
+                            {% endif %}
+                            </div>
+                        </div><div class="c-col">
+                        <h4>Status</h4><div class="text">
+                            <p><b>Program Started: </b>{{sleepdiary_startDate}}</p>
+                            <p><b>Projected End: </b>{{sleepdiary_endDate}}</p>
+
+                        </div>
+                        <div class="quote">
+                        <p>{{ quote }}</p></div>
+                        </div>
+                             <div class="c-col">
+                                <h4>Provider</h4>
+                                <div class="providerImage">
+                                     <img src="{{provider_data.provider_image}}">
+                                </div>
+                                <div class="providerInfo">
+                                    <p>{{provider_data.provider_name}}</p>
+                                <p>{{provider_data.provider_contact}}</p>
+                                </div>
+                            </div>
+                    </div>
+                                        {%  else %}
+                                    <div class="welcome-screen">
+                                        <div class="titleBoxArea">
+                                            <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                                            <h3 class="text-align-center d-md-none">Congratulations!</h3>
+                                            <h1 class="text-align-center d-md-block d-none">Congratulations!</h1>
+                                        </div>
+
+
+                        <div class="status-box">
+                            <div class="c-col">
+                        <h4>Last Session Activity</h4><div class="text">
+                            <p><b>Status:</b> Completed</p>
+                            <p><b>Video:</b> Session {{lweek}} Completed</p>
+                            <p><b>Sleep Diary Entry:</b> Completed </p>
+                        </div>
+                        </div><div class="c-col">
+                        <h4>Next Step</h4>
+                            <div class="text">
+                            <p><b>Get our Certificate:</b></p>
+                             <p align="center">
+                                 {% if ma %}
+                                  <a target="_blank" href="/dashboard/ma-certificate/{{patient}}" class="bg-theme-blue btn btn-primary btn-lg text-center" > <i style="color:goldenrod;" class="fa fa-certificate"></i> GET CERTIFICATE</a>
+                                 {% else %}
+                            <a target="_blank" href="/dashboard/certificate/" class="bg-theme-blue btn btn-primary btn-lg text-center" > <i style="color:goldenrod;" class="fa fa-certificate"></i> GET CERTIFICATE</a>
+                            {% endif %}
+                             </p>
+                        </div>
+                        </div><div class="c-col">
+                        <h4>Status</h4><div class="text">
+                            <p><b>Program Started: </b>{{sleepdiary_startDate}}</p>
+                            <p><b>Projected End: </b>{{sleepdiary_endDate}}</p>
+
+                        </div>
+                        <div >
+                        <p class="quote">Congratulations on completing your program. Keep going with your sleep restrictions for the next few months, to keep yourself on track. </p></div>
+                        </div>
+
+                            <div class="c-col">
+                                <h4>Provider</h4>
+                                <div class="providerImage">
+                                     <img src="{{provider_data.provider_image}}">
+                                </div>
+                                <div class="providerInfo">
+                                    <p>{{provider_data.provider_name}}</p>
+                                <p>{{provider_data.provider_contact}}</p>
+                                </div>
+                            </div>
+
+                    </div>
+
+                        {% endif %}
+
+                    {% endif %}
+
+
+
+    <div class="icon-box-container">
+        {% if sleep_diary_entries in rest_day %}
+        <a class="icon-box popup" style="background-color: #7ace4b;" href="javascript:void(0);" onclick="myFunction1()">
+             {% if sleep_diary_entries == 0 %}
+             <span class="popuptext" id="myPopup1">No entries have been made. Please click on the “Get Started” button to start the program</span>
+            {% endif %}
+            <img src="/static/images/video.png">
+        <p>Video</p></a>
+            {% else %}
+        <a class="icon-box" style="background-color: #3e3e3e;" href="#menu1" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">
+
+        <img src="/static/images/video.png">
+        <p>Video</p></a>
+        {% endif %}
+        {% if sleep_diary_entries not in rest_day %}
+        <a class="icon-box" style="background-color: #7ace4b;" href="javascript:void(0);" onclick="{% if patient > 0 %} goDiary({{patient}}); {% else %}goDiary(0);{% endif %}">
+
+        <img src="/static/images/diary.png"><p>Sleep Diary</p>
+                </a>
+           {% endif %}
+
+        {% if sleep_diary_entries in rest_day %}
+        <a class="icon-box popup" style="background-color: #7ace4b;" href="javascript:void(0);" onclick="myFunction()">
+             {% if sleep_diary_entries == 0 %}
+             <span class="popuptext" id="myPopup">No entries have been made. Please click on the “Get Started” button to start the program</span>
+            {% else %}
+            <span class="popuptext" id="myPopup">First watch video of this week</span>
+            {% endif %}
+            <img src="/static/images/diary.png"><p>Sleep Diary</p>
+                </a>
+        {% endif %}
+        <a class="icon-box" style="background-color: #3e3e3e;" href="javascript:void(0);"
+                                                                      aria-expanded="false"
+                                                                      onclick="{% if patient > 0 %} viewDiary({{patient}}); {% else %}viewDiary(0);{% endif %}">
+        <img src="/static/images/report.png"><p>Sleep Data</p>
+                </a><a class="icon-box" style="background-color: #230c9a;" href="#menu3" manane aria-expanded="false"
+            onclick="{% if patient > 0 %} goDashboardsub('progress',{{patient}}); {% else %}goDashboardsub('progress',0);{% endif %}">
+        <img src="/static/images/progress.png"><p>Your Progress</p>
+                </a>
+            </div>
+
+                <div id="responsivez" class="video_sec tabcontent" style="display:none;">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <div class="outer-jobs">
+                                <div class="inner-jobs">
+                                    <div class="tab for-desk">
+                                        <div class="job-box">
+                                            <ul class="nav nav-pills nav-justified ">
+
+                                                {% for video in videos %}
+                                                    {% if forloop.first %}
+                                                        <li><a href="#tab_1" data-toggle="pill"
+                                                               class="tablink active">Welcome</a></li>
+                                                    {% else %}
+                                                        <li><a href="#tab_{{ video.vid_id }}" data-toggle="pill"
+                                                               class="tablink">{{ video.title }}</a></li>
+
+                                                    {% endif %}
+
+                                                {% endfor %}
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="jobs-details-outer for-desk">
+                                <div class="tab-content inner-job-details">
+
+
+                                    {% for video in videos %}
+
+                                        {% if forloop.first %}
+                                            <div id="tab_1" class="tab-pane active">
+
+                                                <h3>WELCOME TO COGNISLEEP!</h3>
+
+                                                <p>We are so glad you Joined our Cognisleep Insomnia Buster Program
+                                                    .Below
+                                                    is a Introduction Video that will Highlight what you will be
+                                                    learning in
+                                                    this program.Click the Play Button to Begin</p>
+                                                <center>
+                                                    <video src="{% static "assets/images/Welcome_video_with_Intro.mp4" %}"
+                                                           class="int_vid_two" id="video_one" controls=""
+                                                           controlslist="nodownload"></video>
+                                                </center>
+
+                                            </div>
+                                        {% else %}
+
+                                            <div id="tab_{{ video.vid_id }}" class="tab-pane">
+                                                <h3>{{ video.title }}</h3>
+                                                <center>
+                                                    <video src="{{ video.videos_url }}"
+                                                           class="int_vid_two" id="video_one" controls=""
+                                                           controlslist="nodownload"></video>
+                                                </center>
+
+                                            </div>
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="responsivez1" class="sleep_diary tabcontent" style="display:none;">
+                <nav class="weeks">
+                    <ul>
+                        <li style="width: calc(100% /6);"><a>
+                            <button id="weeks_id_1"
+                                    onclick="get_weeks_days(1,'2019/06/25','iehsan77@gmail.com');active_week('weeks_id_1');">
+                                1 Week
+                            </button>
+                        </a></li>
+                        <li style="width: calc(100% /6);"><a>
+                            <button id="weeks_id_2"
+                                    onclick="get_weeks_days(2,'2019/06/25','iehsan77@gmail.com');active_week('weeks_id_2');">
+                                2 Week
+                            </button>
+                        </a></li>
+                        <li style="width: calc(100% /6);"><a>
+                            <button id="weeks_id_3"
+                                    onclick="get_weeks_days(3,'2019/06/25','iehsan77@gmail.com');active_week('weeks_id_3');">
+                                3 Week
+                            </button>
+                        </a></li>
+                        <li style="width: calc(100% /6);"><a>
+                            <button id="weeks_id_4"
+                                    onclick="get_weeks_days(4,'2019/06/25','iehsan77@gmail.com');active_week('weeks_id_4');">
+                                4 Week
+                            </button>
+                        </a></li>
+                        <li style="width: calc(100% /6);"><a>
+                            <button id="weeks_id_5"
+                                    onclick="get_weeks_days(5,'2019/06/25','iehsan77@gmail.com');active_week('weeks_id_5');">
+                                5 Week
+                            </button>
+                        </a></li>
+                        <li style="width: calc(100% /6);"><a>
+                            <button id="weeks_id_6"
+                                    onclick="get_weeks_days(6,'2019/06/25','iehsan77@gmail.com');active_week('weeks_id_6');">
+                                8 week
+                            </button>
+                        </a></li>
+                    </ul>
+                </nav>
+                <nav class="days-menu">
+                    <ul id="week_days">
+                        <li><a>
+                            <button class="red" id="week_days_0" onclick="week_days(25,06,2019)">Day 1</button>
+                        </a></li>
+                        <li><a>
+                            <button class="red" id="week_days_1" onclick="week_days(26,06,2019)">Day 2</button>
+                        </a></li>
+                        <li><a>
+                            <button class="red" id="week_days_2" onclick="week_days(27,06,2019)">Day 3</button>
+                        </a></li>
+                        <li><a>
+                            <button class="red" id="week_days_3" onclick="week_days(28,06,2019)">Day 4</button>
+                        </a></li>
+                        <li><a>
+                            <button class="red" id="week_days_4" onclick="week_days(29,06,2019)">Day 5</button>
+                        </a></li>
+                        <li><a>
+                            <button class="red" id="week_days_5" onclick="week_days(30,06,2019)">Day 6</button>
+                        </a></li>
+                        <li><a>
+                            <button class="red" id="week_days_6" onclick="week_days(01,07,2019)">Day 7</button>
+                        </a></li>
+                    </ul>
+                </nav>
+                <h1 class="text-align-center">SLEEP DIARY</h1>
+                <div class="create_account_button text-align-center">
+                    <a class="" href="#">Tutorials</a>
+                    <p>Please enter sleep information the day/night after your purchase e.g. If purchase on 3/20/19
+                        enter sleep information on the morning of 3/21/19....</p>
+                </div>
+                <form>
+                    <div class="field">
+                        <label for="datepicker">Date</label>
+                        <input type="date" class="readonly" placeholder="Date" name="date" id="datepicker"
+                               required="">
+                    </div>
+                    <div class="field no-mar">
+                        <label for="time_went_to_bed">Time Went To Bed</label>
+                        <input type="time" id="time_went_to_bed" name="time_went_to_bed" required="">
+                    </div>
+                    <div class="field">
+                        <label for="time_fell_asleep">Time Fell Asleep</label>
+                        <input type="time" id="time_fell_asleep" placeholder="Time Fell Asleep"
+                               name="time_fell_asleep" required="">
+                    </div>
+                    <div class="field no-mar">
+                        <label for="time_got_up">Time Got Up</label>
+                        <input type="time" placeholder="Time Got Up" id="time_got_up" name="time_got_up"
+                               required="">
+                        <span class="alert-msg" id="time_sleep_guid_msg">Sleep Restriction Disclaimer: We advise during the course of this program to only restrict your sleep to a minimum of 5.5 hours. If you need further sleep restriction in order to maintain your sleep efficiency at or above 85%, You may need additional personalized consultation</span>
+                    </div>
+
+                    <div class="field no-mar">
+                        <label for="out_of_bed">Out Of Bed</label>
+                        <input type="time" id="out_of_bed" placeholder="Out Of Bed" id="out_of_bed" name="out_of_bed"
+                               required="">
+                    </div>
+                    <div class="field ">
+                        <label for="no_of_times_awakened">No. of times Awakened</label>
+                        <input type="number" min="0" placeholder="No. of times Awakened" name="no_of_times_awakened"
+                               id="no_of_times_awakened" required="">
+                    </div>
+                    <div class="field no-mar">
+                        <label for="total_time_awakened">Total time awakened</label>
+                        <div class="input-group">
+                            <input type="number" placeholder="Total time awakened" name="total_time_awakened"
+                                   id="total_time_awakened" min="0" required="">
+                            <span class="input-group-addon">Mins</span>
+                        </div>
+                    </div>
+                    <div class="field submit create_account_button">
+                        <a class="" href="#">Update</a>
+                    </div>
+                    <div class="field">
+                        <p>New bed time will be best calculated after each submission:</p>
+                        <label>New bed time</label>
+                        <input type="text" class="" value=":0" name="slpbtn" disabled="">
+                    </div>
+                </form>
+            </div>
+
+
+            <div id="responsivez2" class="your-progress tabcontent" style="display:none;">
+                <ul class="nav nav-pills nav-justified ">
+                    <li class="active"><a href="#tab_a" data-toggle="pill">Daily</a></li>
+                    <li class=""><a href="#tab_b" data-toggle="pill">Weekly</a></li>
+                    <li class=""><a href="#tab_c" data-toggle="pill">Biweekly</a></li>
+                    <li class=""><a href="#tab_d" data-toggle="pill">Monthly</a></li>
+                </ul>
+                <div class="tab-content col-md-10">
+                    <div class="tab-pane active" id="tab_a">
+
+                        <h4 class="text-center"> Daily </h4>
+                        {#            <div id="monthly_patient" style="min-width: 100%; height: 400px; margin: 0 auto" data-highcharts-chart="1"><div class="highcharts-container" id="highcharts-1" style="position: relative; overflow: hidden; width: 970px; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><svg version="1.1" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="970" height="400"><desc>Created with Highcharts 4.2.5</desc><defs><clipPath id="highcharts-2"><rect x="0" y="0" width="950" height="375"></rect></clipPath></defs><rect x="0" y="0" width="970" height="400" fill="transparent" class=" highcharts-background"></rect><g class="highcharts-series-group"></g><g class="highcharts-button" style="cursor:default;" stroke-linecap="round" transform="translate(936,10)"><title>Chart context menu</title><rect x="0.5" y="0.5" width="24" height="22" fill="white" stroke="none" stroke-width="1" rx="2" ry="2"></rect><path fill="#E0E0E0" d="M 6 6.5 L 20 6.5 M 6 11.5 L 20 11.5 M 6 16.5 L 20 16.5" stroke="#666" stroke-width="3"></path><text x="0" style="color:black;fill:black;" y="12"></text></g><g class="highcharts-legend"><g><g></g></g></g><g class="highcharts-tooltip" style="cursor:default;padding:0;pointer-events:none;white-space:nowrap;" transform="translate(0,-9999)"><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(249, 249, 249, .85)" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5"></path><text x="8" style="font-size:12px;color:#333333;fill:#333333;" y="20"></text></g></svg></div></div>#}
+
+
+                        <div class="col-md-12">
+                            <canvas id="myChart" style="width: 100%;height: 400px;"></canvas>
+                            <input type="hidden" id="chart_labels" name="chart_labels" value="{{ labels }}"/>
+                            <input type="hidden" id="chart_data" name="chart_data" value="{{ default }}"/>
+                        </div>
+
+                        <table id="monthly_patient_data" style="display:none;">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+
+                                <th>% sleep</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div><!--tab a end here-->
+                    <div class="tab-pane" id="tab_b">
+                        <h4 class="text-center">Weekly</h4>
+
+                        <div class="col-md-6">
+                            <canvas id="myChart2" width="500" height="400"></canvas>
+                        </div>
+
+                        <table id="weekly_sleep_data" style="display:none;">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+
+                                <th>% sleep</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="tab_c">
+                        <h4 class="text-center">Bi Weekly </h4>
+                        <div class="col-md-6">
+                            <canvas id="myChart3" width="500" height="400"></canvas>
+                        </div>
+
+                        <table id="biweekly_sleep_data" style="display:none;">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+
+                                <th>% sleep</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="tab-pane" id="tab_d">
+                        <h4 class="text-center">Monthly</h4>
+
+                        {#          <div id="quarterly_sleep" style="min-width: 100%; height: 400px; margin: 0 auto" data-highcharts-chart="4"><div class="highcharts-container" id="highcharts-7" style="position: relative; overflow: hidden; width: 970px; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><svg version="1.1" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="970" height="400"><desc>Created with Highcharts 4.2.5</desc><defs><clipPath id="highcharts-8"><rect x="0" y="0" width="950" height="375"></rect></clipPath><linearGradient x1="0" y1="0" x2="0" y2="1" id="highcharts-9"><stop offset="0" stop-color="#FFF" stop-opacity="1"></stop><stop offset="1" stop-color="#ACF" stop-opacity="1"></stop></linearGradient><linearGradient x1="0" y1="0" x2="0" y2="1" id="highcharts-10"><stop offset="0" stop-color="#9BD" stop-opacity="1"></stop><stop offset="1" stop-color="#CDF" stop-opacity="1"></stop></linearGradient></defs><rect x="0" y="0" width="970" height="400" fill="transparent" class=" highcharts-background"></rect><g class="highcharts-series-group"></g><g class="highcharts-button" style="cursor:default;" stroke-linecap="round" transform="translate(936,10)"><title>Chart context menu</title><rect x="0.5" y="0.5" width="24" height="22" fill="white" stroke="none" stroke-width="1" rx="2" ry="2"></rect><path fill="#E0E0E0" d="M 6 6.5 L 20 6.5 M 6 11.5 L 20 11.5 M 6 16.5 L 20 16.5" stroke="#666" stroke-width="3"></path><text x="0" style="color:black;fill:black;" y="12"></text></g><g class="highcharts-legend"><g><g></g></g></g><g class="highcharts-tooltip" style="cursor:default;padding:0;pointer-events:none;white-space:nowrap;" transform="translate(0,-9999)"><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(249, 249, 249, .85)" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5"></path><text x="8" style="font-size:12px;color:#333333;fill:#333333;" y="20"></text></g></svg><div class="highcharts-contextmenu" style="position: absolute; z-index: 1000; padding: 24px; display: none; right: -14px; top: 8px;"><div style="box-shadow: rgb(136, 136, 136) 3px 3px 10px; border: 1px solid rgb(160, 160, 160); background: rgb(255, 255, 255); padding: 5px 0px;"><div style="cursor: pointer; padding: 0px 10px; background: none; color: rgb(48, 48, 48); font-size: 11px;">Print chart</div><hr><div style="cursor: pointer; padding: 0px 10px; background: none; color: rgb(48, 48, 48); font-size: 11px;">Download PNG image</div><div style="cursor: pointer; padding: 0px 10px; background: none; color: rgb(48, 48, 48); font-size: 11px;">Download JPEG image</div><div style="cursor: pointer; padding: 0px 10px; background: none; color: rgb(48, 48, 48); font-size: 11px;">Download PDF document</div><div style="cursor: pointer; padding: 0px 10px; background: none; color: rgb(48, 48, 48); font-size: 11px;">Download SVG vector image</div></div></div></div></div>#}
+
+
+                        <table id="quarterly_sleep_data" style="display:none;">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+
+                                <th>% sleep</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div><!--tab-e end here-->
+
+
+                </div>
+            </div>
+
+        </div>
+        </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+{% block jqueryScript %}
+<script>
+    // When the user clicks on div, open the popup
+function myFunction() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+  setTimeout(function() {
+            popup.classList.remove("show");
+        }, 3000);
+}
+function myFunction1() {
+  var popup = document.getElementById("myPopup1");
+  popup.classList.toggle("show");
+  setTimeout(function() {
+            popup.classList.remove("show");
+        }, 3000);
+}
+</script>
+{% include "dashboard-js.html" %}
+{% endblock %}

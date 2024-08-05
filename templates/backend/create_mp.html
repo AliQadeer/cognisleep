@@ -1,0 +1,1112 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 p-r-0 title-margin-right">
+                        <div class="page-header">
+                            <div class="page-title">
+                                <h1>Create MP Account
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+
+                    <!-- /# column -->
+                </div>
+                <!-- /# row -->
+                <div class="dashboard-wrapper">
+                    <div class="col-lg-12 margin-bot-12" style="display: inline-table;padding:0;">
+                        <div class="col-lg-5" style="padding:0;">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="reservation"><button type="button" class="btn bg-navy">Submit</button>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+
+                    </div>
+                    <div class="graphs" style="float:right;text-align:right;"><a href="create_user.html"><span>Create
+                User</span></a>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><a href="/backend/web/user/index?sort=id" data-sort="id">ID</a></th>
+                                <th><a href="/backend/web/user/index?sort=first_name" data-sort="first_name">First Name</a></th>
+                                <th><a href="/backend/web/user/index?sort=last_name" data-sort="last_name">Last Name</a></th>
+                                <th><a href="/backend/web/user/index?sort=email" data-sort="email">Email</a></th>
+                                <th><a href="/backend/web/user/index?sort=contact_number" data-sort="contact_number">Contact Number</a>
+                                </th>
+                                <th><a href="/backend/web/user/index?sort=status" data-sort="status">Is Active</a></th>
+                                <th class="action-column">&nbsp;</th>
+                            </tr>
+                            <tr id="w0-filters" class="filters">
+                                <td>&nbsp;</td>
+                                <td><input type="text" class="form-control" name="UserSearch[id]"></td>
+                                <td><input type="text" class="form-control" name="UserSearch[first_name]"></td>
+                                <td><input type="text" class="form-control" name="UserSearch[last_name]"></td>
+                                <td><input type="text" class="form-control" name="UserSearch[email]"></td>
+                                <td><input type="text" class="form-control" name="UserSearch[contact_number]"></td>
+                                <td><input type="text" class="form-control" name="UserSearch[status]"></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr data-key="1042">
+                                <td>278</td>
+                                <td>377Patient4</td>
+                                <td>Pasteur</td>
+                                <td>377Patient4 Pasteur</td>
+                                <td>1539668220</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+
+                            <tr data-key="1042">
+                                <td>233</td>
+                                <td>367Patient5</td>
+                                <td>Catherine</td>
+                                <td>367Patient5 Catherine</td>
+                                <td>5487786466</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>107</td>
+                                <td>Imran</td>
+                                <td>Khan</td>
+                                <td>Imran Khan</td>
+                                <td>3353353350</td>
+                                <td>CogniSleep#7</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>108</td>
+                                <td>Robi</td>
+                                <td>Anjum</td>
+                                <td>Robi Anjum</td>
+                                <td>3353693456</td>
+                                <td>CogniSleep#7</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>272</td>
+                                <td>refzeeshan</td>
+                                <td>refarain</td>
+                                <td>refzeeshan refarain</td>
+                                <td>0303333333</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>271</td>
+                                <td>dp2register</td>
+                                <td>dp2register</td>
+                                <td>dp2register dp2register</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>270</td>
+                                <td>directfname</td>
+                                <td>directlname</td>
+                                <td>directfname directlname</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>113</td>
+                                <td>Nawaz</td>
+                                <td>Sharif</td>
+                                <td>Nawaz Sharif</td>
+                                <td>3693693690</td>
+                                <td>CogniSleep#7</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>114</td>
+                                <td>Raza</td>
+                                <td>Doctor</td>
+                                <td>Raza Doctor</td>
+                                <td>1234567890</td>
+                                <td>CogniSleep#7</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>269</td>
+                                <td>374Patient5</td>
+                                <td>Franklin</td>
+                                <td>374Patient5 Franklin</td>
+                                <td>1956743244</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>268</td>
+                                <td>374Patient4</td>
+                                <td>Alexander</td>
+                                <td>374Patient4 Alexander</td>
+                                <td>1358460234</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>267</td>
+                                <td>374Patient3</td>
+                                <td>Thomas</td>
+                                <td>374Patient3 Thomas</td>
+                                <td>16548634</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>266</td>
+                                <td>d</td>
+                                <td>d</td>
+                                <td>d d</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>265</td>
+                                <td>d</td>
+                                <td>d</td>
+                                <td>d d</td>
+                                <td>0303333333</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>264</td>
+                                <td>Haroon</td>
+                                <td>Rasheed</td>
+                                <td>Haroon Rasheed</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>263</td>
+                                <td>374Patient2</td>
+                                <td>Marie</td>
+                                <td>374Patient2 Marie</td>
+                                <td>1458032398</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>262</td>
+                                <td>Haroon</td>
+                                <td>Rasheed</td>
+                                <td>Haroon Rasheed</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>261</td>
+                                <td> 374Patient1</td>
+                                <td>Albert</td>
+                                <td> 374Patient1 Albert</td>
+                                <td>1365402332</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>260</td>
+                                <td>373Patient6</td>
+                                <td>Sacerio</td>
+                                <td>373Patient6 Sacerio</td>
+                                <td>9654478804</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>126</td>
+                                <td>343patient13</td>
+                                <td>test</td>
+                                <td>343patient13 test</td>
+                                <td>12345678</td>
+                                <td>test123?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>127</td>
+                                <td>343patient14</td>
+                                <td>test</td>
+                                <td>343patient14 test</td>
+                                <td>1234567</td>
+                                <td>test123?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>128</td>
+                                <td>343patient15</td>
+                                <td>drraza</td>
+                                <td>343patient15 drraza</td>
+                                <td>4587569854</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>129</td>
+                                <td>343patient16</td>
+                                <td>drraza</td>
+                                <td>343patient16 drraza</td>
+                                <td>6354789654</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>130</td>
+                                <td>343patient17</td>
+                                <td>drraza</td>
+                                <td>343patient17 drraza</td>
+                                <td>4826402876</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>131</td>
+                                <td>343patient18</td>
+                                <td>drraza</td>
+                                <td>343patient18 drraza</td>
+                                <td>6548768746</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>132</td>
+                                <td>343patient19</td>
+                                <td>drraza</td>
+                                <td>343patient19 drraza</td>
+                                <td>8566400102</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>133</td>
+                                <td>343patient20</td>
+                                <td>drraza</td>
+                                <td>343patient20 drraza</td>
+                                <td>1232984732</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>134</td>
+                                <td>343patient21</td>
+                                <td>drraza</td>
+                                <td>343patient21 drraza</td>
+                                <td>6200122837</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>135</td>
+                                <td>343patient22</td>
+                                <td>drraza</td>
+                                <td>343patient22 drraza</td>
+                                <td>7613251652</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>136</td>
+                                <td>349Patient1</td>
+                                <td>Record</td>
+                                <td>349Patient1 Record</td>
+                                <td>3344556677</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>137</td>
+                                <td>349Patient2</td>
+                                <td>Smith</td>
+                                <td>349Patient2 Smith</td>
+                                <td>3654789965</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>138</td>
+                                <td>349Patient3</td>
+                                <td>Rodriguez</td>
+                                <td>349Patient3 Rodriguez</td>
+                                <td>4568710013</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>277</td>
+                                <td>377Patient3</td>
+                                <td>Faraday</td>
+                                <td>377Patient3 Faraday</td>
+                                <td>7586930334</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>276</td>
+                                <td> 377Patient2</td>
+                                <td>Fleming</td>
+                                <td> 377Patient2 Fleming</td>
+                                <td>6372250045</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>275</td>
+                                <td>377Patient1</td>
+                                <td>Galilei</td>
+                                <td>377Patient1 Galilei</td>
+                                <td>5460085972</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>274</td>
+                                <td>Ehsan</td>
+                                <td>haq</td>
+                                <td>Ehsan haq</td>
+                                <td>9232324301</td>
+                                <td>Asd123!@#</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>273</td>
+                                <td>refbilal</td>
+                                <td>refbilal</td>
+                                <td>refbilal refbilal</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>145</td>
+                                <td>349patient9</td>
+                                <td>Uzi</td>
+                                <td>349patient9 Uzi</td>
+                                <td>4523311009</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>146</td>
+                                <td>349patient10</td>
+                                <td>Azam</td>
+                                <td>349patient10 Azam</td>
+                                <td>3644896577</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>253</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1 1</td>
+                                <td>1111111111</td>
+                                <td>Mansoor1@3</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>148</td>
+                                <td>351Patient04</td>
+                                <td>Sultan</td>
+                                <td>351Patient04 Sultan</td>
+                                <td>3451271234</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>252</td>
+                                <td>taimoor</td>
+                                <td>haroon</td>
+                                <td>taimoor haroon</td>
+                                <td>5555555555</td>
+                                <td>haroon?123</td>
+                                <td></td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>150</td>
+                                <td>351Patient06</td>
+                                <td>Rasheed</td>
+                                <td>351Patient06 Rasheed</td>
+                                <td>2345554321</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>151</td>
+                                <td>351Patient07</td>
+                                <td>Jameel</td>
+                                <td>351Patient07 Jameel</td>
+                                <td>366459022</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>251</td>
+                                <td>taimoor</td>
+                                <td>haroon</td>
+                                <td>taimoor haroon</td>
+                                <td>5555555555</td>
+                                <td>haroon?123</td>
+                                <td></td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>249</td>
+                                <td>a</td>
+                                <td>a</td>
+                                <td>a a</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td></td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>250</td>
+                                <td>Gilbert</td>
+                                <td>Balbuena</td>
+                                <td>Gilbert Balbuena</td>
+                                <td>3524220318</td>
+                                <td>Janu2019</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>155</td>
+                                <td>352Patient01</td>
+                                <td>Rodriguez</td>
+                                <td>352Patient01 Rodriguez</td>
+                                <td>7858423001</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>156</td>
+                                <td>352Patient02</td>
+                                <td>Martinez</td>
+                                <td>352Patient02 Martinez</td>
+                                <td>4335422385</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>157</td>
+                                <td>352Patient03</td>
+                                <td>Zadan</td>
+                                <td>352Patient03 Zadan</td>
+                                <td>4588320067</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>259</td>
+                                <td>373Patient5</td>
+                                <td>Moss</td>
+                                <td>373Patient5 Moss</td>
+                                <td>8565477029</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>258</td>
+                                <td>373Patient4</td>
+                                <td>Lopez</td>
+                                <td>373Patient4 Lopez</td>
+                                <td>7321551036</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>257</td>
+                                <td>373Patient3</td>
+                                <td>Garcia</td>
+                                <td>373Patient3 Garcia</td>
+                                <td>5467780322</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>256</td>
+                                <td> 373Patient2</td>
+                                <td>Martinez</td>
+                                <td> 373Patient2 Martinez</td>
+                                <td>8547665470</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>255</td>
+                                <td>373Patient1</td>
+                                <td>Williams</td>
+                                <td>373Patient1 Williams</td>
+                                <td>5647896430</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>254</td>
+                                <td>1</td>
+                                <td>test</td>
+                                <td>1 test</td>
+                                <td>9233301399</td>
+                                <td>Mansoor1@3</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>165</td>
+                                <td>350Patient2</td>
+                                <td>Doe</td>
+                                <td>350Patient2 Doe</td>
+                                <td>4966358756</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>166</td>
+                                <td>350Patient3</td>
+                                <td>Narain</td>
+                                <td>350Patient3 Narain</td>
+                                <td>8554303456</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>248</td>
+                                <td>waqas</td>
+                                <td>khan</td>
+                                <td>waqas khan</td>
+                                <td>1111111111</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>247</td>
+                                <td>taimoor</td>
+                                <td>haroon</td>
+                                <td>taimoor haroon</td>
+                                <td>5555555555</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>246</td>
+                                <td>taimoor</td>
+                                <td>haroon</td>
+                                <td>taimoor haroon</td>
+                                <td>5555555555</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>245</td>
+                                <td>Gilbert</td>
+                                <td>Balbuena</td>
+                                <td>Gilbert Balbuena</td>
+                                <td>3524220319</td>
+                                <td>Janu2019</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>244</td>
+                                <td>Gilbert</td>
+                                <td>Balbuena</td>
+                                <td>Gilbert Balbuena</td>
+                                <td>3524220319</td>
+                                <td>Janu2019</td>
+                                <td></td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>242</td>
+                                <td>ds</td>
+                                <td>haq</td>
+                                <td>ds haq</td>
+                                <td>9232430139</td>
+                                <td>Asd123!@#</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>243</td>
+                                <td>taimoor</td>
+                                <td>haroon</td>
+                                <td>taimoor haroon</td>
+                                <td>5555555555</td>
+                                <td>haroon?123</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>286</td>
+                                <td>378Patient3</td>
+                                <td>McClintock</td>
+                                <td>378Patient3 McClintock</td>
+                                <td>1498763345</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>287</td>
+                                <td>378Patient4</td>
+                                <td>Rachel</td>
+                                <td>378Patient4 Rachel</td>
+                                <td>1886542121</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>288</td>
+                                <td>378Patient5</td>
+                                <td>Neumann</td>
+                                <td>378Patient5 Neumann</td>
+                                <td>1342288760</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>289</td>
+                                <td>373Patient7</td>
+                                <td>Adam</td>
+                                <td>373Patient7 Adam</td>
+                                <td>3456987023</td>
+                                <td>test1234?</td>
+                                <td></td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>290</td>
+                                <td>378Patient6</td>
+                                <td>Graves</td>
+                                <td>378Patient6 Graves</td>
+                                <td>1654987430</td>
+                                <td>test1234?</td>
+                                <td></td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>291</td>
+                                <td>378Patient7</td>
+                                <td>Watson</td>
+                                <td>378Patient7 Watson</td>
+                                <td>1694478595</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>292</td>
+                                <td>378Patient8</td>
+                                <td>Martin</td>
+                                <td>378Patient8 Martin</td>
+                                <td>1854760321</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>293</td>
+                                <td>dsds</td>
+                                <td>dsdsd</td>
+                                <td>dsds dsdsd</td>
+                                <td>232323</td>
+                                <td>Asd123!@#</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>294</td>
+                                <td>Tom</td>
+                                <td>Hanks</td>
+                                <td>Tom Hanks</td>
+                                <td>5686584023</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>295</td>
+                                <td>Adam</td>
+                                <td>Sandler</td>
+                                <td>Adam Sandler</td>
+                                <td>7236954109</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>296</td>
+                                <td>Brad</td>
+                                <td>Pitt</td>
+                                <td>Brad Pitt</td>
+                                <td>3546980045</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>297</td>
+                                <td>Christian</td>
+                                <td>Bale</td>
+                                <td>Christian Bale</td>
+                                <td>5846630331</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                            <tr data-key="1042">
+                                <td>298</td>
+                                <td>Chris</td>
+                                <td>Evans</td>
+                                <td>Chris Evans</td>
+                                <td>6513974458</td>
+                                <td>test1234?</td>
+                                <td>yes</td>
+                                <td width="100" class="text-center"><a href="/backend/web/user/1042" title="View" aria-label="View" data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/update/1042" title="Update" aria-label="Update" data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete" data-pjax="0" data-confirm="Are you sure you want to delete this item?" data-method="post"><i class="fa fa-trash"
+                      aria-hidden="true"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li class="prev disabled"><span>«</span></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="1">1</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="2">2</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="3">3</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="4">4</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="5">5</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="6">6</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="7">7</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="8">8</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="9">9</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="10">10</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="11">11</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="12">12</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="13">13</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="14">14</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="15">15</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="16">16</a></li>
+                        <li><a href="/backend/web/user/index?page=2" data-page="17">17</a></li>
+                        <li class="active"><a href="/backend/web/user/index?page=1" data-page="0">1</a></li>
+
+                        <li class="next"><a href="/backend/web/user/index?page=2" data-page="1">»</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 p-r-0 title-margin-right">
+                        <div class="page-header">
+                            <div class="page-title">
+                                <h1>User</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+
+                    <!-- /# column -->
+                </div>
+                <div class="dashboard-wrapper" style="padding-top:0;">
+                    <div class="graphs" style="float:right;text-align:right;"><a href="/dashboard/create_patient/"><span>Create User</span></a>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th><a href="/backend/web/user/index?sort=id" data-sort="id">ID</a></th>
+                            <th><a href="/backend/web/user/index?sort=first_name" data-sort="first_name">First Name</a>
+                            </th>
+                            <th><a href="/backend/web/user/index?sort=last_name" data-sort="last_name">Last Name</a>
+                            </th>
+                            <th><a href="/backend/web/user/index?sort=email" data-sort="email">Email</a></th>
+                            <th><a href="/backend/web/user/index?sort=contact_number" data-sort="contact_number">Contact
+                                Number</a></th>
+                            <th><a href="/backend/web/user/index?sort=status" data-sort="status">Is Active</a></th>
+                            <th class="action-column">&nbsp;</th>
+                        </tr>
+                        <tr id="w0-filters" class="filters">
+                            <td>&nbsp;</td>
+                            <td><input type="text" class="form-control" name="UserSearch[id]"></td>
+                            <td><input type="text" class="form-control" name="UserSearch[first_name]"></td>
+                            <td><input type="text" class="form-control" name="UserSearch[last_name]"></td>
+                            <td><input type="text" class="form-control" name="UserSearch[email]"></td>
+                            <td><input type="text" class="form-control" name="UserSearch[contact_number]"></td>
+                            <td><input type="text" class="form-control" name="UserSearch[status]"></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr data-key="1042">
+                            <td>298</td>
+                            <td>Chris</td>
+                            <td>Evans</td>
+                            <td>Chris Evans</td>
+                            <td>6513974458</td>
+                            <td>test1234?</td>
+                            <td>yes</td>
+                            <td width="65"><a href="/backend/web/user/1042" title="View" aria-label="View"
+                                              data-pjax="0"><i class="fa fa-eye" aria-hidden="true"></i></a> <a
+                                    href="/backend/web/user/update/1042" title="Update" aria-label="Update"
+                                    data-pjax="0"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a
+                                    href="/backend/web/user/delete/1042" title="Delete" aria-label="Delete"
+                                    data-pjax="0" data-confirm="Are you sure you want to delete this item?"
+                                    data-method="post"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,75 @@
+{% extends "no_fotter_base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+
+.provider_login_form h2 {
+    color: #2e2e83;
+    text-transform: capitalize;
+}
+
+
+.alert p {
+    /*font-size: 22px;*/
+    margin-bottom: 30px;
+}
+
+.alert p a.backHome {
+    border: 1px solid #0f9648;
+    color: #0f9648;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 10px;
+}
+        .return-btn {display: inline-block;margin: 150px 0;background: #230c9a;color: #fff !important;padding: 10px 20px;border-radius: 5px;font-family: Montserrat, sans-serif;}
+
+
+        .mainImage {
+    margin: auto;
+    margin-bottom: 15px;
+}
+@media(min-width: 1024px) {
+
+        section.forward_sec {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+}
+}
+
+</style>
+
+
+
+    <section class="forward_sec">
+        <div class="container" >
+            <div class="row">
+                <div class="col-md-8 m-auto">
+                    <div class="mainImage text-center">
+                        <img style="height:100px;" src="{% static 'assets/images/sheep.PNG' %}" />
+                    </div>
+                    <div class="provider_login_form">
+                        <h2 class="mb-2 py-0">Account Under Review</h2>
+                    </div>
+    
+                    <div class="text-center">
+                                <div class="form-group">
+                                    <div class="alertMessage">
+                                        <div class="alert alert-{{ message.tags }} text-center">
+                                            <p style="color: #08a01a;">Your account is under review for verification.<br> We will email you shortly
+                                            about your account verification result.</p>
+                                        <p style="margin-top: 75px;"><a href="/dashboard" class="backHome">Back Home</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                    </div>
+                </div>
+
+            </div>
+
+    </section>
+
+
+{% endblock %}

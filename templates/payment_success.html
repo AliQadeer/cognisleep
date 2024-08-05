@@ -1,0 +1,106 @@
+{% extends "no_fotter_base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        .provider_login_forms h2 {
+            color: #2e2e83;
+            text-transform: capitalize;
+        }
+        
+        
+        .alert p {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+        
+        .alert p a.backHome {
+            border: 1px solid #0f9648;
+            color: #0f9648;
+            padding: 10px 20px;
+            font-size: 15px;
+            border-radius: 10px;
+        }
+
+               .verifyAccount {
+            border: 1px solid #2e2e83;
+            color: #fff;
+            background-color: #2e2e83;
+            padding: 10px 20px;
+            font-size: 15px;
+            border-radius: 10px;
+        }
+
+        .verifyAccount:hover {
+            color: #ffff;
+            background-color: #1a1a6b;
+        }
+
+        .gap-15 {
+            gap: 15px;
+        }
+
+        .alert-success {
+    color: #155724;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+        @media(min-width: 1024px) {
+
+        section.forward_sec {
+    height: 80vh  !important;
+    display: flex;
+    align-items: center;
+}
+}
+    </style>
+
+
+
+    <section class="forward_sec">
+        <div class="container">
+            <div class="row justify-content-between">
+
+                <div class="col-md-5">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="form-group">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="provider_login_forms">
+                                        <h2 class="mb-2 py-0">Payment Successful</h2>
+                                    </div>
+                                    <div class="alert alert-{{ message.tags }} p-0">
+<!--                                        <p style="color: #08a01a;">{{ message }}</p>-->
+                                        <div class="d-flex gap-15 mt-3">
+
+                                            <p><a href="{{ link }}" class="verifyAccount">Verify Account</a></p>
+                                            <p><a href="/dashboard" class="backHome">Verify Later</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-right">
+                    <div class="mainImage text-center">
+                        <img src="{% static 'assets/images/rightSheep.PNG' %}" />
+                    </div>
+                </div>
+            </div>
+
+    </section>
+
+
+{% endblock %}

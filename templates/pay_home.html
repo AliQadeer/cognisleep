@@ -1,0 +1,211 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+  .package-box {
+    background-color: #fff;
+    border: 2px solid #dfdaf7;
+    border-radius: 25px;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    overflow: hidden;
+    transition: .5s;
+}
+
+.package-box:hover {
+    transform: scale(1.1);
+    transition: .5s;
+}
+
+.package-header {
+    background-color: #7ace4b;
+    text-align: center;
+    padding: 10px 0;
+    background-image: linear-gradient(40deg, #7ace4b, #308103);
+}
+
+.package-name {
+    text-transform: lowercase;
+}
+
+.package-header h2 {
+    text-transform: capitalize;
+    color: #fff;
+}
+
+.price-box h2 {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.package-content ul {
+    list-style: none;
+    padding: 0;
+    font-size: 18px;
+    color: #626262;
+}
+
+.package-body {
+    padding: 15px;
+}
+
+.package-content ul li {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.package-content ul li::before {
+    content: '\f046';
+    font-family: 'FontAwesome';
+    padding-right: 5px;
+}
+
+.package-content ul li span {
+    color: #05961e;
+    font-weight: 700;
+}
+
+.package-footer {
+    text-align: center;
+    padding: 28px 0;
+    border-top: 1px solid #f2f2f2;
+}
+
+.package-footer .button {
+    padding: 13px 30px;
+    font-size: 18px;
+    border: 1px solid #230c9a;
+    background-color: transparent;
+    color: #230c9a;
+    border-radius: 50px;
+}
+
+.package-footer .button:hover, .package-box:hover .package-footer .button {
+    color: #fff;
+    background-color: #230c9a;
+}
+
+
+.cancel-subscription:hover, .package-box:hover .cancel-subscription {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}
+
+p.pkgDetails {
+    font-size: 17px;
+}
+
+
+</style>
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+
+              {% if sub_status == "Active" %}
+        <div class="row justify-content-between align-items-center my-4">
+
+                            <div class="col-md-6">
+                                <div class="title-box">
+                                    <button  style=" margin-top: -10px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i>Back</button>
+                                     <h2 class="mb-0 text-dark p-0">Your Subscription:</h2>
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-4 d-md-flex justify-content-end">
+                                <div class="status">
+                                    <h5><i class="fa fa-check-circle text-success pr-2" aria-hidden="true"></i>Active</h5>
+                                </div>
+                            </div>
+                        </div>
+        <div class="row">
+            <div class="col-md-4 m-auto">
+                <div class="package-box">
+          <div class="package-header">
+              <div class="package-name">
+                  <h2 class="mb-0">{{ product.product_name }}</h2> </div>
+              <div class="price-box">
+                  <h2 class="mb-0"><sup>$</sup>{{ product.price }} / Mo</h2> </div>
+          </div>
+          <div class="package-body">
+              <div class="package-content">
+                  <p class="pkgDetails">Access the CogniSleep Provider dashboard. Manage and analyze the progress of patients. Provide the appropriate medical advice by reviewing their sleeping patterns.</p>
+                              <ul>
+                                   <li>Patient can be tracked-<span>Yes</span></li>
+                                  <li>Analyze daily and weekly sleep patterns-<span>Yes</span></li>
+                                  <li>Find out when the patient is having sleep issues-<span>Yes</span></li>
+                                  <li>Problem areas are highlighted with alert-<span>Yes</span></li>
+
+
+                              </ul>
+              </div>
+          </div>
+<!--          <div class="package-footer">-->
+<!--            <a href="/payments/cancel_request" class="btn btn-primary cancel-subscription border-danger text-danger button">Request Cancel Subscription</a>-->
+<!--          </div>-->
+</div>
+            </div>
+        </div>
+
+      {% else %}
+
+      <div class="noSubscription text-center">
+                                     <h5>You don't have any Active Subscription.</h5>
+                                 </div>
+      {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://js.stripe.com/v3/"></script>  <!-- new -->
+<script type="text/javascript">
+
+  console.log("Sanity check!");
+
+// Get Stripe publishable key
+  fetch("{{base_url}}/payments/config/")
+  .then((result) => { return result.json(); })
+  .then((data) => {
+  // Initialize Stripe.js
+  const stripe = Stripe(data.publicKey);
+  // new
+  // Event handler
+  let submitBtn = document.querySelector("#submitBtn");
+  let submitBtn2 = document.querySelector("#submitBtn2")
+  if (submitBtn !== null) {
+    submitBtn.addEventListener("click", () => {
+    // Get Checkout Session ID
+    fetch("{{base_url}}/payments/create-checkout-session/")
+      .then((result) => { return result.json(); })
+      .then((data) => {
+        console.log(data);
+        // Redirect to Stripe Checkout
+        return stripe.redirectToCheckout({sessionId: data.sessionId})
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    });
+  }
+  if (submitBtn2 !== null) {
+    console.log("yes second");
+    submitBtn2.addEventListener("click", () => {
+    // Get Checkout Session ID
+    fetch("{{base_url}}/payments/create-checkout-session2/")
+      .then((result) => { return result.json(); })
+      .then((data) => {
+        console.log(data);
+        // Redirect to Stripe Checkout
+        return stripe.redirectToCheckout({sessionId: data.sessionId})
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

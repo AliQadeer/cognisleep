@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style type="text/css">
+		/**
+		 * The CSS shown here will not be introduced in the Quickstart guide, but shows
+		 * how you can use CSS to style your Element's container.
+		 */
+		.StripeElement {
+		  box-sizing: border-box;
+
+		  height: 40px;
+
+		  padding: 10px 12px;
+
+		  border: 1px solid transparent;
+		  border-radius: 4px;
+		  background-color: white;
+
+		  box-shadow: 0 1px 3px 0 #e6ebf1;
+		  -webkit-transition: box-shadow 150ms ease;
+		  transition: box-shadow 150ms ease;
+		}
+
+		.StripeElement--focus {
+		  box-shadow: 0 1px 3px 0 #cfd7df;
+		}
+
+		.StripeElement--invalid {
+		  border-color: #fa755a;
+		}
+
+		.StripeElement--webkit-autofill {
+		  background-color: #fefde5 !important;
+		}
+
+<!--		checkout session -->
+
+.checkout-session label {
+    display: block;
+}
+
+.checkout-session input {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #dbdbdb;
+    padding: 10px;
+}
+
+.checkout-session label .required {
+    color: red;
+}
+
+div#card-element {
+    border: 1px solid #dbdbdb !important;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.submitCheckout input {
+    background-color: #230c9a;
+    color: #fff;
+}
+
+.total-box {
+    border: 1px solid #dbdbdb;
+    padding: 15px 10px;
+    border-radius: 10px;
+}
+
+.subscriptionPackages:not(:last-child) {
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.blur {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    filter: blur(3px);
+    background-color: #fffcfcd6;
+    z-index: 99;
+}
+
+.custom-loader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+.custom-loader {
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:conic-gradient(#0000 10%,#200B94);
+  -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 16px),#000 0);
+  animation:s3 1s infinite linear;
+}
+
+.main_checkout_div{
+	display: flex;
+	justify-content: space-around;
+	align-content: center;
+	margin-bottom: 20px;
+}
+
+@keyframes s3 {to{transform: rotate(1turn)}}
+    .backBtn {
+    left: 20px;
+    background-color: #00a115;
+    border: none;
+    border-radius: 50px;
+    width: 36px;
+    height: 36px;
+    z-index: 999;
+    top: 20px;
+}
+
+.backBtn:hover {
+    background-color: #79ce4a;
+}
+
+	</style>
+<script src="https://js.stripe.com/v3/"></script>
+
+
+
+
+
+	<section class="checkout-session py-5">
+		<form id="payment-form" method="POST">
+		<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="main_checkout_div">
+					<button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+					<div class="checkout-title text-center">
+						<h3 class="mb-3 h2 font-weight-bold">Checkout</h3>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>
+									First Name: <span class="required">*</span>
+								</label>
+								<input type="text" name="firstName" class="form-controls" placeholder="Enter First Name" value="{{ user_detail.first_name }}" readonly>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>
+									Last Name: <span class="required">*</span>
+								</label>
+								<input type="text" name="lastName" class="form-controls" placeholder="Enter Last Name" value="{{ user_detail.last_name }}" readonly>
+								<input type="hidden" name="pid" id="pidValue" class="form-controls" value="{{ price_id }}">
+								<input type="hidden" id="user_id" class="form-controls" value="{{ user_data.id }}">
+
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>
+									Email: <span class="required">*</span>
+								</label>
+								<input type="email" name="email" class="form-controls" placeholder="Enter Email" value="{{ user_data.email }}" readonly>
+								<input type="hidden" id="cSecret">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>
+									Phone Number: <span class="required">*</span>
+								</label>
+								<input type="text" name="phoneNumber" class="form-controls" placeholder="Enter Phone Number" value="{{ user_detail.contact_no }}" readonly>
+							</div>
+						</div>
+							  <div class="col-md-12">
+					  <div class="form-group">
+				    <label for="card-element">
+				      Credit or debit card
+				    </label>
+				    <div id="card-element">
+				      <!-- A Stripe Element will be inserted here. -->
+				    </div>
+
+				    <!-- Used to display form errors. -->
+				    <div id="card-errors" role="alert"></div>
+				  </div>
+				  </div>
+<!--				<div class="col-md-5 mt-3">-->
+<!--					<div class="submitCheckout">-->
+<!--						<input  class="myButton" class="form-controls"  type="submit" value="Pay" name="">-->
+<!--					</div>-->
+<!--				</div>-->
+					</div>
+<!--					<div class="form-field-6 form-group">-->
+<!--						<input required type="text" class="form-controls" name="priceid" value="{{ priceid }}">-->
+<!--						<input required type="text" class="form-controls" name="clientid" id="clientid" value="{{ clientsecret }}">-->
+<!--					</div>-->
+
+			</div>
+			<div class="col-md-4">
+				<div class="text-center total-box">
+					<div class="orderTitle">
+					<h4 class="mb-3">Order Details:</h4>
+					</div>
+				<div class="border-top pt-3 subscriptionPackages">
+					<div class="row">
+						<div class="col-md-12 text-center">
+						<div class="packageName">
+							<h5 class="mb-0 font-weight-bold">{{ pkg_name }}</h5>
+						</div>
+    					<div class="packagePrice">
+							<p class="mb-0"><span class="cSymbol">$</span>{{ pkg_price }} <span class="unitll">/ Month</span></p>
+						</div>
+					</div>
+
+					</div>
+				</div>
+				</div>
+				<div class="submitCheckout mt-3">
+						<input  class="myButton" class="form-controls"  type="submit" value="Pay" name="">
+					<p style="font-size: 14px;line-height: 18px;text-align: center;">Please do not click the back or refresh button while your payment is processing.</p>
+					</div>
+
+			</div>
+		</div>
+	</div>
+		</form>
+		<div class="error text-center container mt-3" style="display: none;">
+			<p class="bg-danger text-white rounded">Payment is declined.</p>
+		</div>
+	</section>
+	<div class="blur loading" style="display: none;"></div>
+	<div class="custom-loader loading" style="display: none;"></div>
+
+
+
+
+<script>
+
+
+		// Create a Stripe client.
+		var stripe = Stripe('{{ stripe_api_key }}');
+
+		// Create an instance of Elements.
+		var elements = stripe.elements();
+
+		// Custom styling can be passed to options when creating an Element.
+		// (Note that this demo uses a wider set of styles than the guide below.)
+		var style = {
+		  base: {
+		    color: '#32325d',
+		    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+		    fontSmoothing: 'antialiased',
+		    fontSize: '16px',
+		    '::placeholder': {
+		      color: '#aab7c4'
+		    }
+		  },
+		  invalid: {
+		    color: '#fa755a',
+		    iconColor: '#fa755a'
+		  }
+		};
+
+		// Create an instance of the card Element.
+		var card = elements.create('card', {style: style});
+
+		// Add an instance of the card Element into the `card-element` <div>.
+		card.mount('#card-element');
+
+		// Handle real-time validation errors from the card Element.
+		card.addEventListener('change', function(event) {
+		  var displayError = document.getElementById('card-errors');
+		  if (event.error) {
+		    displayError.textContent = event.error.message;
+		  } else {
+		    displayError.textContent = '';
+		  }
+		});
+
+		var form = document.getElementById('payment-form');
+
+form.addEventListener('submit', function(ev) {
+  $('.dashboardLink a').attr('href', 'javascript: void()');
+  $('.loading').show();
+  ev.preventDefault();
+  let paymentKey  = jQuery('#pidValue').val();
+  let user  = jQuery('#user_id').val();
+  let detail = paymentKey+'/'+user
+  // Get Stripe publishable key
+  fetch("{{base_url}}/payments/reg_subsc/"+detail)
+  .then((resultsss) => { return resultsss.json(); })
+  .then((data) => {
+  document.getElementById('cSecret').value = data.clientsecret;
+   cusname = jQuery('input[name="lastName"]').val();
+  clientSecret = jQuery('#cSecret').val();
+  stripe.confirmCardPayment(clientSecret, {
+    payment_method: {
+      card: card,
+      billing_details: {
+        name: cusname
+      }
+    }
+  }).then(function(result) {
+  	let user  = jQuery('#user_id').val();
+    if (result.error) {
+   		$('.loading').hide();
+      fetch("{{base_url}}/payments/unsuccessfull/"+user)
+      $('.error p').text(result.error.message);
+      $('.error').show();
+      // Show error to your customer (for example, insufficient funds)
+      console.log(result.error.message);
+      //let errormsg = result.error.message;
+      //window.location = "{{base_url}}/payments/unsuccessfull/"+errormsg
+    } else {
+      // The payment has been processed!
+      if (result.paymentIntent.status === 'succeeded') {
+      	$('.loading').hide();
+      	console.log("Payment Successfull");
+      	window.location = "{{base_url}}/payments/success/"+user
+        // Show a success message to your customer
+        // There's a risk of the customer closing the window before callback
+        // execution. Set up a webhook or plugin to listen for the
+        // payment_intent.succeeded event that handles any business critical
+        // post-payment actions.
+      }
+    }
+  });
+  })
+
+
+
+});
+	</script>
+
+{% endblock content %}
+
+
+
+

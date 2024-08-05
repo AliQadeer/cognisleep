@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+    </style>
+
+
+
+    <section class="contact_us">
+        <div class="container">
+            <div class="row">
+                <div class="col-12  col-lg-3 col-md-12"></div>
+                <div class="col-12  col-lg-6  col-md-12">
+                    <div class="titleBox text-center">
+                        <h2 class="defaultHead">GET IN TOUCH            </h2>
+            <h6>Thank you for contacting CogniSleep. You will receive an emailed response to your inquiry in the next 30 minutes during regular business hours.</h6>
+                    </div>
+                    <div class="form-left">
+                    <form method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+
+                            <div class="form-group">
+                                <label class="col-form-label  requiredField">Full Name<span
+                                        class="asteriskField">*</span>
+                                </label>
+                                <div class="">
+                                    <input type="text" name="fullname" id="fullname" class="form-control" required="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label  requiredField">Email<span class="asteriskField">*</span>
+                                </label>
+                                <div class="">
+                                    <input type="email" name="email" id="email" class="form-control" required="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label ">Phone Number
+                                </label>
+                                <div class="">
+                                    <input type="text" name="phone" id="phone" class="form-control" required="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label requiredField">Message <span class="asteriskField">*</span>
+                                </label>
+                                <div class="">
+                                    <textarea class="form-control" rows="4" id="message" name="message"></textarea>
+                                </div>
+                            </div>
+                           <div class="form-group bg-mobile-about py-4 px-2">
+                             <div class="d-flex gap-15 align-items-center">
+                                <div class="lableBox flex-shrink-0">
+                                    <label for="myfile">
+                                        Attached file:
+                                    </label>
+                                </div>
+                                <div class="fileBtn flex-grow-1">
+                                    <button type="button">BROWSE FILE</button>
+                                </div>
+                             </div>
+                            <input
+                                type="file"
+                                name="myfile"
+                                accept="image/*"
+                                id="myfile"
+                                class="d-none"
+                                />
+                           </div>
+                            <input type="hidden" name="response_captcha" value="0" class="responseCaptcha">
+
+                            <div class="form-group">
+                                <div style="margin-top: 13px;" id="g-recaptcha2" class="g-recaptcha2"
+                                     data-sitekey="6Lf37LQUAAAAAIHIJDdoPYLF0pLXZ_zFwqbV2AAn"></div>
+                            </div>
+                            <button type="submit" class="login_buttonz submitbtn">Send</button>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            {% if messages %}
+							{% for message in messages %}
+							<div class="alert alert-{{ message.tags}}">{{ message }}</div>
+							{% endfor %}
+						{% endif %}
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+    <section class="locate_sec">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-5 col-lg-5">
+                    <div class="call-to-action-item call-to-action-contact-1">
+                        <div class="call-to-action-icon">
+                            <img src="{% static "assets/images/icon-pin-2.png" %}" alt="">
+                        </div>
+                        <div class="call-to-action-action">
+                            <p class="call-to-action-content">6405 W Gulf To Lake Hwy <span class="d-md-block">Crystal River, FL 34429</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class="call-to-action-item call-to-action-contact-1">
+                        <div class="call-to-action-icon">
+                            <img src="{% static "assets/images/icon-phone-2.png" %}" alt="">
+                        </div>
+                        <div class="call-to-action-action">
+                            <h4 class="call-to-action-title">Call Us Now at</h4>
+                            <p class="call-to-action-content">+1 (833) 346-2929</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="call-to-action-item call-to-action-contact-1">
+                        <div class="call-to-action-icon">
+                            <img src="{% static "assets/images/icon-mail.png" %}" alt="">
+                        </div>
+                        <div class="call-to-action-action">
+                            <h4 class="call-to-action-title">Email Us at</h4>
+                            <p class="call-to-action-content">info@cognisleep.com</p>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class="call-to-action-item call-to-action-contact-1">
+                        <div class="call-to-action-icon">
+                            <img src="{% static "assets/images/chat.png" %}" alt="">
+                        </div>
+                        <div class="call-to-action-action">
+                            <h4 class="call-to-action-title">Chat with us</h4>
+                            <p class="call-to-action-content"><a href="">Start chat</a></p>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block jqueryScript %}
+<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback2&render=explicit' async defer></script>
+
+<script>
+
+    jQuery('.fileBtn button').click(function(){
+        jQuery('#myfile').trigger('click');
+    })
+
+       setTimeout(function(){ $('.alert').hide(); }, 5000);
+    var recaptchaValid2 = 0;
+    $("#g-recaptcha-response-1").attr("required", true);
+
+    var onloadCallback2 = function () {
+        grecaptcha.render('g-recaptcha2', {
+            'sitekey': $("#g-recaptcha2").data("sitekey"),
+            'callback': correctCaptcha2
+        });
+    };
+
+    var correctCaptcha2 = function (response) {
+        //alert($('#g-recaptcha').length);
+        var response2 = grecaptcha.getResponse();
+
+        if (response.length == 0) {
+            recaptchaValid2 = 0;
+        } else {
+            recaptchaValid2 = 1;
+        }
+       // alert(recaptchaValid2);
+        setTimeout(function () {
+            recaptchaValid2 = 0;
+            $(".responseCaptcha").val(recaptchaValid2);
+            grecaptcha.reset();
+        }, 15000);
+
+        $(".responseCaptcha").val(recaptchaValid2);
+    };
+
+</script>
+{% endblock %}

@@ -1,0 +1,1121 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        ul.nav.nav-tabs {
+        float: unset;
+        flex-wrap: nowrap;
+    }
+
+        #detailss a .content-val {
+            width: 100%;
+        }
+
+        ul.nav.nav-tabs li a {
+            padding: 10px 15px !important;
+            font-size: 12px;
+        }
+
+        p.mainTitle {
+    font-size: 14px;
+    position: absolute;
+    left: 5px;
+    right: 0;
+    text-align: center;
+    top: -60px;
+    color: #000;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+    margin: 0 20px;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.bg-yellow span.lastPrescribedTime {
+    font-weight: 600;
+}
+
+.bg-blue span.lastPrescribedTime, .bg-green span.previewWeekSE, .bg-greaish span.previewWeekSE {
+    font-weight: 600;
+    color: #fff;
+}
+
+
+.bg-blue {
+    background-color: #230c9a;
+}
+
+.bg-green {
+    background-color: #55b321;
+}
+
+.bg-greaish {
+    background-color: #444342;
+}
+
+        #wrapper {
+            width: 800px;
+            margin: 0 auto;
+            color: #333;
+            font-family: Tahoma, Verdana, sans-serif;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .demo {
+            margin: 30px 0;
+        }
+
+        .date-picker-wrapper .month-wrapper table .day.lalala {
+            background-color: orange;
+        }
+
+        .options {
+            display: none;
+            border-left: 6px solid #8ae;
+            padding: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+            background-color: #eee;
+            border-radius: 4px;
+        }
+
+        .date-picker-wrapper.date-range-picker19 .day.first-date-selected {
+            background-color: red !important;
+        }
+
+        .date-picker-wrapper.date-range-picker19 .day.last-date-selected {
+            background-color: orange !important;
+        }
+.tab-pane h4{
+    padding: 31px;
+    font-weight: bold;
+        text-decoration: underline;
+}
+
+.pd-40 {
+            padding: 0 30px;
+        }
+
+ .sleepEffeciency {
+    position: absolute;
+    left: -84px !important;
+    transform: rotate(-90deg) translateY(-50%);
+    top: 50%;
+}
+
+.sleepEffeciency p, .noOfdays p {
+ text-transform: uppercase;
+}
+
+.sleepEffeciency p {
+    font-weight: bold;
+    color: #000;
+}
+
+.noOfdays p {
+    text-align: center;
+    font-weight: bold;
+    color: #000;
+}
+
+
+    </style>
+
+
+
+
+
+
+
+    <section class="forward_sec progressPage">
+        <div class="container pd-40">
+            <div class="row">
+                <div class="desktopTab d-md-block d-none m-auto">
+                    <ul class="nav nav-tabs justify-content-center">
+
+                        {% if request.user.package != 3 %}
+                        {% if ma %}
+
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} magoVideos({{patient}}); {% else %}magoVideos(0){% endif %}" >Videos</a></li>
+                        {% else %}
+
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">Videos</a></li>
+                        {% endif %}
+                    {% endif %}
+
+                       {% if sleep_diary_entries not in rest_day %}
+                        {% if ma %}
+                    <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} magoDiary({{patient}}); {% else %}magoDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% else %}
+                        <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} goDiary({{patient}}); {% else %}goDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                            {% if ma %}
+                    <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} maviewDiary({{patient}}); {% else %}maviewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                            {% else %}
+                          <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} viewDiary({{patient}}); {% else %}viewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                        {% endif %}
+                      {% if request.user.package != 3 %}
+                        {% if ma %}
+                    <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} magoDashboardsub({{patient}}); {% else %}magoDashboardsub(0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% else %}
+                        <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} goDashboardsub('progress',{{patient}}); {% else %}goDashboardsub('progress',0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+
+                        </li>
+                        {% if ma %}
+                    <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/ma-relaxation/{{patient}}"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% else %}
+                         <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/relaxation"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% endif %}
+                            {% if ma %}
+                    <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} magoNtl({{patient}}); {% else %}magoNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                            {% else %}
+                        <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                            {% if patient == 0 %}
+        {#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+        {#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+        {#                        Us</a></li>#}
+                            {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                               aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                            </li>{% endcomment %}
+                             {% endif %}
+                        <!-- <li id="detailss" class="" style="">
+                            <a>
+                                <div class="content-val"><span >Previous week's sleep efficiency</span><span class="previewWeekSE">N/A</span></div>
+                                <div class="content-val"><span>Prescribed Bedtime</span><span class="lastPrescribedTime">N/A</span></div>
+                                 <div class="content-val"><span>Wake-up Time</span><span class="lastWeekWakeupTime">N/A</span></div>
+                            </a>
+                            </li>-->
+                            <li id="detailss" style="">
+                            <a class="bg-green">
+                                <div class="content-val"><span class="tooltipp">Previous week's sleep efficiency</span>
+                                <span class="previewWeekSE">{{avgsleep}}%</span></div>
+                            </a>
+                            </li>
+                           <span class="d-flex position-relative">
+                               <p class="mainTitle">Sleep Restriction</p>
+                                <li id="detailss" style="">
+                                <a class="bg-blue">
+                                    <div class="content-val"><span class="tooltipp">Prescribed Bedtime</span><span class="lastPrescribedTime">{{avgbedtime}}</span></div>
+                                </a>
+                                </li>
+                                <li id="detailss"  style="">
+                                <a class="bg-yellow">
+                                    <div class="content-val"><span class="tooltipp">Suggested Wake Up</span><span class="lastPrescribedTime">{{sug_time}}</span></div>
+                                </a>
+                                </li>
+                           </span>
+        
+                        </ul>
+                </div>
+              
+
+             {% comment %}   <div class="col-lg-12 your-progress-filters">
+                    <form method="post" action="?">
+                        <div class="col-lg-12" style="display: inline-table;">
+
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon ">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input style="background: transparent;" type="hidden"
+                                           onchange="on_select_date(this.value)" class="form-control pull-right"
+                                           name="date_field_1" id="datepicker">
+                                    <input style="background: transparent;" onchange="on_select_date(this.value)"
+                                           class="form-control pull-right" name="date-range0" id="date-range0">
+
+                               <span class="fa fa-arrow-down" style="position: absolute;right: 2px;z-index: 0;top: 14px;font-size: 10px;"><span></span></span>
+                                </div>
+                                <input type="hidden" class="form-control" name="start_date" id="start_date"
+                                       placeholder="Start">
+                                <input type="hidden" class="form-control" name="end_date" id="end_date"
+                                       placeholder="End">
+
+                            </div>
+
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-priamry" name="date_range_btn"
+                                        onclick="get_date_range()" style="float: left;">Go
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>{% endcomment %}
+
+                <div class="mobieTabs d-md-none m-auto">
+                    <ul class="nav nav-tabs justify-content-center">
+                        {% if patient == 0 %}
+    {#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+    {#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+    {#                        Us</a></li>#}
+                        {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                           aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                        </li>{% endcomment %}
+                         {% endif %}
+                    <!-- <li class="" style="">
+                        <a>
+                            <div class="content-val"><span >Previous week's sleep efficiency</span><span class="previewWeekSE">N/A</span></div>
+                            <div class="content-val"><span>Prescribed Bedtime</span><span class="lastPrescribedTime">N/A</span></div>
+                             <div class="content-val"><span>Wake-up Time</span><span class="lastWeekWakeupTime">N/A</span></div>
+                        </a>
+                        </li>-->
+                        <li class="" style="">
+                        <a class="tabsColor">
+                            <div class="content-val_mobile">
+                            <span class="previewWeekSE">{{avgsleep}}%</span>
+                            <span class="toolData">Previous week's sleep efficiency</span></div>
+                        </a>
+                        </li>
+                        <li  style="">
+                            <a class="tabsColor">
+                                <div class="content-val_mobile">
+                                    <span class="lastPrescribedTime">{{avgbedtime}}</span>
+                                    <span class="toolData">Prescribed Bedtime</span></div>
+                            </a>
+                            </li>
+                            <li  style="">
+                            <a class="tabsColor">
+                                <div class="content-val_mobile">
+                                    <span class="lastPrescribedTime">{{sug_time}}</span>
+                                    <span class="toolData">Suggested Wake Up</span>
+                                </div>
+                            </a>
+                            </li>
+    
+                            <li class="ntlTabs" style="">
+                                <a class="tabsColor" data-toggle="tab"
+                                href="javascript:void(0);"
+                                aria-expanded="false"
+                                onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                    <div class="content-val_mobile">
+                                        <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span>
+                                        <span class="toolData">Negative Thought Lockbox<sup>TM</sup></span>
+                                    </div>
+                                </a>
+                            </li>
+    
+                    </ul>
+                    </div>
+
+                <div id="responsivez2" class="your-progress tabcontent py-4" style="display:block;">
+                    <div class="progress_tabs d-md-block d-none">
+                        <ul class="nav nav-pills nav-justified justify-content-center customTabs mt-3">
+                            <li class="active"><a href="#tab_a" data-toggle="pill">Daily</a></li>
+                            <li class=""><a href="#tab_b" data-toggle="pill">Weekly</a></li>
+                           {% comment %} <li class=""><a href="#tab_c" data-toggle="pill">Biweekly</a></li>
+                            <li class=""><a href="#tab_d" data-toggle="pill">Monthly</a></li>{% endcomment %}
+                        </ul>
+                    </div>
+                    <div class="tab-content col-md-12">
+                        <div class="tab-pane active" id="tab_a">
+                            <div class="titleBoxArea">
+                                <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                                <h3 class="text-align-center">Daily</h3>
+                            </div>
+                            {#            <div id="monthly_patient" style="min-width: 100%; height: 400px; margin: 0 auto" data-highcharts-chart="1"><div class="highcharts-container" id="highcharts-1" style="position: relative; overflow: hidden; width: 970px; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><svg version="1.1" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="970" height="400"><desc>Created with Highcharts 4.2.5</desc><defs><clipPath id="highcharts-2"><rect x="0" y="0" width="950" height="375"></rect></clipPath></defs><rect x="0" y="0" width="970" height="400" fill="transparent" class=" highcharts-background"></rect><g class="highcharts-series-group"></g><g class="highcharts-button" style="cursor:default;" stroke-linecap="round" transform="translate(936,10)"><title>Chart context menu</title><rect x="0.5" y="0.5" width="24" height="22" fill="white" stroke="none" stroke-width="1" rx="2" ry="2"></rect><path fill="#E0E0E0" d="M 6 6.5 L 20 6.5 M 6 11.5 L 20 11.5 M 6 16.5 L 20 16.5" stroke="#666" stroke-width="3"></path><text x="0" style="color:black;fill:black;" y="12"></text></g><g class="highcharts-legend"><g><g></g></g></g><g class="highcharts-tooltip" style="cursor:default;padding:0;pointer-events:none;white-space:nowrap;" transform="translate(0,-9999)"><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" isShadow="true" stroke="black" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(249, 249, 249, .85)" d="M 3.5 0.5 L 13.5 0.5 C 16.5 0.5 16.5 0.5 16.5 3.5 L 16.5 13.5 C 16.5 16.5 16.5 16.5 13.5 16.5 L 3.5 16.5 C 0.5 16.5 0.5 16.5 0.5 13.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5"></path><text x="8" style="font-size:12px;color:#333333;fill:#333333;" y="20"></text></g></svg></div></div>#}
+
+
+                            <div style="width: 100%" class="chart-container position-relative">
+                                <div class="sleepEffeciency">
+                                    <p class="mb-0">Sleep Efficiency %</p>
+                                </div>
+                                <canvas id="myChart" style="width: 100% !important;;height: 400px; !important;"></canvas>
+                                <input type="hidden" id="chart_labels" name="chart_labels" value="{{ labels }}"/>
+                                <input type="hidden" id="chart_data" name="chart_data" value="{{ default }}"/>
+                                <div class="noOfdays">
+                                    <p class="mb-0">No of Days</p>
+                                </div>
+                            </div>
+
+                            <table id="monthly_patient_data" style="display:none;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+
+                                    <th>% sleep</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div><!--tab a end here-->
+                        <div class="tab-pane" id="tab_b">
+                            <div class="titleBoxArea">
+                                <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                                <h3 class="text-align-center">Weekly</h3>
+                            </div>
+
+                            <div  style="width: 100%" class="chart-container position-relative">
+                                <div class="sleepEffeciency">
+                                    <p class="mb-0">Sleep Efficiency %</p>
+                                </div>
+                                <div class="chartSize" style="height: 300px;">
+                                    <canvas id="myChart2" style="width: 100%;height: 400px; display: block;"></canvas>
+                                </div>
+                                <div class="noOfdays">
+                                    <p class="mb-0">No of Weeks</p>
+                                </div>
+                            </div>
+
+                            <table id="weekly_sleep_data" style="display:none;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+
+                                    <th>% sleep</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        {% comment %}<div class="tab-pane" id="tab_c">
+                            <h4 class="text-center">Bi Weekly </h4>
+                            <div  style="width: 100%" class="chart-container">
+                                <canvas id="myChart3" style="width: 100%;height: 400px;display: block;"></canvas>
+                            </div>
+
+                            <table id="biweekly_sleep_data" style="display:none;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+
+                                    <th>% sleep</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="tab-pane" id="tab_d">
+                            <h4 class="text-center">Monthly</h4>
+
+
+                             <div  style="width: 100%" class="chart-container">
+                                <canvas id="myChart4" style="width: 100%;height: 400px;display: block;"></canvas>
+                            </div>
+                            <table id="quarterly_sleep_data" style="display:none;">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+
+                                    <th>% sleep</th>
+
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>{% endcomment %}
+                        <!--tab-e end here-->
+
+
+                    </div>
+                    <div class="progress_tabs d-md-none px-4">
+                        <ul class="nav nav-pills nav-justified justify-content-between customTabs mt-5 gap-15">
+                            <li class="active"><a href="#tab_a" data-toggle="pill">Daily</a></li>
+                            <li class=""><a href="#tab_b" data-toggle="pill">Weekly</a></li>
+                           {% comment %} <li class=""><a href="#tab_c" data-toggle="pill">Biweekly</a></li>
+                            <li class=""><a href="#tab_d" data-toggle="pill">Monthly</a></li>{% endcomment %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+<!--<div class="d-flex gap-15 justify-content-right align-items-right float-left">-->
+<!--                        <div class="buttonLink">-->
+<!--                                      <a class="btn-primary btn text-white" href="/dashboard/" style="margin-top: 10px; background-color: #28a745; border-color: #28a745; margin-left: 30px;"><i class="fa fa-angle-double-left" style="font-size:48px;color:#ffff; text-alignment: center;"></i></a>-->
+
+<!--                                  </div>-->
+<!--                            </div>-->
+    </section>
+
+
+
+{% endblock %}
+
+
+<script>
+    $(function () {
+        $('#datemask').inputmask('dd/mm/yyyy', {'placeholder': 'dd/mm/yyyy'})
+        //Datemask2 mm/dd/yyyy
+        $('#datemask2').inputmask('mm/dd/yyyy', {'placeholder': 'mm/dd/yyyy'})
+        //Money Euro
+        $('[data-mask]').inputmask()
+
+        //Date range picker
+        $('#reservation').daterangepicker()
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'})
+        //Date range as a button
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment()
+            },
+            function (start, end) {
+                $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            }
+        );
+
+        //Date picker
+        $('#datepicker').datepicker({
+            autoclose: false
+        });
+
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+
+        $('.timepicker').timepicker({
+            showInputs: false
+        });
+    });
+</script>
+
+
+{% block jqueryScript %}
+
+{% include "dashboard-js.html" %}
+
+   
+<script type="text/javascript">       
+
+    $(function () {
+        $('a.show-option').click(function (evt) {
+            evt.preventDefault();
+            $(this).siblings('.options').slideToggle();
+        });
+    });
+
+
+    var dataLabels = [];
+    var defaultData = [];
+
+    var dataLabelsN = [];
+    var defaultDataN = [];
+
+    var dataLabels_wkeekly = [];
+    var defaultData_wkeekly = [];
+
+    var dataLabels_wkeeklyN = [];
+    var defaultData_wkeeklyN = [];
+
+    var dataLabels_biwkeekly = [];
+    var defaultData_biwkeekly = [];
+
+    var dataLabels_monthly = [];
+    var defaultData_monthly = [];
+
+   // setChart();
+    {% if patient > 0 %}
+     const endpoint = '/patient/api/chart/data/'+{{patient}}+'/';
+    {% else %}
+      const endpoint = '/api/chart/data/';
+    {% endif %}
+
+    var weekCounter = 0;
+    var weekCount = 1;
+    var  week_days_array = [];
+    $.ajax({
+        method: 'GET',
+        url: endpoint,
+        success: function (response_data) {
+
+            if (response_data.success == "true") {
+                var weekData = JSON.parse(response_data.invoice_for_today);
+                var weeklyData = JSON.parse(response_data.progress_data);
+                for (var i = 0; i < weekData.length; i++){
+                   
+                    var SleepEF = weekData[i].fields.sleep_efficiency;
+                    //var timeSS = weekData[i].fields.time_went_to_bed;
+                    //var timeEE = weekData[i].fields.out_of_bed;
+                    //var timeFellSleepS = weekData[i].fields.time_fell_asleep;
+                    //var timeFellSleepE = weekData[i].fields.time_got_up;
+                    //var bed_time = timeDiff(timeSS,timeEE);
+                    //var sleep_time = timeDiff(timeFellSleepS,timeFellSleepE);
+                    //var sleepEfficiencyPercentage = sleepEfficiency(bed_time,sleep_time,weekData[i].fields.total_time_awakened);
+                    //console.log("=============================!!");
+                    //console.log(sleepEfficiencyPercentage);
+                    var sleepEfficiencyPercentage = sleepEfficiency(SleepEF);
+                    dataLabelsN.push((i+1));
+                    defaultDataN.push(sleepEfficiencyPercentage);
+                    if(weekCounter == 6){
+                      //  console.log("NOrmal arr: "+week_days_array);
+                       // console.log("============================!!!");
+                        const sum = week_days_array.reduce(function(a, b) { return parseInt(a) + parseInt(b); }, 0);
+                       // console.log("NOrmal sum: "+sum);
+                       // console.log("Lenght: "+week_days_array.length);
+                        var temSum = ((sum)/(week_days_array.length))
+                       // console.log("NOrmal Tem: "+temSum);
+                        //defaultData_wkeeklyN.push(Math.round(temSum));
+                        //console.log(Math.round(temSum));
+                        dataLabels_wkeeklyN.push("Week "+weekCount);
+                        week_days_array = [];
+                        weekCounter = 0;
+                        weekCount++;
+                    }else{
+                        week_days_array.push(sleepEfficiencyPercentage);
+                        weekCounter++;
+                    }
+                    
+                }  
+                for (var i = 0; i < weeklyData.length; i++){
+                    var SleepEF = weeklyData[i].fields.sleep_efficiency;
+                    defaultData_wkeeklyN.push(SleepEF);}
+
+                dataLabels = dataLabelsN;
+                defaultData = defaultDataN;
+
+
+                //dataLabels = response_data.labels;
+                //defaultData = response_data.default;
+
+                dataLabels_wkeekly = response_data.labels_weekly;
+                defaultData_wkeekly = response_data.default_items_weekly;
+
+               // dataLabels_wkeekly = response_data.labels_weekly;
+               // defaultData_wkeekly = response_data.default_items_weekly;
+              //  dataLabels_biwkeekly = response_data.labels_biweekly;
+               // defaultData_biwkeekly = response_data.default_items_biweekly;
+
+               // dataLabels_monthly = response_data.labels_monthly;
+               // defaultData_monthly = response_data.default_items_monthly;
+
+                setChart()
+            }
+
+        }
+    })
+    ;
+
+
+
+
+
+
+    function setChart() {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+    //    var ctx3 = document.getElementById('myChart3').getContext('2d');
+    //    var ctx4 = document.getElementById('myChart4').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: dataLabels,
+                datasets: [{
+                    label: '# Your Daily Progress  (Bar Chart)',
+                    data: defaultData
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+
+                    ],
+                    borderColor: [
+                      '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                    ],
+                    borderWidth: 1
+                }
+                ,/*{
+                    label: '#Your Daily Progress (Line Chart)',
+                    data: defaultData
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a',
+                        '#022859',
+                        'rgba(128, 128, 0, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                    ],
+                    borderColor: [
+                       'rgba(0, 255, 0, 1)',
+                        'rgba(0, 0, 225, 1)',
+                        'rgba(0, 225, 0, 1)',
+                        'rgba(225, 225, 0, 1)',
+                        'rgba(0, 225, 255, 1)',
+                        'rgba(225, 0, 255, 1)',
+                        'rgba(128, 0, 0, 1)',
+                        'rgba(128, 128, 0, 1)',
+                        'rgba(54, 162, 235, 1)',
+                    ],
+                    borderWidth: 1,
+                         type: 'line'
+                }*/
+                ]
+            }, 
+            options: {
+             scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                xAxes: [{
+                    type: 'hour',
+                    time: {
+                        displayFormats: {
+                            quarter: 'hA'
+                        }
+                    }
+                }],
+                xyAxes: [{
+                    type: 'day',
+                    time: {
+                        displayFormats: {
+                            quarter: 'MMM D'
+                        }
+                    }
+                }],
+                animation: {
+                    onProgress: function (animation) {
+                        progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                    }
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: 'rgb(255, 99, 132)'
+                    }
+                }
+            }
+        });
+
+        var myChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: dataLabels_wkeeklyN,
+                datasets: [{
+                    label: '# Your Weekly Progress  (Bar Chart)',
+                    data: defaultData_wkeeklyN
+                    ,
+                    backgroundColor: [
+                       '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+                    ],
+                    borderColor: [
+                       '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+                    ],
+                    borderWidth: 1
+                },
+                /*{
+                    label: '# Your Weekly Progress (Line Chart)',
+                    data: defaultData_wkeeklyN
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+       ,             ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(0, 0, 225, 1)',
+                        'rgba(0, 225, 0, 1)',
+                        'rgba(225, 225, 0, 1)',
+                        'rgba(0, 225, 255, 1)',
+                        'rgba(225, 0, 255, 1)'
+                    ],
+                    borderWidth: 1,
+                    type: "line"
+                }*/
+                ]
+            }, options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: 'rgb(255, 99, 132)'
+                    }
+                }
+            }
+        });
+
+
+      {% comment %}  var myChart = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: dataLabels_biwkeekly,
+                datasets: [{
+                    label: '# Your BiWeelly Progress  (Bar Chart)',
+                    data: defaultData_biwkeekly
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+                    ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(0, 0, 225, 1)',
+                        'rgba(0, 225, 0, 1)',
+                        'rgba(225, 225, 0, 1)',
+                        'rgba(0, 225, 255, 1)',
+                        'rgba(225, 0, 255, 1)'
+                    ],
+                    borderWidth: 1
+                },{
+                    label: '# Your BiWeelly Progress (Line Chart)',
+                    data: defaultData_biwkeekly
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+       ,             ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(0, 0, 225, 1)',
+                        'rgba(0, 225, 0, 1)',
+                        'rgba(225, 225, 0, 1)',
+                        'rgba(0, 225, 255, 1)',
+                        'rgba(225, 0, 255, 1)'
+                    ],
+                    borderWidth: 1,
+                    type: "line"
+                }]
+            }, options: {
+                xAxes: [{
+                    type: 'hour',
+                    time: {
+                        displayFormats: {
+                            quarter: 'hA'
+                        }
+                    }
+                }],
+                xyAxes: [{
+                    type: 'day',
+                    time: {
+                        displayFormats: {
+                            quarter: 'MMM D'
+                        }
+                    }
+                }],
+                animation: {
+                    onProgress: function (animation) {
+                        progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                    }
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: 'rgb(255, 99, 132)'
+                    }
+                }
+            }
+        });
+
+
+        var myChart4 = new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels: dataLabels_monthly,
+                datasets: [{
+                    label: '# Your Monthly Progress  (Bar Chart)',
+                    data: defaultData_monthly
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+       ,             ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(0, 0, 225, 1)',
+                        'rgba(0, 225, 0, 1)',
+                        'rgba(225, 225, 0, 1)',
+                        'rgba(0, 225, 255, 1)',
+                        'rgba(225, 0, 255, 1)'
+                    ],
+                    borderWidth: 1
+                },{
+                    label: '# Your Monthly Progress (Line Chart)',
+                    data: defaultData_monthly
+                    ,
+                    backgroundColor: [
+                        '#feea64',
+                        '#febc66',
+                        '#da727d',
+                        '#ac6d82',
+                        '#695c78',
+                        '#455c7a'
+       ,             ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(0, 0, 225, 1)',
+                        'rgba(0, 225, 0, 1)',
+                        'rgba(225, 225, 0, 1)',
+                        'rgba(0, 225, 255, 1)',
+                        'rgba(225, 0, 255, 1)'
+                    ],
+                    borderWidth: 1,
+                    type: "line"
+                }]
+            }, options: {
+                xAxes: [{
+                    type: 'hour',
+                    time: {
+                        displayFormats: {
+                            quarter: 'hA'
+                        }
+                    }
+                }],
+                xyAxes: [{
+                    type: 'day',
+                    time: {
+                        displayFormats: {
+                            quarter: 'MMM D'
+                        }
+                    }
+                }],
+                animation: {
+                    onProgress: function (animation) {
+                        progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                    }
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: 'rgb(255, 99, 132)'
+                    }
+                }
+            }
+        });
+        console.log(data);{% endcomment %}
+
+    }
+
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function radioSubmit() {
+        $("#next").trigger("click");
+    }
+
+
+</script>
+
+{% endblock %}

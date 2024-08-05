@@ -1,0 +1,788 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    /* Style the Image Used to Trigger the Modal */
+#myImg, #myImg1 {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#myImg:hover, #myImg:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content, .modal-content1 {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+#caption, #caption1 {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+/* Add Animation - Zoom in the Modal */
+.modal-content, #caption, #caption1 {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+.modal-content1, #caption1 {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close, .close1 {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus,.close1:hover,
+.close1:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content, .modal-content1 {
+    width: 100%;
+  }
+}
+</style>
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+    </style>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .days-menu ul li a button.green {
+            background: #00a115;
+        }
+
+        .days-menu ul li a button.red {
+            background: #eb0606;
+        }
+        .paid {
+        color: green;
+        }
+        .pending {
+        color : orange;
+        }
+        .cancel {
+        color: red;
+        }
+        .invoiceStaus {
+        border-radius: 50px;
+        }
+
+
+.invoiceTable {
+  text-align: center;
+}
+
+.invoiceTable td a {
+  text-align: center;
+  background-color: #3e3e3e;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 50px;
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+.form-group {
+    position: relative;
+}
+
+ .searchBtn {
+    position: absolute;
+    right: 3px;
+    border-radius: 80px;
+    top: 3px;
+    width: 39px;
+    height: 39px;
+    background-color: #00a115;
+    outline: none;
+    border: 1px solid;
+}
+
+.form-group input {
+    padding: 11px 14px;
+    border-radius: 50px;
+    outline: none;
+}
+
+.notes {
+    background-attachment: local;
+    background-image:
+        linear-gradient(to right, white 10px, transparent 10px),
+        linear-gradient(to left, white 10px, transparent 10px),
+        repeating-linear-gradient(#2d2d82, white 2px, white 30px, white 31px, white 31px);
+    line-height: 31px;
+    padding: 8px 10px;
+    border: none;
+    margin-top:30px;
+}
+@media print
+    {
+        body header, body footer, .bold_heading, .tab-list, .printBtn { display: none; }
+        #doctorcard-container { display: block !important; }
+    }
+    p a.backHome {
+    border: 1px solid #5966c1;
+    color: #2238a5;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+
+.bg-theme-primary {
+    background-color: #200b94;
+    color: #fff;
+    border: 1px solid #fff0;
+}
+
+.bg-theme-primary:hover {
+    border: 1px solid #200b94;
+    background-color: #fff;
+    color: #200b94;
+}
+
+#openBtn{
+    background-color: #200b94;
+}
+
+#openBtn:hover{
+    background-color: #2238a5;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1000;
+  }
+
+  .popup-content {
+    color: 3e3e3e;
+    text-align: start;
+  }
+
+  .closeclass {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    cursor: pointer;
+    margin-bottom: 50px;
+    background-color: #5966c1;
+    padding: 3px 10px;
+    color: #fff;
+    border-radius: 15%;
+    font-size: 20px;
+  }
+  .closeclass:hover {
+  background-color: #2238a5;
+  }
+
+  .popup .popup-content  input {
+    color: #3e3e3e;
+width: 100%;
+  }
+
+
+
+    </style>
+
+
+
+
+
+
+     <section class="forward_sec py-5 dashboard_provider_page">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 order-md-1 order-1">
+                    <div class="bold_heading">
+                        <h2 class="text-center mb-0 p-0 defaultHead">MA Dashboard</h2>
+                    </div>
+                </div>
+                <div class="col-md-4 order-md-2 order-3">
+                    <div class="form-group">
+                        <label for="providerList">Select Provider</label>
+                        <select class="form-control" id="mySelect">
+                            <option value="" >Select Provider</option>
+                            {% for ma in provider_list %}
+                            <option value="{{ma.provider_id}}" data-refferal="{{ma.provider_ref}}">{{ma.provider_name}}</option>
+                            {% endfor %}
+
+                        </select>
+                      </div>
+                </div>
+                <div class="col-md-4 order-md-3 order-2">
+                    <div class="form-group">
+                        <p style="text-align: center; padding-top: 28px; font-size: 35px;">Patient Details</p>
+                      </div>
+                </div>
+                <div  class="col-md-4 order-md-4 order-4">
+                    <div class="form-group">
+                        <label for="providerList">Refferal ID</label>
+                        <input  id="refferal_id" type="text" value="" readonly class="bg-light f-18 rounded-0 text-success w-100">
+                      </div>
+                </div>
+                <div  class="col-md-12 order-md-4 order-4">
+                  <div style="text-align: right!important;margin: 10px 0px;">
+                    <button type="button" id="openBtn">Change Refferal ID</button>
+                </div>
+              </div>
+                <div class="col-md-12 order-md-5 order-5">
+                    <div class="table-responsive" id="provider-table">
+
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Patient First Name</th>
+                                        <th>Patient Last Name</th>
+                                        <th>View License</th>
+                                        <th>Status</th>
+                                        <th>View Patient</th>
+
+    
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="popup" class="popup">
+            <div class="popup-content">
+              <form method="post" action="">
+                {% csrf_token %}
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content p-3">
+                   <div class="modal-header bg-white border-0 px-0 mb-3">
+                      <h4 class="text-dark">Change Refferal ID.</h4>
+                      <span class="closeclass" id="closeBtn">&times;</span>
+                   </div>
+                    <div class="modal-body p-0">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <lable>Provider Referral ID:</lable>
+                                    <div>
+                                        <input value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}' type="text" required
+                                               id="doctor_ref_number" name="doctor_ref_number" onblur="verify_ma_refbypro(this.value,'office_name');">
+                                        <input type="hidden" id="user_email" value="{{ request.user.email }}" name="email">
+   
+                                        <p class="mb-3" style="font-size: 12px;line-height: 1.5;">Input the Referral ID you received from your provider at your last appointment.</p>
+                                        <div style="margin-top:10px;">
+                                            <span class="text-danger" id="error_office_name">{% if verifiedRefId is not None  %}  {{verifiedRefId}} {% endif %}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+   
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <lable>Provider Office:</lable>
+                                    <div>
+                                        <input value='{{ request.session.allform.primary_care_office_name|default_if_none:"" }}' readonly type="text" required="" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Office Name field should be alpha only')"
+                                               id="primary_care_office_name" name="primary_care_office_name">
+                                    </div>
+                                </div>
+                            </div>
+   
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <lable>Provider Name:</lable>
+                                    <div>
+                                        <input value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}' readonly type="text" required="" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                                               id="primary_care_doctor_name" name="primary_care_doctor_name">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="patient_regist_form modal-footer justify-content-center border-0 bg-white pb-3">
+                        <button type="button" onclick="submitForm()">Save Provider ID</button>
+                    </div>
+             </form>
+              </div>
+              </div>
+
+
+
+        <!-- <div class="modal fade confimPopup" id="changeRefferalId" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <form method="post" action="">
+             {% csrf_token %}
+             <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content p-3">
+                <div class="modal-header bg-white border-0 px-0 mb-3">
+                   <h4 class="text-dark">Change Refferal ID.</h4>
+                   <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                   </button>
+                </div>
+                 <div class="modal-body p-0">
+                     <div class="row">
+                         <div class="col-12">
+                             <div class="form-group">
+                                 <lable>Provider Referral ID:</lable>
+                                 <div>
+                                     <input value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}' type="text" required
+                                            id="doctor_ref_number" name="doctor_ref_number" onblur="verify_ma_refbypro(this.value,'office_name');">
+                                     <input type="hidden" id="user_email" value="{{ request.user.email }}" name="email">
+
+                                     <p class="mb-3" style="font-size: 12px;line-height: 1.5;">Input the Referral ID you received from your provider at your last appointment.</p>
+                                     <div style="margin-top:10px;">
+                                         <span class="text-danger" id="error_office_name">{% if verifiedRefId is not None  %}  {{verifiedRefId}} {% endif %}</span>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="col-12">
+                             <div class="form-group">
+                                 <lable>Provider Office:</lable>
+                                 <div>
+                                     <input value='{{ request.session.allform.primary_care_office_name|default_if_none:"" }}' readonly type="text" required="" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Office Name field should be alpha only')"
+                                            id="primary_care_office_name" name="primary_care_office_name">
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="col-12">
+                             <div class="form-group">
+                                 <lable>Provider Name:</lable>
+                                 <div>
+                                     <input value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}' readonly type="text" required="" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                                            id="primary_care_doctor_name" name="primary_care_doctor_name">
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="patient_regist_form modal-footer justify-content-center border-0 bg-white pb-3">
+                     <button type="button" onclick="submitForm()">Save Provider ID</button>
+                 </div>
+          </form>
+          </div> -->
+    </section>
+
+      
+
+{% endblock %}
+
+
+{% block jqueryScript %}
+
+<script type="text/javascript">
+    const endpoint = '/accounts/ma_refbypro/';
+
+    function verify_ma_refbypro(id, fieldid) {
+      var cname = "prp";
+      var cvalue = document.getElementById("doctor_ref_number").value;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', endpoint);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var response_data = JSON.parse(xhr.responseText);
+          if (response_data.success) {
+            document.getElementById("primary_care_office_name").value = response_data.primary_care_office_name;
+            document.getElementById("primary_care_doctor_name").value = response_data.primary_care_doctor_name;
+            document.getElementById("error_office_name").innerHTML = response_data.message;
+            document.getElementById("error_office_name").classList.remove('text-danger');
+            document.getElementById("error_office_name").classList.add('text-success');
+
+            var d = new Date();
+            d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+            // Submit the form if verification is successful
+            document.getElementById("submit_button").click();
+          } else {
+            document.cookie = cname + "=" + cvalue + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+            document.getElementById("error_office_name").innerHTML = response_data.message;
+            document.getElementById("primary_care_office_name").value = '';
+            document.getElementById("primary_care_doctor_name").value = '';
+            document.getElementById("error_office_name").classList.remove('text-success');
+            document.getElementById("error_office_name").classList.add('text-danger');
+          }
+        }
+      };
+
+      var params = 'ref_name=' + encodeURIComponent(document.getElementById("doctor_ref_number").value) + '&fieldid=' + encodeURIComponent(fieldid);
+      xhr.send(params);
+    }
+
+
+
+    function submitForm() {
+     var providerRefNumber = document.getElementById("doctor_ref_number").value;
+
+     // Assuming you have an endpoint for submitting provider ref ID
+     var submitEndpoint = '/accounts/ma_refbypro/';
+
+     var xhr = new XMLHttpRequest();
+     xhr.open('PATCH', submitEndpoint);
+     xhr.setRequestHeader('Content-Type', 'application/json');
+
+     xhr.onload = function () {
+         if (xhr.status === 200) {
+             var response_data = JSON.parse(xhr.responseText);
+             if (response_data.success) {
+                 // Optionally, you can display a success message or redirect the user
+                 alert('Provider Referral ID saved successfully.');
+                 window.location.href = '/dashboard/';
+             } else {
+                 // Handle the case where the submission was not successful
+                 alert('Failed to save Provider Referral ID.');
+             }
+         }
+     };
+
+     // Get the user's email from the DOM
+     var userEmail = document.getElementById("user_email").value;
+
+     var data = JSON.stringify({
+         provider_id: providerRefNumber,
+         user_email: userEmail  // Include the user's email in the request data
+     });
+
+     xhr.send(data);
+ }
+</script>
+
+
+<script>
+    // Get the select element and table
+let select = document.getElementById("mySelect");
+let tableBody = document.getElementById("myTable").getElementsByTagName("tbody")[0];
+
+// Add event listener for select change
+select.addEventListener("change", function() {
+  // Get the selected option value
+
+  let selectedValue = select.value;
+
+
+
+  // Fetch the API data
+  let myurl = 'https://cognisleep.com/accounts/ma_provider_patients/'+selectedValue+'/'
+  fetch(myurl)
+    .then(response => response.json())
+    .then(data => {
+    console.log(data);
+      // Clear existing table rows
+      tableBody.innerHTML = "";
+
+      // Loop through the data and add rows to the table
+      data.forEach(record => {
+
+        var row = tableBody.insertRow();
+        var cell1 = row.insertCell();
+        var cell2 = row.insertCell();
+        var cell3 = row.insertCell();
+        var cell4 = row.insertCell();
+        var cell5 = row.insertCell();
+        var cell6 = row.insertCell();
+
+
+
+        // Populate cells with data from the API response based on the selected value
+        cell1.textContent = record["user"];
+        cell2.textContent = record["first_name"];
+        cell3.textContent = record["last_name"];
+        console.log(record.user.active_patient);
+       var url = 'https://cognisleep.com/media';
+       var baseurlf = record.driving_license_front_img;
+       var baseurlb = record.driving_license_back_img;
+       var extractedUrlf = baseurlf.substring(baseurlf.lastIndexOf('/'));
+       var extractedUrlb = baseurlb.substring(baseurlb.lastIndexOf('/'));
+
+if (record.driving_license_front_img) {
+  cell4.innerHTML = '<a class="userData" style="color:#00a115;"><img id="myImg" src="' + url  + extractedUrlf+ '" alt="Front license" style="height:20px;width:20px;"> Front</a><a class="userPrice" style="color:#007bff;"><img id="myImg1" src="' + url + extractedUrlb+ '" alt="Back license" style="height:20px;width:20px;"> Back</a>';
+} else {
+  cell4.innerHTML = 'Not Available';
+}
+        cell5.innerHTML = '<a>Active</a>';
+
+
+        cell6.innerHTML = '<div style="text-align: center;"><a href="/dashboard/ma_patient_dashboard/' + record["user"] + '" title="View Patient"><i style="color: #200b94;font-size: 21px;" class="fa fa-user"></i></a></div>';
+
+      });
+    })
+    .catch(error => {
+      console.log("Error fetching API data:", error);
+    });
+});
+
+</script>
+<script>
+
+
+jQuery(document).ready(function(){
+
+jQuery('#mySelect').change(function(){
+    let refferal = jQuery(this).find(':selected').attr('data-refferal');
+    jQuery('#refferal_id').val(refferal);
+})
+
+    jQuery('.closebtn').click(function(){
+    jQuery('.modal-backdrop').remove();
+});
+});
+
+document.getElementById('contact_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+document.getElementById('fax_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+
+</script>
+ <script type="text/javascript">
+
+
+        const endpoint = '/api/patient_status/';
+
+
+        $("body").delegate(".switch-custom input","change",function () {
+            $(this).parent().parent().find(".activePatient").trigger("click");
+        });
+
+
+        $("body").delegate(".activePatient","click",function () {
+            var UserStatus = 1;
+            var activeThis = this;
+            var user_id = $(this).data("user");
+            if($(this).attr("data-active") == "True"){
+                    UserStatus = 0;
+                    $(activeThis).parent().find(".switch-custom input").prop('checked',false);
+                    //$(".switch-custom input").prop('checked',false)
+                }
+            else{
+                UserStatus = 1;
+                  $(activeThis).parent().find(".switch-custom input").prop('checked',true);
+                //$(".switch-custom input").prop('checked',true)
+                }
+            $.ajax({
+                method: 'POST',
+                data: {"user_id":user_id,'status_change': UserStatus},
+                url: endpoint,
+                success: function (response_data) {
+                    //alert(response_data.message);
+                    var response_data = response_data;
+                    if(response_data.success){
+                        if(UserStatus == 0){
+                            $(activeThis).html("Inactive");
+                            $(activeThis).addClass("Inactive");
+                            $(activeThis).removeClass("Active");
+                            $(activeThis).removeAttr("data-active");
+                            $(activeThis).attr("data-active","False");
+                        }else{
+                              $(activeThis).html("Active")
+                             $(activeThis).addClass("Active");
+                            $(activeThis).removeClass("Inactive");
+                            $(activeThis).removeAttr("data-active");
+                             $(activeThis).attr("data-active","True");
+                        }
+
+                    }else{
+                        alert("Something Wrong")
+                    }
+
+                }
+            });
+        });
+        jQuery('.invoiceStatus').each(function(){
+        var statusText = jQuery(this).text();
+        //alert(statu)
+        // statusText = statusText.toLowerCase()
+        if(statusText == 'Paid') {
+        jQuery(this).removeClass('pending');
+        jQuery(this).removeClass('cancel');
+        jQuery(this).addClass('paid');
+        }
+        });
+
+
+        //new code shakaib
+
+        function printcontent(el){
+
+        var restorepage = document.body.innerHTML;
+        document.getElementById('cardfooterid').style = 'width: 100%;position: absolute;bottom: 0;';
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+        //document.getElementById('cardfooterid').style = 'width: 100%;position: relative;bottom: 0;';
+
+    }
+
+
+
+
+
+
+
+
+// Get the modal
+var modal = document.getElementById("myModal1");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById("myImg1");
+var modalImg = document.getElementById("img02");
+var captionText = document.getElementById("caption1");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+  captionText.innerHTML = this.alt;
+}
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close1")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+ jQuery('.userData').click(function(){
+   var name =  jQuery(this).parents('tr').find('.front').text();
+    jQuery('.package_name').val(name);
+    // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = name//document.getElementById("myImg");
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+
+          modal.style.display = "block";
+          modalImg.src = name;
+          captionText.innerHTML = "Front License Image";
+
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+});
+jQuery('.userPrice').click(function(){
+    var name =  jQuery(this).parents('tr').find('.back').text();
+    jQuery('.package_name').val(name);
+    // Get the modal
+        var modal = document.getElementById("myModal1");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = name
+        var modalImg = document.getElementById("img02");
+        var captionText = document.getElementById("caption1");
+
+          modal.style.display = "block";
+          modalImg.src = name;
+          captionText.innerHTML = "Back License Image";
+
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+})
+
+
+    </script>
+
+<script>
+    document.getElementById("openBtn").addEventListener("click", function () {
+      document.getElementById("popup").style.display = "block";
+    });
+  
+    document.getElementById("closeBtn").addEventListener("click", function () {
+      document.getElementById("popup").style.display = "none";
+    });
+  </script>
+
+
+{% endblock %}

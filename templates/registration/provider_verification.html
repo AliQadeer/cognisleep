@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    .backBtn {
+
+    left: 0;
+    background-color: #00a115;
+    border: none;
+    border-radius: 50px;
+    width: 36px;
+    height: 36px;
+    z-index: 9999;
+    top: 20px;
+}
+
+.backBtn:hover {
+    background-color: #79ce4a;
+}
+.bg-theme-primary {
+    background-color: #200b94;
+    color: #fff;
+    border: 1px solid #fff0;
+    font-size: 16px;
+    padding: 8px;
+}
+
+.bg-theme-primary:hover {
+    border: 1px solid #200b94;
+    background-color: #fff;
+    color: #200b94;
+}
+</style>
+    <section class="provider_login_sec">
+        <div class="container">
+            <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+            <div class="row">
+                <div class="provider_login_form">
+                    <h2>VERIFICATION</h2>
+                </div>
+<!--                <div class="thanks-tagline">Please check your email for the verification code.-->
+<!--                </div>-->
+
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div style="text-align: center; margin-top: -25px;"><p>Please check your email for the verification code.</p></div>
+
+                    <div class="provider_registeration_form VERIFICATION-CODE">
+<!--                        <div style="text-align: center; margin-top: -25px;"><p>Once you verify your account, please login.</p></div>-->
+                        <div class="provider_registeration patient_regist_form">
+
+                            <h4>ENTER VERIFICATION CODE</h4>
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% if success %}
+                                <div class="alert alert-success">Your account is verified, please click on continue button to login</div>
+                                <a href="/accounts/pro_logout/" class="btn bg-theme-primary">Continue</a>
+                                {% else %}
+                                <div class="form-group">
+                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                        {{ form.message.errors }}
+                                        <div class="d-flex" style="width: 40%; margin-left: auto;margin-right: auto;">{{ form.verify_code|as_crispy_field }}</div>
+                                        <div class="create_account_button"><button>Verify</button></div>
+                                    </div>
+                                </div>
+
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

@@ -1,0 +1,166 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        ul.nav.nav-tabs {
+        float: unset;
+        flex-wrap: nowrap;
+    }
+
+        #detailss a .content-val {
+            width: 100%;
+        }
+
+        ul.nav.nav-tabs li a {
+            padding: 10px 15px !important;
+            font-size: 12px;
+        }
+
+        p.mainTitle {
+    font-size: 14px;
+    position: absolute;
+    left: 5px;
+    right: 0;
+    text-align: center;
+    top: -60px;
+    color: #000;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+    margin: 0 20px;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.bg-yellow span.lastPrescribedTime {
+    font-weight: 600;
+}
+
+.bg-blue span.lastPrescribedTime, .bg-green span.previewWeekSE, .bg-greaish span.previewWeekSE {
+    font-weight: 600;
+    color: #fff;
+}
+
+
+.bg-blue {
+    background-color: #230c9a;
+}
+
+.bg-green {
+    background-color: #55b321;
+}
+
+.bg-greaish {
+    background-color: #444342;
+}
+
+.pd-40 {
+            padding: 0 30px;
+        }
+
+        .form-group {
+    margin-bottom: 0;
+}
+
+input, button {
+height: auto !important;
+}
+
+
+.audio-box{
+padding-bottom: 15px;
+}
+
+.backBtn {
+
+    left: 0;
+    background-color: #00a115;
+    border: none;
+    border-radius: 50px;
+    width: 36px;
+    height: 36px;
+    z-index: 9999;
+    top: 20px;
+}
+
+.backBtn:hover {
+    background-color: #79ce4a;
+}
+.relax {
+    display: none;
+}
+    </style>
+
+
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            margin: 100px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #d9534f;
+        }
+
+        p {
+            color: #333;
+        }
+    </style>
+
+
+
+    <section class="forward_sec">
+<div class="container">
+     <meta charset="UTF-8">
+    <title>404 - Page Not Found</title>
+        <h1>404 - Page Not Found</h1>
+        <p>Sorry, the page you are looking for might be under construction or doesn't exist.</p>
+        <p><a href="/">Go back to the home page</a></p>
+    </div>
+        </div>
+    <div class="d-flex gap-15 justify-content-right align-items-right float-left">
+<!--                        <div class="buttonLink">-->
+<!--                                      <a class="btn-primary btn text-white" href="/dashboard/" style="margin-top: 10px; background-color: #28a745; border-color: #28a745; margin-left: 30px;"><i class="fa fa-angle-double-left" style="font-size:48px;color:#ffff; text-alignment: center;"></i></a>-->
+
+<!--                                  </div>-->
+                            </div>
+    </section>
+
+
+{% endblock %}
+
+{% block jqueryScript %}
+<script>
+    jQuery('.relaxAudio').change(function(){
+    let audioValue = jQuery(this).val();
+    if(audioValue == '1') {
+        jQuery('.sleep').show();
+        jQuery('.relax').hide();
+    } else {
+        jQuery('.sleep').hide();
+        jQuery('.relax').show();
+    }
+});
+</script>
+{% include "dashboard-js.html" %}
+{% endblock %}

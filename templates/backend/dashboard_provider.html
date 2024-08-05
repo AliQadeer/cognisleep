@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+    </style>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .days-menu ul li a button.green {
+            background: #00a115;
+        }
+
+        .days-menu ul li a button.red {
+            background: #eb0606;
+        }
+    </style>
+
+
+
+
+     <section class="forward_sec">
+        <div class="container">
+            <div class="row">
+                <div class="bold_heading">
+                    <h2 class="text-center">Provider-Patients Details</h2>
+                </div>
+                <ul class="nav nav-tabs">
+                     <li class="active" style=""><a data-toggle="tab" href="#menu1" hidden>Patients Details</a>
+                    </li>
+                    <li class="" style=""><a data-toggle="tab" href="#home" hidden>Your Details</a>
+                    </li>
+
+                </ul>
+                <div class="tab-content provider-dashboard-patients">
+                    <div id="home" class="dashboard_form tab-pane fade ">
+                        <form method="POST" action="/accounts/change_password/">
+                            {% csrf_token %}
+                            <div class="col-md-4">
+                                <div class="text-center">
+
+                                    <img class="avatar img-circle" src="{{ userdata.provider_image }}" class="img-responsive img-thumbnail" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h1 class="text-center">Welcome to CogniSleep !</h1>
+                                <p class="text-center " style="font-size: 25px;">Hi {{ userdata.first_name }} {{ userdata.last_name }}</p>
+                                <br>
+                                <br>
+                                <h1 style="text-align: center;">Account Details</h1>
+
+                                <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Referral ID:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input type="text" readonly value="{{ userdata.provider_ref }}" id="ref_id" name="ref_id" disabled=""
+                                           class="form-control">
+
+                                </div>
+                                <label class="col-md-3 col-lg-3 control-label">First name:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input type="text" readonly value="{{ userdata.first_name }}" disabled="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Last name:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input type="text" readonly value="{{ userdata.last_name }}" disabled="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Email:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input type="text" readonly value="{{ user.get_username }}" id="email" name="email"
+                                           disabled="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Username:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input type="text" readonly value="{{ userdata.first_name }} {{ userdata.last_name }}"
+                                           id="name" name="name" disabled="" class="form-control">
+                                </div>
+                            </div>
+                                   <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Phone:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input readonly type="text" value="{{ userdata.contact_no }}"
+                                           id="contact_no" name="contact_no" disabled="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Change Password:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$"  type="password" value="" id="password1" placeholder="Enter New Password"
+                                           name="password1" class="form-control">
+                                    <!--<span toggle="#password-field" class="toggle-password" onclick="passeye()"><img
+                                            src="/static/assets/images/3025-200.png" id="eye" style="z-index: 1;top: 4px;"></span>-->
+                                </div>
+                            </div>
+                                <div class="form-group" style="margin-left: 120px; margin-top: -28px;">
+                             <!--<label class="col-md-3 col-lg-3 control-label"></label>-->
+                                <div class="col-md-8 col-lg-8">
+                                    <b style="color:red;" id="password_error">*Password should be minimum 8 characters<br>*Include at least a number and symbol<br>*Don't Use (&amp;) Sign
+                                    </b>
+                                </div>
+                                </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Confirm Password:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$"  type="password" value="" id="password2" placeholder="Re-Enter Password"
+                                           name="password2" class="form-control">
+                                </div>
+                            </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"></label>
+                                    <div class="col-md-8 col-lg-8">
+                                        <div class="create_account_button">
+                                            <button class="" type="submit">Update</button>
+                                            <a class="" href="#">Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">license:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input name="license_state" type="text" readonly value="{{ userdata.license_state }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Type of Practice:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input name="practice_name" type="text" readonly value="{{ userdata.practice_name }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Facility Name:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input name="practice_name" type="text" readonly value="{{ userdata.practice_name }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Facility Number:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input name="practice_phone_number" type="text" readonly
+                                           value="{{ userdata.practice_phone_number }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Facility Address:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input name="practice_address" type="text" readonly
+                                           value="{{ userdata.practice_address }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Fax:</label>
+                                <div class="col-md-8 col-lg-8">
+                                    <input name="fax_no" type="text" readonly value="{{ userdata.fax_no }}">
+                                </div>
+                            </div>
+
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                    <div id="menu1" class="table_mode tab-pane fade active in">
+                        <div class="table-responsive" id="provider-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>S.no</th>
+                                        <!-- <th>Referral Id</th> -->
+                                        <th>Patient First Name</th>
+                                        <th>Patient Last Name</th>
+                                        <th>View License</th>
+                                        <th>Status</th>
+                                        <th>View Patient</th>
+
+
+                                    </tr>
+                                        {% for ref in user_ref_data_array %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <!-- <td>{{ ref.doctor_ref_number }}</td> -->
+                                                <td>{{ ref.first_name }}</td>
+                                                <td>{{ ref.last_name }}</td>
+                                                <td>
+                                                    {% if ref.driving_license_front_img %}
+                                                    <a style="color:#00a115;" href="/media/{{ ref.driving_license_front_img }}" title="Front" rel="home">
+                                                        <i class="fa fa-id-card-o" aria-hidden="true"></i> Front
+                                                    </a>
+                                                    <a href="/media/{{ ref.driving_license_back_img }}" title="Back" rel="home">
+                                                        <i class="fa fa-id-card" aria-hidden="true"></i> Back
+                                                    </a>
+                                                    {% else %}
+                                                    Not Available
+                                                    {% endif %}
+                                                 </td>
+                                                <td>
+                                                    <label class="switch-custom">
+                                                  <input type="checkbox" {% if ref.user.active_patient is True %} checked  {% endif %}>
+                                                  <span class="slider-custom round"></span>
+                                                </label>
+                                                    <a href="javascript:void(0)" class="activePatient {% if ref.user.active_patient is True %} Active {% else %} Inactive {% endif %}" data-user="{{ref.user.id}}" data-active="{{ ref.user.active_patient}}">{% if ref.user.active_patient is True %} Active {% else %} Inactive {% endif %} </a>
+                                                </td>
+                                                <td style="text-align: center;"><a href="/backend/patient-admin/view-diary/0/{{ref.user.id}}" target="_blank" title="View Patient"><i style="color: #200b94;font-size: 21px;" class="fa fa-user"></i></a></td>
+                                            </tr>
+                                        {%  endfor %}
+                                </thead>
+                                <tbody>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+
+{% block jqueryScript %}
+
+<script>
+document.getElementById('contact_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+document.getElementById('fax_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+
+</script>
+ <script type="text/javascript">
+        const endpoint = '/api/patient_status/';
+
+
+        $("body").delegate(".switch-custom input","change",function () {
+            $(this).parent().parent().find(".activePatient").trigger("click");
+        });
+
+
+        $("body").delegate(".activePatient","click",function () {
+            var UserStatus = 1;
+            var activeThis = this;
+            var user_id = $(this).data("user");
+            if($(this).attr("data-active") == "True"){
+                    UserStatus = 0;
+                    $(activeThis).parent().find(".switch-custom input").prop('checked',false);
+                    //$(".switch-custom input").prop('checked',false)
+                }
+            else{
+                UserStatus = 1;
+                  $(activeThis).parent().find(".switch-custom input").prop('checked',true);
+                //$(".switch-custom input").prop('checked',true)
+                }
+            $.ajax({
+                method: 'POST',
+                data: {"user_id":user_id,'status_change': UserStatus},
+                url: endpoint,
+                success: function (response_data) {
+                    //alert(response_data.message);
+                    var response_data = response_data;
+                    if(response_data.success){
+                        if(UserStatus == 0){
+                            $(activeThis).html("Inactive");
+                            $(activeThis).addClass("Inactive");
+                            $(activeThis).removeClass("Active");
+                            $(activeThis).removeAttr("data-active");
+                            $(activeThis).attr("data-active","False");
+                        }else{
+                              $(activeThis).html("Active")
+                             $(activeThis).addClass("Active");
+                            $(activeThis).removeClass("Inactive");
+                            $(activeThis).removeAttr("data-active");
+                             $(activeThis).attr("data-active","True");
+                        }
+
+                    }else{
+                        alert("Something Wrong")
+                    }
+
+                }
+            });
+        });
+
+
+    </script>
+
+{% endblock %}

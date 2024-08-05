@@ -1,0 +1,1166 @@
+{% extends "base_login.html" %}
+{% load static %}
+{% load  tagss %}
+{% block content %}
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        #detailss a .content-val {
+            width: 100%;
+        }
+
+        ul.nav.nav-tabs li a {
+            padding: 10px 15px !important;
+            font-size: 12px;
+        }
+
+        p.mainTitle {
+    font-size: 14px;
+    position: absolute;
+    left: 5px;
+    right: 0;
+    text-align: center;
+    top: -60px;
+    color: #000;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+    margin: 0 20px;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.bg-yellow span.lastPrescribedTime {
+    font-weight: 600;
+}
+
+.bg-blue span.lastPrescribedTime, .bg-green span.previewWeekSE, .bg-greaish span.previewWeekSE {
+    font-weight: 600;
+    color: #fff;
+}
+
+
+.bg-blue {
+    background-color: #230c9a;
+}
+
+.bg-green {
+    background-color: #55b321;
+}
+
+.bg-greaish {
+    background-color: #444342;
+}
+
+
+
+
+.pd-40 {
+            padding: 0 30px;
+        }
+
+ .align-video-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+.question .wronganswer span {font-weight:700;}
+
+.step {
+  display: none;
+}
+.progress-bar {
+  margin-top: 20px;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 10px;
+}
+.progress {
+  height: 10px;
+  background-color: #007bff;
+  border-radius: 10px;
+  transition: width 0.2s ease-in-out;
+}
+
+.inso label{
+font-size: 17px;
+}
+@media(min-width: 970px) {
+        ul.nav.nav-tabs {
+        float: unset;
+        flex-wrap: nowrap;
+    }
+
+    .custom-wizard .seesionquestion-1 {
+    width: 98% !important;
+    }
+}
+
+
+
+
+    </style>
+
+<section class="questioner d-none py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="questionaerForm">
+                    <div class="titleBoxArea text-center">
+                        <h2 class="defaultHead"></h2>
+                    </div>
+                    <div class="progress-initial">
+                        <div class="progress-completion" role="progressbar"></div>
+                      </div>
+                      <div class="totalCount">
+                        <p><span class="initial-steps"></span> / <span class="final-step">15</span> </p>
+                      </div>
+
+                    <div id="questionList">
+                        <!-- The question list will be displayed here -->
+                    </div>
+                    <button class="next d-none" onclick="counter()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <section class="forward_sec videosTab d-none">
+        <div class="container-fluid pd-40">
+
+            <div class="row">
+                <!-- <div class="bold_heading"><h2 class="text-center">Provider Dashboard</h2></div> -->
+                <div class="col-md-12 mb-3">
+                    <div class="desktopTab d-md-block d-none m-auto">
+                        <ul class="nav nav-tabs justify-content-center">
+
+                {% if request.user.package != 3 %}
+                        {% if ma %}
+
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} magoVideos({{patient}}); {% else %}magoVideos(0){% endif %}" >Videos</a></li>
+                        {% else %}
+
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">Videos</a></li>
+                        {% endif %}
+                    {% endif %}
+
+                       {% if sleep_diary_entries not in rest_day %}
+                        {% if ma %}
+                    <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} magoDiary({{patient}}); {% else %}magoDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% else %}
+                        <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} goDiary({{patient}}); {% else %}goDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                            {% if ma %}
+                    <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} maviewDiary({{patient}}); {% else %}maviewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                            {% else %}
+                          <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} viewDiary({{patient}}); {% else %}viewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                        {% endif %}
+                      {% if request.user.package != 3 %}
+                        {% if ma %}
+                    <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} magoDashboardsub({{patient}}); {% else %}magoDashboardsub(0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% else %}
+                        <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} goDashboardsub('progress',{{patient}}); {% else %}goDashboardsub('progress',0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+
+                        </li>
+                        {% if ma %}
+                    <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/ma-relaxation/{{patient}}"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% else %}
+                         <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/relaxation"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% endif %}
+                            {% if ma %}
+                    <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} magoNtl({{patient}}); {% else %}magoNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                            {% else %}
+                        <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if patient == 0 %}
+{#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+{#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+{#                        Us</a></li>#}
+                    {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                       aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                    </li>{% endcomment %}
+                     {% endif %}
+                <!-- <li id="detailss" class="" style="">
+                    <a>
+                        <div class="content-val"><span >Previous week's sleep efficiency</span><span class="previewWeekSE">N/A</span></div>
+                        <div class="content-val"><span>Prescribed Bedtime</span><span class="lastPrescribedTime">N/A</span></div>
+                         <div class="content-val"><span>Wake-up Time</span><span class="lastWeekWakeupTime">N/A</span></div>
+                    </a>
+                    </li>-->
+                    <li id="detailss" style="">
+                    <a class="bg-green">
+                        <div class="content-val"><span class="tooltipp">Previous week's sleep efficiency</span>
+                        <span class="previewWeekSE">{{avgsleep}}%</span></div>
+                    </a>
+                    </li>
+                   <span class="d-flex position-relative">
+                       <p class="mainTitle">Sleep Restriction</p>
+                        <li id="detailss" style="">
+                        <a class="bg-blue">
+                            <div class="content-val"><span class="tooltipp">Prescribed Bedtime</span><span class="lastPrescribedTime">{{avgbedtime}}</span></div>
+                        </a>
+                        </li>
+                        <li id="detailss"  style="">
+                        <a class="bg-yellow">
+                            <div class="content-val"><span class="tooltipp">Suggested Wake Up</span><span class="lastPrescribedTime">{{sug_time}}</span></div>
+                        </a>
+                        </li>
+                   </span>
+
+                </ul>
+                    </div>
+
+                    <div class="mobieTabs d-md-none m-auto">
+                        <ul class="nav nav-tabs justify-content-center">
+                            {% if patient == 0 %}
+                    {#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+                    {#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+                    {#                        Us</a></li>#}
+                            {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                               aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                            </li>{% endcomment %}
+                             {% endif %}
+                        <!-- <li class="" style="">
+                            <a>
+                                <div class="content-val"><span >Previous week's sleep efficiency</span><span class="previewWeekSE">N/A</span></div>
+                                <div class="content-val"><span>Prescribed Bedtime</span><span class="lastPrescribedTime">N/A</span></div>
+                                 <div class="content-val"><span>Wake-up Time</span><span class="lastWeekWakeupTime">N/A</span></div>
+                            </a>
+                            </li>-->
+                            <li class="" style="">
+                            <a class="tabsColor">
+                                <div class="content-val_mobile">
+                                <span class="previewWeekSE">{{avgsleep}}%</span>
+                                <span class="toolData">Previous week's sleep efficiency</span></div>
+                            </a>
+                            </li>
+                            <li  style="">
+                                <a class="tabsColor">
+                                    <div class="content-val_mobile">
+                                        <span class="lastPrescribedTime">{{avgbedtime}}</span>
+                                        <span class="toolData">Prescribed Bedtime</span></div>
+                                </a>
+                                </li>
+                                <li  style="">
+                                <a class="tabsColor">
+                                    <div class="content-val_mobile">
+                                        <span class="lastPrescribedTime">{{sug_time}}</span>
+                                        <span class="toolData">Suggested Wake Up</span>
+                                    </div>
+                                </a>
+                                </li>
+
+                                <li class="ntlTabs" style="">
+                                    <a class="tabsColor" data-toggle="tab"
+                                    href="javascript:void(0);"
+                                    aria-expanded="false"
+                                    onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                        <div class="content-val_mobile">
+                                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span>
+                                            <span class="toolData">Negative Thought Lockbox<sup>TM</sup></span>
+                                        </div>
+                                    </a>
+                                </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+
+{#        New Work    #}
+
+
+
+
+    <div class="col-xs-12 col-md-12">
+        <div class="desktopEntries d-md-block d-none">
+            <nav class="weeks">
+                            <ul>
+
+
+
+
+                                 <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                        <a class="getWeekData" href="#">
+                                            <button id="weeks_id_1" >
+                                            Week 1 - SE {{ se.0 }}%
+                                        </button></a>
+                                    </li>
+                                <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                        <a class="getWeekData" href="#">
+                                            <button id="weeks_id_1" >
+                                            Week 2 - SE {{ se.1 }}%
+                                        </button></a>
+                                    </li>
+                                <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                        <a class="getWeekData" href="#">
+                                            <button id="weeks_id_1" >
+                                            Week 3 - SE {{ se.2 }}%
+                                        </button></a>
+                                    </li>
+                                <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                        <a class="getWeekData" href="#">
+                                            <button id="weeks_id_1" >
+                                            Week 4 - SE {{ se.3 }}%
+                                        </button></a>
+                                    </li>
+                                <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                        <a class="getWeekData" href="#">
+                                            <button id="weeks_id_1" >
+                                            Week 5 - SE {{ se.4 }}%
+                                        </button></a>
+                                    </li>
+                                <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                        <a class="getWeekData" href="#">
+                                            <button id="weeks_id_1" >
+                                            Week 6 - SE {{ se.5 }}%
+                                        </button></a>
+                                    </li>
+
+
+
+
+                            </ul>
+            </nav>
+        </div>
+        <div class="desktopEntries d-md-none">
+            <div class="titleBoxArea position-relative">
+                <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                <h3 class="sleep-rep_patient">Video's</h3>
+            </div>
+            <nav class="weeks">
+                <ul>
+
+
+
+
+                     <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                            <a class="getWeekData" href="#">
+                                <button id="weeks_id_1" >
+                                Week 1 - SE {{ se.0 }}%
+                            </button></a>
+                        </li>
+                    <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                            <a class="getWeekData" href="#">
+                                <button id="weeks_id_1" >
+                                Week 2 - SE {{ se.1 }}%
+                            </button></a>
+                        </li>
+                    <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                            <a class="getWeekData" href="#">
+                                <button id="weeks_id_1" >
+                                Week 3 - SE {{ se.2 }}%
+                            </button></a>
+                        </li>
+                    <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                            <a class="getWeekData" href="#">
+                                <button id="weeks_id_1" >
+                                Week 4 - SE {{ se.3 }}%
+                            </button></a>
+                        </li>
+                    <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                            <a class="getWeekData" href="#">
+                                <button id="weeks_id_1" >
+                                Week 5 - SE {{ se.4 }}%
+                            </button></a>
+                        </li>
+                    <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                            <a class="getWeekData" href="#">
+                                <button id="weeks_id_1" >
+                                Week 6 - SE {{ se.5 }}%
+                            </button></a>
+                        </li>
+
+
+
+
+                </ul>
+</nav>
+        </div>
+
+    </div>
+
+      <div class="col-xs-12 col-md-12">
+          <nav class="weeks border-0">
+                        <ul>
+
+                            {% for x in weekDays_array %}
+                                {% if x.is_selected == 1  %}
+
+                                <li class="activeWeek" style=" !important;width: calc(100% / );">
+                                    <a   class="getWeekData" href="javascript:void(0)" data-week="{{ x.x }}"  >
+                                        <button  id="weeks_id_1" >
+                                        Week {{ x.x }} - SE {{ x.eff }}%
+                                    </button></a>
+                                </li>
+                                {% else %}
+
+                             <li  style="width: calc(100% / );background-color: rgb(32, 11, 148, 0); ">
+                                    <a class="getWeekData" href="javascript:void(0)" data-week="{{ x.x }}">
+                                        <button id="weeks_id_1" >
+                                        Week {{ x.x }} - SE {{ x.eff }}%
+                                    </button></a>
+                                </li>
+
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </ul>
+                    </nav>
+
+    </div>
+</div>
+
+
+            <div id="responsivez" class="video_sec tabcontent" style="display:block;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">{% if all_video_compeleted == 1 %}
+                            <!-- certificate code here -->
+                             {% endif %}
+                             <div class="outer-jobs">
+                                     <div class="inner-jobs">
+                                         <div class="tab for-desk">
+                                             <div class="job-box">
+                                                 <ul class="nav nav-pills nav-justified ">
+
+
+     {% for video in videos %}
+                                                            {% if ma %}
+                                                     <li class=" {% if video.id <= weekVideo %}active{% else %} deactive {% endif %}"><a
+                                                                     href="{% if video.id <= weekVideo %}/dashboard/ma_videos/{{ video.id }}/{% if patient > 0 %}{{patient}}/{% endif %}{% else %}javascript:void(0){% endif %}"
+                                                                     id="tabs_{{ video.id }}"
+                                                                     data-vID="{{ video.id }}"
+                                                                     data-target="pill"
+                                                                     class="tablink   {% if video.id <= weekVideo %}active{% endif %}"   {% if video.id <= weekVideo %} disabled {% endif %} > {% if video.id > 0 %} {% if video.id <= weekVideo %} <i class="fa fa-unlock"></i> {% else %} <i class="fa fa-lock"></i>  {% endif %}  {% endif %}   {% if video.id is 0 %} Welcome {% else %} {{ video.title }} {% endif %}</a>
+                                                             </li>
+                                                            {% else %}
+                                                           <li class=" {% if video.id <= weekVideo %}active{% else %} deactive {% endif %}"><a
+                                                                     href="{% if video.id <= weekVideo %}/dashboard/videos/{{ video.id }}/{% if patient > 0 %}{{patient}}/{% endif %}{% else %}javascript:void(0){% endif %}"
+                                                                     id="tabs_{{ video.id }}"
+                                                                     data-vID="{{ video.id }}"
+                                                                     data-target="pill"
+                                                                     class="tablink   {% if video.id <= weekVideo %}active{% endif %}"   {% if video.id <= weekVideo %} disabled {% endif %} > {% if video.id > 0 %} {% if video.id <= weekVideo %} <i class="fa fa-unlock"></i> {% else %} <i class="fa fa-lock"></i>  {% endif %}  {% endif %}   {% if video.id is 0 %} Welcome {% else %} {{ video.title }} {% endif %}</a>
+                                                             </li>
+                                                     {% endif %}
+
+
+
+                                                     {% endfor %}
+
+                                                 </ul>
+                                             </div>
+                                         </div>
+
+                                     </div>
+                             </div>
+                         </div>
+                    </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="custom-wizard">
+  <div class="wizard-sec active videowizard">
+                        <div class="row">
+
+                        <div class="col-sm-12 col-md-4 col-lg-4 session-content mb-4 mb-md-0">
+                            <div class="align-video-content">
+                               <div class="videoContent">
+                                   <h3 class="dashboard-video-title">{{ video_content.title|safe }}</h3>
+                                  <p>{{ video_content.content|safe }}</p>
+                               </div>
+
+                               <div class="fullVideoMode">
+                                  <button class="fullMode btn bg-dark text-white">
+                                  Watch on Full Screen <i class="fa fa-expand" aria-hidden="true"></i>
+                                  </button>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="jobs-details-outer for-desk">
+                                <div class="tab-content inner-job-details">
+                                     <input type="hidden" id="videoid" value="{{ video_content.id }}">
+                                            <div id="tab_{{ video_content.id }}" class="tab-pane active">
+
+                                                    {% if video_content.id <= weekVideo %}
+                                                    <video src="{{ video_content.url }}"
+                                                        class="int_vid_two" id="video_{{ video_content.id }}" controls=""
+                                                        name="video"
+                                                        controlslist="nodownload"></video>
+                                                    {% else %}
+                                                        <img src="{% static "assets/images/lock.png" %}">
+                                                    {% endif %}
+
+                                            </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+      {% if video_content.id <= 6 %}
+                            {% if video_content.id <= video_view and video_content.id > 0 %}
+                            <div class="nextprevbtn next col-sm-12 col-md-1 d-none" ><a href="javascript:void(0);"  ><i class="fa fa-chevron-right" aria-hidden="true"></i></a></div>
+                            {% else %}
+                            <div class="nextprevbtn next col-sm-12 col-md-1" ><a href="javascript:void(0);"  ><i class="fa fa-chevron-right" aria-hidden="true"></i></a></div>
+                            {% endif %}
+        {% else %}
+                            {% if ma %}
+     <div class="finals next col-sm-12 col-md-1" ><a href="/dashboard/mafinalvideo/{{patient}}" ><i class="fa fa-chevron-right" aria-hidden="true"></i></a></div>
+                            {% else %}
+     <div class="finals next col-sm-12 col-md-1" ><a href="/dashboard/finalvideo" ><i class="fa fa-chevron-right" aria-hidden="true"></i></a></div>
+
+                            {% endif %}
+                            {% endif %}
+                    </div>
+
+
+</div>
+
+{% if video_content.id > 0 %}
+<div class="wizard-sec seesionriveiw">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="session-content review">
+         {{ video_content.review_content|safe }}
+    </div>
+</div>
+    <div class="nextprevbtn next d-block" id="nextsess"><a href="javascript: void(0)" >Next</a></div>
+</div>
+                            {% endif %}
+
+<div class="wizard-sec seesionquestion seesionquestion-1">
+    {% if video_content.id == 0 %}
+
+
+<div class="question">
+
+<div class="row">
+
+    <div class="col-sm-12 col-md-5 session-content mb-4 mb-md-0">
+       <!-- <h4 class="parentQuestion"></h4> -->
+       <div class="forward_login_process">
+                <h2 class="mb-0">1. Why do you want to complete this program?</h2>
+                <p>Select all that apply.</p>
+       </div>
+
+        <div class="col-md-12 ">
+
+
+                   <div class="col-md-12 inso">
+                    <input required="" type="checkbox" value="I want to get better sleep" name="ans[][32]" data-question="32" class="correct qans ">
+                    <label>I want to get better sleep</label>
+                </div>
+
+                   <div class="col-md-12 inso">
+                    <input required="" type="checkbox" value="
+I want to feel more energized during the day" name="ans[][32]" data-question="32" class="correct qans ">
+                    <label>
+I want to feel more energized during the day</label>
+                </div>
+
+                   <div class="col-md-12 inso">
+                    <input required="" type="checkbox" value="
+I want to stop taking sleeping pills" name="ans[][32]" data-question="32" class="correct qans ">
+                    <label>
+I want to stop taking sleeping pills</label>
+                </div>
+
+                   <div class="col-md-12 inso">
+                    <input required="" type="checkbox" value="
+I want to improve my health and quality of life.
+" name="ans[][32]" data-question="32" class="correct qans ">
+                    <label>
+I want to improve my health and quality of life.
+</label>
+                </div>
+            </div>
+
+       <div id="answer0" style="font-size: 20px; padding-left: 17px; margin-top: 15px; display: none;"><p>That’s great. Focus on these goals as you continue on your CogniSleep journey.</p></div>
+       <h4 class="mt-4" style="
+    color: #200b94;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 23px;
+">2. Play Video "Understanding Sleep"</h4>
+
+</div>
+    <div class="col-sm-12 col-md-6 welcome_video">
+                            <div class="jobs-details-outer for-desk">
+                                <div class="tab-content inner-job-details">
+
+
+
+                                            <input type="hidden" id="videoid" value="{{ video_content.id }}">
+                                            <div id="tab_{{ video_content.id }}" class="tab-pane active">
+
+                                                    {% if video_content.id <= weekVideo %}
+                                                    <video src="{% static "assets/images/welcome-next.mp4" %}"
+                                                        class="int_vid_two" id="video_q" controls=""
+                                                        name="video"
+                                                        controlslist="nodownload"></video>
+                                                    {% else %}
+                                                        <img src="{% static "assets/images/lock.png" %}">
+                                                    {% endif %}
+
+                                            </div>
+
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+               </div>
+               <div class="nextprevbtn next col-sm-12 col-md-1 welcomeBtn" style="display:none;"><a href="javascript:void(0);"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></div>
+</div>
+
+    {% else %}
+
+   {% for questions in video_questions %}
+   <div class="question">
+
+
+       {% if questions.main_question != None %}<h4 class="parentQuestion"></h4> {% endif %}
+       <div class="forward_login_process">
+                <h2>{{ forloop.counter }}. {{ questions.question }}</h2>
+       </div>
+
+        <div class="col-md-12 ">
+            {% with questions.options|split:"," as option_v %}
+                {% for option in option_v %}
+                   <div class="col-md-12 inso">
+                    <input required="" type="radio" value="{{ option }}" name="ans[][{{ questions.id }}]" data-question="{{ questions.id }}" class="correct qans {% if questions.correct_ans == option %} correct_ans {% endif %}">
+                    <label>{{ option }}</label>
+                </div>
+                {% endfor %}
+            {% endwith %}
+            </div>
+       {% if video_content.id > 0 %}
+        <div class="answer"> </div><div class="wronganswer"> </div>
+       {% else %}
+       <div id="answer0" style="font-size: 20px; padding-left: 17px;margin-top: 15px"><p>“That’s great. Focus on this goal as you continue on your CogniSleep journey.”</p></div>
+        {% endif %}
+</div>
+    {% endfor %}
+    {% endif %}
+
+    {% if all_video_compeleted == 1 %}
+    <p class="sleepdiarymsg" style="font-weight: bold;color:red;"></p>
+
+{% endif %}
+
+<p class="anserMsg" style="font-weight: bold;color:red; display: none;">*Please Correct the Answer First.  </p>
+    <div id="hidenext">
+        <a class="welnextbtn saveanswers" id="saveanswer" data-vid="{{current_video_id}}" href="javascript:void(0)" >Next</a></div>
+    </div>
+
+</div>
+
+            </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+            </div>
+
+
+        </div>
+        </div>
+        </div>
+        <div class="d-flex gap-15 justify-content-right align-items-right float-left">
+
+                            </div>
+    </section>
+
+{% endblock %}
+
+{% block jqueryScript %}
+
+<script>
+
+var parts = window.location.pathname.split('/');
+var lastSegment = parts.pop() || parts.pop();
+
+
+
+
+if(lastSegment == '0' || $("#videoid").val() == 0) {
+jQuery('.welnextbtn').addClass('d-none');
+
+$(document).ready(function() {
+  // Add event listener to checkboxes
+  $('input[type="checkbox"]').on('change', handleCheckboxChange);
+
+  // Add event listener to the video
+  $('#video_q').on('ended', handleVideoEnded);
+
+  // Event handler for checkbox change event
+  function handleCheckboxChange() {
+    // Check if at least one checkbox is checked
+    jQuery('.welnextbtn').addClass('d-none');
+    const isChecked = $('input[type="checkbox"]:checked').length > 0;
+
+    // Check if the video has completed playing
+    const isVideoCompleted = $('#video_q')[0].ended;
+
+    // Show the button if at least one checkbox is checked and the video is completed
+    $('.welcomeBtn').css('display', isChecked && isVideoCompleted ? 'block' : 'none');
+  }
+
+  // Event handler for video ended event
+  function handleVideoEnded() {
+    // Check if at least one checkbox is checked
+    jQuery('.welnextbtn').addClass('d-none');
+    const isChecked = $('input[type="checkbox"]:checked').length > 0;
+
+    // Show the button if at least one checkbox is checked and the video is completed
+    $('.welcomeBtn').css('display', isChecked ? 'block' : 'none');
+  }
+});
+}
+
+
+jQuery('.welcomeBtn').click(function(){
+    jQuery('a#saveanswer').trigger('click');
+});
+
+    var ma = "{{ma}}"
+    const patientId = {{userdata.user_id}}
+    if(ma == "False"){ma = false}
+    else{ ma = true}
+
+
+
+
+    let id;
+    if($("#videoid").val() >= 0 && $("#videoid").val() < 7) {
+      let = preQuestions = `{{ base_url }}/questions/is_submited_quest/${patientId}/pre`;
+    }
+    if ($("#videoid").val() == 7) {
+       let = preQuestions = `{{ base_url }}/questions/is_submited_quest/${patientId}/post`;
+    }
+
+   fetch(preQuestions)
+   .then(res => {
+    return res.json();
+   })
+   .then(data => {
+    console.log(data);
+
+if (data >= 0 )
+    {
+        jQuery('.questioner').removeClass('d-none');
+        jQuery('.videosTab').addClass('d-none');
+        id = data;
+         getQuestionById(id);
+    }
+    else {
+     jQuery('.questioner').addClass('d-none');
+     jQuery('.videosTab').removeClass('d-none');
+
+    }
+   })
+   .catch(error => {
+    console.log(error);
+   });
+
+
+let questionList = document.getElementById('questionList');
+let filteredData = [];
+
+
+// Function to fetch question data from the API based on an ID
+function getQuestionById(id) {
+  if (filteredData.length === 0) {
+    // Fetch data from the API if it hasn't been fetched yet
+    fetch('{{ base_url }}/questions/cogni_questions', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        },
+        mode: 'cors'
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .then(data => {
+        // Filter the data based on the value of the is_pre key
+        if($("#videoid").val() >= 0 && $("#videoid").val() < 7) {
+            jQuery(".defaultHead").text("Pre-program Questionnaire")
+            filteredData = data.filter(item => item.is_pre === true);
+        }
+
+        if($("#videoid").val() == 7) {
+            jQuery(".defaultHead").text("Post-program Questionnaire")
+            filteredData = data.filter(item => item.is_post === true);
+        }
+
+        console.log(filteredData);
+
+        // Display the question data in the UI
+        displayQuestionById(id);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  } else {
+    // Use the filtered data if it has already been fetched
+    displayQuestionById(id);
+  }
+}
+
+const progressBar = document.querySelector('.progress-completion');
+progressBar.style.width = '0%';
+
+// Function to display question data in the UI
+function displayQuestionById(id) {
+  localStorage.setItem('Question_id', filteredData[id].id);
+  const data = filteredData[id];
+  const options = data.options.map(option => `<div class="form-container"><label class="radio-container" for="answer_${option.id}"> ${option.name}<input type="radio" name="answer" value="${option.id}" id="answer_${option.id}"><span class="checkmark"></span></label></div>`);
+  questionList.innerHTML = `
+    <h4><b>Question ${id + 1}:</b>  ${data.name}</h4>
+    ${options.join("")}
+  `;
+
+  const progress = (id + 1) / filteredData.length * 100;
+  progressBar.style.width = `${progress}%`;
+
+//   display first counter
+
+document.querySelector('.initial-steps').innerHTML = id + 1;
+}
+
+// Example usage: fetch question data when a button is clicked
+//let id = 0;
+//getQuestionById(id);
+
+function counter() {
+  const progress = (id + 1) / filteredData.length * 100;
+  progressBar.style.width = `${progress}%`;
+
+//   increment step
+  document.querySelector('.initial-steps').innerHTML = id + 1;
+
+  let user_id = patientId;
+  let question_id = localStorage.getItem('Question_id');
+  let option_id = jQuery('input[name="answer"]:checked').val();
+
+  // create empty object for post data
+  const postData = {};
+
+  // assign post values to empty object
+  Object.assign(postData, {
+    'user_id': user_id,
+    'question_id': question_id,
+    'option_id': option_id
+  });
+
+  if (option_id) {
+    fetch('{{ base_url }}/questions/cogni_answer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postData)
+    })
+    .then(response => {
+        console.log('Data Sent');
+    })
+    .catch(error=> {
+        console.log(error);
+    })
+  }
+
+  id++;
+
+  if (id < filteredData.length) {
+    displayQuestionById(id);
+  } else {
+    //alert("No more questions!");
+    jQuery('.questioner').addClass('d-none');
+    jQuery('.videosTab').removeClass('d-none');
+    id = filteredData.length - 1;
+  }
+}
+
+
+
+
+setInterval(function(){
+    jQuery('input[name="answer"]').click(function(){
+    jQuery('.next').removeClass('d-none');
+  });
+
+  jQuery('.next').click(function(){
+    jQuery(this).addClass('d-none');
+  });
+},500)
+
+
+// post question
+
+
+$("#answer0").hide();
+jQuery('.nextprevbtn a').click(function(){
+    jQuery(this).parents('.video_sec').find('video').get(0).pause();;
+});
+
+jQuery('.fullMode').click(function(){
+var videoZoom = document.querySelector('.videowizard video');
+videoZoom.webkitRequestFullScreen();
+});
+
+$("#video_0").on("ended",function () {
+      $(".videowizard .nextprevbtn").show();
+
+});
+
+
+
+$("#video_7").on("ended",function () {
+window.stop();
+    $(".videowizard .finals").show();
+});
+
+jQuery('#tab_4').parents('.custom-wizard').find('.seesionquestion > .question:nth-of-type(4)').prepend('<h5>Select true or false for the following statements regarding sleep hygiene.</h5>');
+jQuery('#tab_5').parents('.custom-wizard').find('.seesionquestion > .question:nth-of-type(2)').prepend('<h5>Overcoming negative thoughts takes practice. Select true or false on the following methods of overcoming negative thinking.</h5>');
+jQuery('#tab_6').parents('.custom-wizard').find('.seesionquestion .reviewQuestion').next().append('<h5>Select true or false regarding ways to relax.</h5>');
+jQuery('#tab_6').parents('.custom-wizard').find('.seesionquestion > .question:nth-of-type(1)').prepend('<h5>Select true or false regarding behaviors that can influence positive thoughts:</h5>');
+    var isCorrrectAnswer = false;
+    var truecount = 0;
+    var emptyanswer = 0;
+    var correctAnswer = [];
+
+    function checkCorrectAnswers() {
+        let result = true;
+
+        if($('.question').length === correctAnswer.length) {
+            $.each(correctAnswer, function(i, value) {
+                if(value==false || value == null) {
+                    console.log(i+" - "+value);
+                    result = false;
+                }
+            });
+
+            return result;
+        } else {
+            return false;
+        }
+    }
+
+    var count_elements = $('.question').length;
+       
+    $(".videowizard .welnextbtn").hide();
+    $(".saveanswers").hide();
+    $(".videowizard .nextprevbtn").hide();
+    $(".videowizard .finals").hide();
+
+
+    $('.custom-wizard .nextprevbtn').on('click', function(e) {
+    e.preventDefault()
+    var parent = $(this).closest('.wizard-sec')
+    var elem = $(this).hasClass('next') ? parent.next() : parent.prev();
+    $('.custom-wizard .wizard-sec').removeClass('active');
+    elem.addClass('active');
+});
+        $('.question .inso input').on('change',function(){
+            var answer=$(this).closest('.question').find('.answer');
+            var wronganswer=$(this).closest('.question').find('.wronganswer');
+
+            if(!$(this).hasClass('correct_ans')){
+                 correctAnswer[$(this).closest('.question').index()] = false;
+                 wronganswer.html('<span>Incorrect answer: </span>'+"Please try again.");
+                 $(".wronganswer").css({"color":"red","font-size": "20px", "padding-left": "17px","margin-top": "15px"});
+                 answer.hide();
+                 wronganswer.show();
+
+            }
+            else{
+                correctAnswer[$(this).closest('.question').index()] = true;
+                answer.html('<span>Answer: </span>'+"That's correct, keep up the good work");
+                 wronganswer.hide();
+                 answer.show();
+
+
+            }
+                console.log(checkCorrectAnswers());
+                if($("#videoid").val() == 0){ $("#answer0").show(); $(".welnextbtn").show();}
+                else{
+                    if(checkCorrectAnswers()) {
+                        $(".welnextbtn").show();
+                    } else {
+                        $(".welnextbtn").hide();
+                    }
+                }
+            });
+
+
+        $("body").delegate(".saveanswers","click",function(){
+
+
+            if(checkCorrectAnswers() || ($("#videoid").val() == 0)) {
+            //$(".anserMsg").css("display","none");
+
+
+            var currentVid = parseInt($(this).data("vid"));
+            const endpoint = '/dashboard/answers/'+currentVid+'/';
+            var cname =  "answers";
+            var cvalue =   {};
+            var qvalue =   [];
+         
+            $( ".qans" ).each(function () {
+                if($(this).is(":checked")) {
+                    //alert($(this).val());
+                    qvalue.push($(this).data('question'));
+                    cvalue[$(this).data('question')] = ($(this).val());
+                    $(this).parent().parent().find('div.error').remove();
+
+                }else{
+
+                    if(jQuery.inArray($(this).data('question'), qvalue) == -1){
+                        $(this).parent().parent().find('div.error').remove();
+                        $(this).parent().parent().append('<div class="alert alert-danger error mt-3" >This is a Required Field  </div>');
+                    }
+                }
+            });
+
+            if(qvalue.length == $( ".question" ).length || ($("#videoid").val() == 0)){
+                $.ajax({
+                    method: 'POST',
+                    data: {"answers": JSON.stringify(cvalue),'user_id':patientId},
+                    url: endpoint,
+                    success: function (response_data) {
+
+                        var response_data = response_data;
+                        if(response_data.status){
+
+                            // {% if video_content.id == 7 %}
+                            //  alert("We are working on session 7")
+                            // {% else %}
+                            // window.location.href = "{{ base_url }}/dashboard/";
+
+                            if($("#tabs_"+(currentVid+1)).hasClass("active")){
+                                if(ma)
+                                {
+
+                                    window.location.href = "{{ base_url }}/dashboard/ma_videos/"+(currentVid+1)+"/"+patientId+"/";
+                                }
+                                else
+                                {
+
+                                    window.location.href = "{{ base_url }}/dashboard/videos/"+(currentVid+1)+"/";
+                                 }
+                            }
+                            else{
+                                if(ma)
+                                {
+
+                                    window.location.href = "{{ base_url }}/dashboard/ma_patient_dashboard/"+patientId+"/";
+                                }
+                                else
+                                {
+
+                                    window.location.href = "{{ base_url }}/dashboard/";
+                                }
+                            }
+                                
+                            {% endif %}
+                        }else{
+                            alert("Something wrong!!!");
+                        }
+
+                    }
+                });
+            }
+            $(".anserMsg").css("display","none");
+            }else{
+            if($("#videoid").val() == 0){ $(".anserMsg").css("display","none");}
+            else {
+                $(".anserMsg").css("display","block");
+                }
+            }
+        });
+      
+    </script>
+    {% include "dashboard-js.html" %} 
+{% endblock %}

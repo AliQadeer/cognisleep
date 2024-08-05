@@ -1,0 +1,975 @@
+{% extends "base_login_crop.html" %}
+{% load static %}
+{% block content %}
+<style>
+   body {
+   overflow-x: hidden;
+   }
+   .days-menu ul li a button.green {
+   background: #00a115;
+   }
+   .days-menu ul li a button.red {
+   background: #eb0606;
+   }
+   .paid {
+   color: green;
+   }
+   .pending {
+   color : orange;
+   }
+   .cancel {
+   color: red;
+   }
+   .invoiceStaus {
+   border-radius: 50px;
+   }
+   .invoiceTable {
+   text-align: center;
+   }
+   .invoiceTable td a {
+   text-align: center;
+   background-color: #3e3e3e;
+   color: #fff;
+   padding: 10px 30px;
+   border-radius: 50px;
+   }
+   .img-circle {
+   border-radius: 50%;
+   height: 150px;
+   width: 150px;
+   object-fit: cover;
+   }
+   .form-group {
+   position: relative;
+   }
+   .searchBtn {
+   position: absolute;
+   right: 3px;
+   border-radius: 80px;
+   top: 3px;
+   width: 39px;
+   height: 39px;
+   background-color: #00a115;
+   outline: none;
+   border: 1px solid;
+   }
+   .form-group input {
+   padding: 11px 14px;
+   border-radius: 50px;
+   outline: none;
+   }
+   span#war_msg {
+   color: red;
+   float: left;
+   width: 100%;
+   font-weight:bold;
+   margin-top: -15px;}
+   .patient_regist_form img {
+   /* height: 200px !important; */
+   object-fit: cover;
+   margin-top: 10px;
+   cursor: pointer;
+   }
+   .take_btn button {
+   font-size: 12px !important;
+   white-space: nowrap;
+   }
+   .gap-15 {
+   gap: 15px;
+   }
+   .provider_registeration input {
+   margin-bottom: 0;
+   }
+   video {
+   display: none;
+   width: 100%;
+   height: auto !important;
+   }
+   .uploadedImage img {
+   max-width: 100%;
+   }
+   .modal-backdrop.fade.in {
+   opacity: 1;
+   }
+   .modal.fade.in {
+   display: block !important;
+   opacity: 1 !important;
+   z-index: 9999999999 !important;
+   }
+   .modal-backdrop.fade.in:not(:last-child) {
+   display: none;
+   }
+   .modal-backdrop.fade.in {
+   z-index: 9999999;
+   }
+   .modal-content {
+   width: 100% !important;
+   }
+   canvas {
+   max-width: 100%;
+   }
+   img {
+   max-width: 100%;
+   }
+   body {
+   padding: 0 !important;
+   }
+   .take_btn {
+   display: flex;
+   gap: 15px;
+   }
+   .provider_registeration > .row:nth-of-type(1) > div:not(:last-child), .provider_registeration > div >.row:nth-of-type(1) > div:not(:last-child):not(:first-child) {
+   border-right: 1px solid #afafafb0 !important;
+   }
+   .openImage.show.in {
+   display: block !important;
+   }
+   button.close {
+   width: 50px;
+   height: 50px;
+   position: absolute;
+   z-index: 999;
+   right: -20px;
+   background-color: #5eb82d;
+   border-radius: 50px;
+   font-size: 33px;
+   opacity: 1;
+   color: #fff;
+   top: -20px;
+   }
+   span#war_msg {
+   color: red;
+   float: left;
+   width: 100%;
+   font-weight: bold;
+   }
+   .patient_regist_form img {
+   height: auto;
+   object-fit: cover;
+   margin: auto;
+   }
+   .take_btn button {
+   font-size: 12px !important;
+   white-space: nowrap;
+   }
+   .gap-15 {
+   gap: 15px;
+   }
+   .provider_registeration input {
+   margin-bottom: 0;
+   }
+   video {
+   display: none;
+   width: 100%;
+   height: auto !important;
+   }
+   .take_btn {
+   display: flex;
+   gap: 15px;
+   }
+
+   .take_btn .openCrop, .take_btn .croppedBtn {
+   display: none;
+   }
+   .patient_regist_form  button {
+   border-radius: 5px;
+   background: #79ce4a;
+   display: inline-block;
+   text-align: center;
+   color: #fff;
+   font-weight: 400;
+   font-family: "Montserrat", sans-serif;
+   padding: 11px 35px;
+   text-transform: uppercase;
+   font-size: 16px;
+   border: none;
+   transition: 0.2s all ease;
+   }
+   span.input-group-btn input {
+   margin-bottom: 0;
+   }
+   .hide_section {
+   display: none;
+   }
+   button.edit_btn {
+   position: absolute;
+   right: 6px;
+   padding: 0;
+   background-color: #fff;
+   color: #0f9648;
+   width: 35px;
+   height: 35px;
+   border-radius: 50px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   top: 6px;
+   font-size: 18px;
+   border: 1px solid #0f9648;
+   }
+   .image_box img {
+   height: 200px !important;
+   }
+   .create_account_button {
+   float: right;
+   width: 100%;
+   padding: 12px 0;
+   text-align: right;
+   }
+   .modal.fade.confimPopup.in {
+   display: block !important;
+   opacity: 1 !important;
+   z-index: 999999999;
+   }
+   .modal-backdrop {
+   z-index: 9999999;
+   }
+   .modal-backdrop.fade {
+   display: none;
+   }
+   .modal-backdrop.fade:last-child {
+   opacity: 1;
+   display: block;
+   }
+   button.close {
+   width: 30px;
+   height: 30px;
+   position: absolute;
+   z-index: 999;
+   right: 30px;
+   background-color: #5eb82d;
+   border-radius: 50px;
+   font-size: 24px;
+   opacity: 1;
+   color: #fff !important;
+   top: 30px;
+   display: flex !important;
+   align-items: center;
+   justify-content: center;
+   padding: 0 !important;
+   }
+   img#eye {
+   position: absolute;
+   top: 50% !important;
+   }
+   div#changePassword input {
+   margin-bottom: 10px;
+   }
+   .bg-green, .callout.callout-success, .alert-success, .label-success, .modal-success .modal-body {
+   background-color: #49b902 !important;
+   }
+   video.showBox {
+   margin: 0;
+   max-width: 100%;
+   }
+
+   .videoBox button.clear, .videoBox button.turnCamera {
+    display: none;
+}
+</style>
+<section class="forward_sec">
+   <div class="container">
+      <div class="message">
+         {% if messages %}
+         {% for message in messages %}
+         <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+         {% endfor %}
+         {% endif %}
+      </div>
+      <div class="dashboard_form dashboard2 tabcontent container position-relative titleBoxArea" id="responsivez0">
+         <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+         <h3 class="mb-0 mt-md-2 mb-3 text-align-center">ACCOUNT DETAILS</h3>
+         <form method="POST" action="/accounts/change_details/" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row text-left">
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>First name:</label>
+                     <div>
+                        <input type="text" readonly value="{{ userdata.first_name }}" id="first_name"
+                           name="first_name" disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Last name:</label>
+                     <div>
+                        <input type="text" readonly value="{{ userdata.last_name }}" id="last_name"
+                           name="last_name" disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Email:</label>
+                     <div>
+                        <input type="text" readonly value="{{ user.get_username }}" id="email" name="email" disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Package:</label>
+                     <div>
+                        <input name="contact" readonly type="text" value="{{ userdata.package_no }}" id="package"
+                           name="package" disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               {% if userdata.doctor_ref_number  %}
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Referral No:</label>
+                     <div>
+                        <input  readonly type="text" value="{{ userdata.provider_id  }}" id="refNoInput"
+                           disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               {% endif %}
+               {% if request.user.role_id is 2 %}
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Provider Name:</label>
+                     <div>
+                        <input name="provider_name" readonly type="text" value="{{ provider.first_name }} {{ provider.last_name }}"
+                           id="provider_name" name="provider_name" disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Provider Referral ID:</label>
+                     <div>
+                        <input name="provider_id" readonly type="text" value="{{ provider.provider_ref }}"
+                           id="provider_id" name="provider_id" disabled="" class="form-control">
+                     </div>
+                  </div>
+               </div>
+               {% endif %}
+               {% if request.user.role_id is not 1 %}
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Phone:</label>
+                     <div >
+                        <input name="contact" value="{{ userdata.contact_no }}"
+                           id="contact_no">
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-8">
+                  <div class="patient_regist_form" style="text-align: right!important;margin-top: 50px;">
+                     <button type="button" data-toggle="modal" data-target="#changePassword" style="color:#F8FAF0;">Change Password</button>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <div class="provider_registeration patient_regist_form">
+                     <div class="clearfix"></div>
+                     <div class="row text-center">
+                        <div class="col-md-8 m-auto">
+                           <p>Tip: If taking photo with your webcam, move the license back and forth until the text
+                              comes into focus. Then click to take photo and crop to the license size.
+                           </p>
+                        </div>
+                     </div>
+                     <div class="row py-4 uploadedImages">
+                        <div class="col-sm-12 col-md-6 col-lg-3 my-3" >
+                           <div class="input-groups">
+                              <h5>Drivers License Front</h5>
+                              <div class="image_box position-relative">
+                                 <img  style="width: 100%;" src="{{userdata.driving_license_front_img}}" alt="Driving License Front" data-toggle="modal" data-target=".openImage">
+                                 <button class="edit_btn driver_front" type="button"><i class="fa fa-edit"></i></button>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3 my-3">
+                           <h5>Drivers License Back</h5>
+                           <div class="image_box position-relative">
+                              <img  style="width: 100%;" src="{{userdata.driving_license_back_img}}" alt="Driving License Back" data-toggle="modal" data-target=".openImage">
+                              <button class="edit_btn driver_back" type="button"><i class="fa fa-edit"></i></button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 hide_section" id="driverFront">
+                           <div class="input-groups">
+                              <span class="input-group-btn">
+                              <h5>Drivers License Front</h5>
+                              <input type="hidden" name="pid" value={{userdata.user_id}}>
+                              <div class="videoBox">
+                                 <!-- template.html -->
+                                 <!-- Add a button to trigger the image capture -->
+                                 <div class="d-flex flex-wrap flex-md-nowrap gap-15 align-items-center mb-3">
+                                    <div class="take_btn d-none">
+                                       <button class="showBox" id="capture-button-2" type="button">Start Camera</button>
+                                       <button class="clear" type="button" id="clear-btn-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                       <button type="button" class="turnCamera" id="switch-camera-2"><i class="fa fa-refresh"></i></button>
+                                       <button type="button" class="btn btn-primary openBox d-none" data-target=".modalOpen" data-toggle="modal" id="crop-2">Open Crop</button>
+                                    </div>
+                                    <div class="input-group">
+                                       <span class="input-group-btn">
+                                       <input type="hidden" required value="" class="requiredFiled hidden_required_3">
+                                       <input type="file" name="driving_license_front_img" accept="image/*"
+                                          id="driving_license_front_img" />
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="take-photo">
+                                    <!-- Add a video element to display the webcam video -->
+                                    <video class="showBox" id="capture-video-2" autoplay width="560" height="420" playsinline></video>
+                                    <!--                      &lt;!&ndash; Add a canvas element to capture the image &ndash;&gt;-->
+                                    <canvas class="showBox" id="capture-canvas-2" width="560" height="420"
+                                       style="display:none;"></canvas>
+                                    <div class="original_image">
+                                       <input type="hidden" id="hidden-image-2">
+                                    </div>
+                                    <div class="image_33">
+                                       <img class="imagecaptureBox"  id="captured-image-2">
+                                    </div>
+                                    <input type="hidden" class="captureImageUrl crop_hidden_2" name="front_image">
+                                    <!-- Add a div element to display the image file name -->
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 hide_section" id="driverBack">
+                           <h5>Drivers License Back</h5>
+                            <div class="videoBox">
+                                 <!-- template.html -->
+                                 <!-- Add a button to trigger the image capture -->
+                                 <div class="d-flex flex-wrap flex-md-nowrap gap-15 align-items-center mb-3">
+                                    <div class="take_btn d-none">
+                                       <button class="showBox" id="capture-button-3" type="button">Start Camera</button>
+                                       <button class="clear" type="button" id="clear-btn-3"><i class="fa fa-undo" aria-hidden="true"></i></button>
+                                       <button type="button" class="turnCamera" id="switch-camera-3"><i class="fa fa-refresh"></i></button>
+                                       <button type="button" class="btn btn-primary openBox d-none" data-target=".modalOpen" data-toggle="modal" id="crop-3">Open Crop</button>
+                                    </div>
+                                    <div class="input-group">
+                                       <span class="input-group-btn">
+                                       <input type="hidden" required value="" class="requiredFiled hidden_required_3">
+                                       <input type="file" name="driving_license_back_img" accept="image/png, image/jpeg" id="driving_license_back_img" />
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="take-photo">
+                                    <!-- Add a video element to display the webcam video -->
+                                    <video class="showBox" id="capture-video-3" autoplay width="560" height="420" playsinline></video>
+                                    <!--                      &lt;!&ndash; Add a canvas element to capture the image &ndash;&gt;-->
+                                    <canvas class="showBox" id="capture-canvas-3" width="560" height="420"
+                                       style="display:none;"></canvas>
+                                    <div class="original_image">
+                                       <input type="hidden" id="hidden-image-3">
+                                    </div>
+                                    <div class="image_33">
+                                       <img class="imagecaptureBox"  id="captured-image-3">
+                                    </div>
+                                    <input type="hidden" class="captureImageUrl crop_hidden_3" name="back_image">
+                                    <!-- Add a div element to display the image file name -->
+                                 </div>
+                              </div>
+                        </div>
+                        <div class="col-md-12 text-center d-none btns_action mt-4">
+                           <button type="button" class="cancelBtn">Cancel</button>
+                        </div>
+                        <div class="col-md-12 text-center mt-4" style="text-align: center!important;">
+                           <button class="" type="submit">Update Details</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+         </form>
+
+         </div>
+         </div>
+         </div>
+      </div>
+      {% endif %}
+   </div>
+   </div>
+   </div>
+
+   <!-- Modal -->
+<div class="modal fade confimPopup" id="changePassword" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<form method="post" action="/accounts/change_password/">
+   {% csrf_token %}
+   <div class="modal-dialog modal-dialog-centered" role="document">
+   <div class="modal-content p-3">
+      <div class="modal-header bg-white border-0 px-0 mb-3">
+         <h4 class="text-dark">Change Password.</h4>
+         <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body p-0">
+         <div class="row">
+            <div class="col-md-12">
+               <div class="form-group">
+                  <label>Password:</label>
+                  <div>
+                     <input  type="password" value="{{ loggedUser.passwordstr }}" id="password1"
+                        name="password1" class="form-control" required>
+                     <span toggle="#password-field" class="toggle-password" onclick="passeye()"><img
+                        src="/static/assets/images/3025-200.png" id="eye" style="z-index: 1;top: 4px;"></span>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-12">
+               <div class="form-group">
+                  <label>Confirm Password:</label>
+                  <div>
+                     <input type="password" value="{{ loggedUser.passwordstr }}" id="password2"
+                        name="password2" class="form-control" required>
+                     <p class="passwordError text-danger" style="display: none;">Password not match.
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="patient_regist_form modal-footer justify-content-center border-0 bg-white pb-3">
+         <button type="submit" class="btn cogniClor" id="submitDiaryForm" >Update</button>
+      </div>
+</form>
+</div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade modalOpen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+         <div class="modal-header bg-secondary">
+            <h5 class="modal-title" id="modalLabel">Cropper</h5>
+            <button type="button" class="bg-transparent close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div class="img-container">
+               <img id="image" src="" alt="Picture">
+            </div>
+         </div>
+         <div class="modal-footer bg-secondary justify-content-center">
+            <button type="button" class="btn btn-success" id="button" data-dismiss="modal">Crop</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+
+
+{% endblock %}
+{% block jqueryScript %}
+<script>
+   // password match
+   
+   jQuery('#password2').keyup(function(){
+       var pass1 = jQuery('#password1').val();
+       var pass2 = jQuery(this).val();
+       if(pass1 != pass2) {
+           jQuery('.passwordError').show();
+           jQuery('#submitDiaryForm').attr('type', 'button');
+       } else {
+           jQuery('.passwordError').hide();
+           jQuery('#submitDiaryForm').attr('type', 'submit');
+       }
+   })
+   
+   jQuery('.close').click(function(){
+       jQuery('.modal-backdrop.fade.in').remove();
+   })
+   
+   document.getElementById('contact_no').addEventListener('input', function (e) {
+     var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+     e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+   });
+   document.getElementById('fax_no').addEventListener('input', function (e) {
+     var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+     e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+   });
+   
+</script>
+<script type="text/javascript">
+   setTimeout(function(){
+      jQuery('.message > div').hide();
+   }, 3000)
+   
+   
+          const endpoint = '/api/patient_status/';
+   
+   
+          $("body").delegate(".switch-custom input","change",function () {
+              $(this).parent().parent().find(".activePatient").trigger("click");
+          });
+   
+   
+          $("body").delegate(".activePatient","click",function () {
+              var UserStatus = 1;
+              var activeThis = this;
+              var user_id = $(this).data("user");
+              if($(this).attr("data-active") == "True"){
+                      UserStatus = 0;
+                      $(activeThis).parent().find(".switch-custom input").prop('checked',false);
+                      //$(".switch-custom input").prop('checked',false)
+                  }
+              else{
+                  UserStatus = 1;
+                    $(activeThis).parent().find(".switch-custom input").prop('checked',true);
+                  //$(".switch-custom input").prop('checked',true)
+                  }
+              $.ajax({
+                  method: 'POST',
+                  data: {"user_id":user_id,'status_change': UserStatus},
+                  url: endpoint,
+                  success: function (response_data) {
+                      //alert(response_data.message);
+                      var response_data = response_data;
+                      if(response_data.success){
+                          if(UserStatus == 0){
+                              $(activeThis).html("Inactive");
+                              $(activeThis).addClass("Inactive");
+                              $(activeThis).removeClass("Active");
+                              $(activeThis).removeAttr("data-active");
+                              $(activeThis).attr("data-active","False");
+                          }else{
+                                $(activeThis).html("Active")
+                               $(activeThis).addClass("Active");
+                              $(activeThis).removeClass("Inactive");
+                              $(activeThis).removeAttr("data-active");
+                               $(activeThis).attr("data-active","True");
+                          }
+   
+                      }else{
+                          alert("Something Wrong")
+                      }
+   
+                  }
+              });
+          });
+          jQuery('.invoiceStatus').each(function(){
+          var statusText = jQuery(this).text();
+          //alert(statu)
+          // statusText = statusText.toLowerCase()
+          if(statusText == 'Paid') {
+          jQuery(this).removeClass('pending');
+          jQuery(this).removeClass('cancel');
+          jQuery(this).addClass('paid');
+          }
+          });
+   
+   
+          //new code shakaib
+   
+          function printcontent(el){
+   
+          var restorepage = document.body.innerHTML;
+          document.getElementById('cardfooterid').style = 'width: 100%;position: absolute;bottom: 0;';
+          var printcontent = document.getElementById(el).innerHTML;
+          document.body.innerHTML = printcontent;
+          window.print();
+          document.body.innerHTML = restorepage;
+          //document.getElementById('cardfooterid').style = 'width: 100%;position: relative;bottom: 0;';
+   
+      }
+   
+   
+      
+</script>
+<script>
+    function closeWebCamera() {
+  if (videoStream) {
+    videoStream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    console.log("Web camera closed successfully!");
+  }
+}
+
+    function captureImage(captureButtonId, captureVideoId, captureCanvasId, capturedImageId, imageNameInputId, switchButtonId, clearButtonId, hiddenImageId, cropBoxId) {
+      // The JavaScript for the page
+      const captureButton = document.getElementById(captureButtonId);
+      const captureVideo = document.getElementById(captureVideoId);
+      const captureCanvas = document.getElementById(captureCanvasId);
+      const capturedImage = document.getElementById(capturedImageId);
+      const imageNameDiv = document.getElementById(imageNameInputId);
+      const switchButton = document.getElementById(switchButtonId);
+      const clearButton = document.getElementById(clearButtonId);
+      const hiddenImage = document.getElementById(hiddenImageId);
+      const cropBox = document.getElementById(cropBoxId);
+let videoStream;
+  // Set up the click event for the capture button
+  clearButton.addEventListener('click', function () {
+    captureVideo.srcObject = null;
+    videoStream = null;
+
+    // Call getUserMedia with the updated facingMode constraint
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+      .then(function (stream) {
+        videoStream = stream;
+        captureVideo.srcObject = stream;
+      })
+      .catch(function (error) {
+        console.error('Error accessing the webcam:', error);
+      });
+    });
+
+
+      // Set up the click event for the capture button
+      captureButton.addEventListener('click', function () {
+        // Start the video stream if it has not been started yet
+          clearButton.style.display = 'none';
+          switchButton.style.display = 'block';
+          captureVideo.style.display = 'block';
+        if (!videoStream) {
+          navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+            .then(function (stream) {
+              videoStream = stream;
+              captureVideo.srcObject = stream;
+            })
+            .catch(function (error) {
+              console.error('Error accessing the webcam:', error);
+            });
+            clearButton.style.display = 'none';
+            switchButton.style.display = 'block';
+        }
+
+
+        // Start the video
+        captureVideo.play();
+
+        // Draw the video frame to the canvas
+        captureCanvas.getContext('2d').drawImage(captureVideo, 0, 0, captureCanvas.width, captureCanvas.height);
+
+        // Generate a unique file name for the captured image
+        // const imageName = 'captured-image-' + Date.now() + '.jpg';
+
+        // document.getElementById(imageNameInputId).value = imageName;
+
+        // // Set the file name as the text of the image name div
+        // imageNameDiv.innerText = imageName;
+
+        // Set the captured image as the src of the captured image img
+       // capturedImage.width = captureCanvas.width;
+       // capturedImage.height = captureCanvas.height;
+
+        capturedImage.src = captureCanvas.toDataURL('image/jpg');
+        hiddenImage.value = capturedImage.src;
+        localStorage.setItem('image', capturedImage.src);
+
+        captureVideo.pause();
+        videoStream.getTracks().forEach(function (track) {
+          captureButton.style.display = 'none';
+          clearButton.style.display = 'block';
+          switchButton.style.display = 'none';
+          captureVideo.style.display = 'none';
+          cropBox.classList.remove('d-none');
+          track.stop(); });
+
+
+        // Remove the click event for the capture button to prevent further captures
+        captureButton.removeEventListener('click', this);
+      });
+
+      // Set up the click event for the switch camera button
+      switchButton.addEventListener('click', function () {
+        // Stop the current video stream
+        videoStream.getTracks().forEach(function (track) {
+          track.stop();
+        });
+
+        // Switch the camera by changing the video constraints
+        const videoConstraints = captureVideo.srcObject.getVideoTracks()[0].getConstraints();
+        console.log(videoConstraints);
+        if (videoConstraints.facingMode === 'user') {
+          videoConstraints.facingMode = 'environment';
+        } else {
+          videoConstraints.facingMode = 'user';
+        }
+
+        console.log(videoConstraints);
+
+        // Restart the video stream with the new constraints
+        navigator.mediaDevices.getUserMedia({ video: videoConstraints})
+          .then(function (stream) {
+            videoStream = stream;
+            captureVideo.srcObject = stream;
+          })
+          .catch(function (error) {
+            console.error('Error accessing the webcam:', error);
+          });
+      });
+
+      clearButton.addEventListener('click', function() {
+        clearButton.style.display = 'none';
+        switchButton.style.display = 'block';
+      });
+
+    }
+
+
+  // Set up the capture image function for the first instance
+  captureImage('capture-button-2', 'capture-video-2', 'capture-canvas-2', 'captured-image-2', 'image-name-input-2', 'switch-camera-2', 'clear-btn-2', 'hidden-image-2', 'crop-2');
+  captureImage('capture-button-3', 'capture-video-3', 'capture-canvas-3', 'captured-image-3', 'image-name-input-3', 'switch-camera-3', 'clear-btn-3', 'hidden-image-3', 'crop-3');
+
+     window.addEventListener('DOMContentLoaded', function () {
+      var image = document.getElementById('image');
+      var cropper;
+      var result = document.getElementById('result');
+       var button = document.getElementById('button');
+
+      $('.modalOpen').on('shown.bs.modal', function () {
+        cropper = new Cropper(image, {
+          autoCropArea: .5,
+        });
+      }).on('hidden.bs.modal', function () {
+        cropper.destroy();
+      });
+
+       button.onclick = function () {
+        const croppedCanvas = cropper.getCroppedCanvas();
+        const imageUrl = croppedCanvas.toDataURL();
+        jQuery('.activeCrop .imagecaptureBox').attr('src', imageUrl);
+        jQuery('.activeCrop .captureImageUrl').val(imageUrl);
+        jQuery('.modal-backdrop').remove();
+
+      };
+    });
+
+
+    jQuery('.openBox').click(function(){
+    jQuery('.videoBox').removeClass('activeCrop');
+    jQuery(this).parents('.videoBox').addClass('activeCrop')
+    let originalImage = jQuery(this).parents('.videoBox').find('.original_image input').val();
+    jQuery('#image').attr('src', originalImage);
+
+})
+
+
+     jQuery('input[type="file"]').change(function (event) {
+     var files = jQuery(this)[0].files;
+     for (var i = 0; i < files.length; i++) {
+       var file = files[i];
+   
+       // Check file type
+       if (!file.type.includes('image/')) {
+         alert('Please select only image files.');
+         jQuery(this).val('');
+       } else {
+         var reader = new FileReader();
+         reader.onload = function (e) {
+           var dataURL = e.target.result;
+   
+           jQuery(this).parents('.videoBox').find('video').hide();
+           jQuery(this).parents('.videoBox').find('.turnCamera').hide();
+           jQuery(this).parents('.videoBox').find('.clear').show();
+           jQuery(this).parents('.videoBox').find('.openBox').removeClass('d-none');
+           jQuery(this).parents('.videoBox').find('.showBox').hide();
+           // Perform actions with the data URL
+           jQuery(this).parents('.videoBox').find('.imagecaptureBox').attr('src', dataURL);
+           jQuery(this).parents('.videoBox').find('.captureImageUrl').val(dataURL);
+           jQuery(this).parents('.videoBox').find('.original_image input').val(dataURL);
+           jQuery(this).parents('.videoBox').find('.input-group-btn > input.requiredFiled').val(dataURL);
+         }.bind(this);
+         reader.readAsDataURL(file);
+       }
+     }
+   });
+   
+     jQuery('.clear').click(function () {
+       jQuery(this).parents('.take_btn').find('.showBox').show();
+       jQuery(this).parents('.videoBox').find('.openBox').addClass('d-none');
+       jQuery(this).parents('.videoBox').find('video').show();
+       jQuery(this).parents('.videoBox').find('input[type="file"]').val('');
+       jQuery(this).parents('.videoBox').find('.imagecaptureBox').removeAttr('src');
+     });
+   
+     jQuery('.showBox').click(function () {
+       jQuery(this).text('Take Photo');
+     });
+   
+   
+     jQuery('.validation_Check').click(function () {
+         jQuery('.captureImageUrl').each(function(){
+           var getValue = jQuery(this).val();
+           var storeValue = jQuery(this).parents('.videoBox').find('.imagecaptureBox').attr('src');
+           if(getValue == '') {
+               jQuery(this).val(storeValue);
+               }
+       });
+         
+       var required_1 = jQuery('.crop_hidden_1').val();
+       var required_2 = jQuery('.crop_hidden_2').val();
+       var required_3 = jQuery('.crop_hidden_3').val();
+       var required_4 = jQuery('.crop_hidden_4').val();
+       if (required_1 != '' && required_2 != '' && required_3 != '' && required_4 != '') {
+         jQuery('.submitForm').trigger('click');
+       } else {
+         alert('Upload Fields are required.')
+       }
+     });
+   
+   
+     jQuery('.close').click(function () {
+       jQuery('.modal-backdrop').remove();
+     })
+   
+   
+     $(document).ready(function () {
+       webcam_check_func();
+     });
+   
+     function webcam_check_func() {
+       var hasWebcam = false;
+       var device = [];
+       if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+   
+         navigator.enumerateDevices = function (callback) {
+           navigator.mediaDevices.enumerateDevices().then(callback);
+         };
+         navigator.enumerateDevices(function (devices) {
+           devices.forEach(function (my_device) {
+   
+             if (my_device.kind === 'videoinput') {
+               // debugger;
+               hasWebcam = true;
+             }
+           }
+           );
+           //alert("Has Web Camera -->" + hasWebcam);
+           jQuery('.take_btn').removeClass('d-none');
+         });
+       }
+   
+     }
+
+
+         jQuery('.close').click(function(){
+          jQuery('.modal-backdrop.fade.in').remove();
+      })
+   
+   
+   
+   
+jQuery('.take_btn .showBox').click(function(){
+   let video_Url = jQuery(this).parents('.videoBox').find('.original_image input').val();
+    jQuery(this).parents('.videoBox').find('.captureImageUrl').val(video_Url);
+});
+
+   
+   jQuery('.driver_front').click(function(){
+   // stopCam();
+   jQuery('#driverFront').show();
+   });
+   
+   jQuery('.driver_back').click(function(){
+   // stopCam();
+   jQuery('#driverBack').show();
+   });
+   
+   
+   
+   
+</script>
+
+{% endblock %}

@@ -1,0 +1,1486 @@
+{% extends "base_login.html" %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    /* Style the Image Used to Trigger the Modal */
+#myImg, #myImg1 {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#myImg:hover, #myImg:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content, .modal-content1 {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+#caption, #caption1 {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+/* Add Animation - Zoom in the Modal */
+.modal-content, #caption, #caption1 {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+.modal-content1, #caption1 {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+.space_15{
+    padding: 15px 0;
+}
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+.close, .close1 {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus,.close1:hover,
+.close1:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content, .modal-content1 {
+    width: 100%;
+  }
+}
+</style>
+    <style>
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+    </style>
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .days-menu ul li a button.green {
+            background: #00a115;
+        }
+
+        .days-menu ul li a button.red {
+            background: #eb0606;
+        }
+        .paid {
+        color: green;
+        }
+        .pending {
+        color : orange;
+        }
+        .cancel {
+        color: red;
+        }
+        .invoiceStaus {
+        border-radius: 50px;
+        }
+
+
+.invoiceTable {
+  text-align: center;
+}
+
+.invoiceTable td a {
+  text-align: center;
+  background-color: #3e3e3e;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 50px;
+}
+
+.img-circle {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+.form-group {
+    position: relative;
+}
+
+ .searchBtn {
+    position: absolute;
+    right: 3px;
+    border-radius: 80px;
+    top: 3px;
+    width: 39px;
+    height: 39px;
+    background-color: #00a115;
+    outline: none;
+    border: 1px solid;
+}
+
+.form-group input {
+    padding: 11px 14px;
+    border-radius: 50px;
+    outline: none;
+}
+
+.notes {
+    background-attachment: local;
+    background-image:
+        linear-gradient(to right, white 10px, transparent 10px),
+        linear-gradient(to left, white 10px, transparent 10px),
+        repeating-linear-gradient(#2d2d82, white 2px, white 30px, white 31px, white 31px);
+    line-height: 31px;
+    padding: 8px 10px;
+    border: none;
+    margin-top:30px;
+}
+
+@media print{
+
+    body header, body footer, .bold_heading, .tab-list, .printBtn, .notshow { display: none; }
+    #doctorcard-container { display: block !important; }
+    img#cardfooterid {
+    position: fixed !important;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+    div#doctorcard-container > div > hr:first-child {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+    textarea#hello {
+    height: 450px;
+}
+}
+    p a.backHome {
+    border: 1px solid #5966c1;
+    color: #2238a5;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+
+.bg-theme-primary {
+    background-color: #200b94;
+    color: #fff;
+    border: 1px solid #fff0;
+    font-size: 16px;
+    padding: 8px;
+}
+
+.bg-theme-primary:hover {
+    border: 1px solid #200b94;
+    background-color: #fff;
+    color: #200b94;
+}
+
+/* .modal-backdrop.fade.in {
+    opacity: 1;
+} */
+
+.modal.fade.in {
+    opacity: 1 !important;
+    display: block !important;
+    z-index: 9999;
+}
+
+.modal-backdrop.fade.in:not(:last-child) {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden;
+}
+
+
+button.close {
+    color: #000;
+    z-index: 9999;
+}
+
+button.close:hover {
+    background-color: transparent;
+}
+
+.modal-body .form-group input {
+    padding: 11px 14px;
+    border-radius: 10px;
+    outline: none;
+    position: relative;
+    width: auto;
+}
+.activema.Active {
+    color: green !important;
+    font-weight: bold;
+}
+.activema.Inactive {
+    color: red !important;
+    font-weight: bold;
+}
+
+textarea {
+  resize: none !important;
+  overflow: hidden;
+  height: 165px;
+}
+
+.card-image {
+    margin-left: 30px;
+}
+    </style>
+
+
+
+
+
+
+     <section class="forward_sec py-5 dashboard_provider_page">
+        <div class="container">
+            <div class="row">
+                <div class="bold_heading">
+                    <h2 class="text-center mb-0 p-0 defaultHead">Provider Dashboard</h2>
+                </div>
+            </div>
+                 {% if access < 4 %}
+                <div class="row" style="display: flow-root;margin-top: 30px;">
+
+                   <p style="text-align:center !important;">Thank you for your patience.<br><br>Your license information is being verified.<br>You will receive an email by the next business day.</p>
+
+                    <p  class="space_15" style="text-align:center !important;"><a href="/accounts/pro_logout/"  class="backHome">Please click here to logout</a></p>
+                    <p style="text-align:center !important;">Login again when you receive your verification email.</p>
+                    <br>
+                    <br>
+                </div>
+                {% endif %}
+                {% if access == 4 %}
+                <div class="d-flex justify-content-between w-100 align-items-center mt-4">
+                    <div class="tab-list">
+                        <ul class="pt-0 nav nav-tabs">
+                     <li class="active" style=""><a data-toggle="tab" href="#menu1">Patients Details</a>
+                    </li>
+
+
+                            <li class="" style=""><a data-toggle="tab" href="#home4">Patient Instructions</a>
+                    </li>
+                              <li class="" style=""><a data-toggle="tab" href="#menu2">MA / PROVIDER Record</a>
+                    </li>
+                            <li class="" style=""><a data-toggle="tab" href="#menu3">Colleague Dashboard</a>
+                    </li>
+
+                    </ul>
+                    
+                    </div>
+                    <div class="ma_btns d-flex gap-15">
+                         <div class="maBtn notshow">
+<!--                        <button type="button" class="btn bg-theme-primary" onclick="window.open('{% static "assets/images/CogniSleep_Patient_Handbook.pdf" %}'); return true;">Patient's Handbook</button>-->
+                        </div>
+                             <div class="maBtn notshow">
+                                  <button type="buton" class="btn bg-theme-primary resetFileds" data-toggle="modal" data-target="#invite">Invite MA/Provider</button>
+                             </div>
+                    </div>
+
+
+                </div>
+                <div class="tab-content provider-dashboard-patients">
+                    <div id="home" class="dashboard_form tab-pane fade ">
+                        <form method="POST" action="/accounts/change_password/">
+                            {% csrf_token %}
+                            <div class="col-md-12">
+                                <h1 style="text-align: center;" class="font-weight-bold h4">Account Details</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="text-center mb-2">
+            <!--{{ userdata.provider_image }}-->
+            <img class="avatar img-circle" src="{{ userdata.provider_image }}" data-original="{{ userdata.provider_image }}" class="img-responsive img-thumbnail" />
+
+        </div>
+        <h1 class="text-center mb-1 h3">Welcome to CogniSleep !</h1>
+        <p class="text-center " style="font-size: 25px;">Hi {{ userdata.first_name }} {{ userdata.last_name }}</p>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-4">
+            <div class="form-group">
+            <label class="control-label">Referral ID:</label>
+                <input type="text" readonly value="{{ userdata.provider_ref }}" id="ref_id" name="ref_id" disabled=""
+                       class="form-control">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+         <label class="control-label">First name:</label>
+        <input type="text" readonly value="{{ userdata.first_name }}" disabled="" class="form-control">
+        </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Last name:</label>
+                <div>
+                    <input type="text" readonly value="{{ userdata.last_name }}" disabled="" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Email:</label>
+                <div>
+                    <input type="text" readonly value="{{ user.get_username }}" id="email" name="email"
+                           disabled="" class="form-control">
+                </div>
+            </div>
+        </div>
+         <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Username:</label>
+                <div>
+                    <input type="text" readonly value="{{ userdata.first_name }} {{ userdata.last_name }}"
+                           id="name" name="name" disabled="" class="form-control">
+                </div>
+            </div>
+        </div>
+         <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Phone:</label>
+                <div>
+                    <input readonly type="text" value="{{ userdata.contact_no }}"
+                           id="contact_no" name="contact_no" disabled="" class="form-control">
+                </div>
+            </div>
+         </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Change Password:</label>
+                <div>
+                    <!-- pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$" -->
+                    <input type="password" value="" id="password1" placeholder="Enter New Password"
+                           name="password1" class="form-control">
+                    <span toggle="#password-field" class="toggle-password" onclick="passeye()"><img
+                            src="/static/assets/images/3025-200.png" id="eye" style="z-index: 1;top: 4px;"></span>
+                </div>
+            </div>
+             <div class="form-group">
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">Confirm Password:</label>
+                <div>
+                    <!-- pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,15}$" -->
+                    <input  type="password" value="" id="password2" placeholder="Re-Enter Password"
+                           name="password2" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+               <label class="control-label"></label>
+               <div>
+                   <div class="create_account_button">
+                       <button class="" type="submit">Update</button>
+                       <a class="" href="#">Cancel</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div class="col-md-4">
+           <div class="form-group">
+               <label class="control-label">license:</label>
+               <div>
+                   <input name="license_state" type="text" readonly value="{{ userdata.license_state }}">
+               </div>
+           </div>
+       </div>
+       <div class="col-md-4">
+           <div class="form-group">
+               <label class="control-label">Type of Practice:</label>
+               <div>
+                   <input name="practice_name" type="text" readonly value="{{ userdata.practice_name }}">
+               </div>
+           </div>
+       </div>
+       <div class="col-md-4">
+            <div class="form-group">
+               <label class="control-label">Facility Name:</label>
+               <div>
+                   <input name="practice_name" type="text" readonly value="{{ userdata.practice_name }}">
+               </div>
+           </div>
+       </div>
+       <div class="col-md-4">
+           <div class="form-group">
+               <label class="control-label">Tel Number:</label>
+               <div>
+                   <input name="practice_phone_number" type="text" readonly
+                          value="{{ userdata.practice_phone_number }}">
+               </div>
+           </div>
+       </div>
+       <div class="col-md-4">
+           <div class="form-group">
+               <label class="control-label">Facility Address:</label>
+               <div>
+                   <input name="practice_address" type="text" readonly
+                          value="{{ userdata.practice_address }}">
+               </div>
+           </div>
+       </div>
+       <div class="col-md-4">
+           <div class="form-group">
+               <label class="control-label">Fax:</label>
+               <div>
+                   <input name="fax_no" type="text" readonly value="{{ userdata.fax_no }}">
+               </div>
+           </div>
+       </div>
+    </div>
+</div>
+                                </div>
+                        </form>
+                    </div>
+                    <div id="home2" class="table_mode tab-pane fade">
+                        <div class="row justify-content-between align-items-center my-4">
+                            <div class="col-md-6">
+                                <div class="title-box">
+                                     <h2 class="mb-0 text-dark p-0">Your Subscription:</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-md-flex justify-content-end">
+                                {% if status == "Active" %}
+                                <div class="status">
+                                    <h5><i class="fa fa-check-circle text-success pr-2" aria-hidden="true"></i>Active</h5>
+                                </div>
+<!--                                pending-->
+                                {% else %}
+                                <div class="pending-status">
+                                    <h5><i class="fa fa-exclamation-circle text-warning pr-2" aria-hidden="true"></i>Pending</h5>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-center py-4">
+                             <div class="col-md-5">
+                                  <div class="package-box">
+                                                      <div class="package-header">
+                                                          <div class="package-name">
+                                                               <h2 class="mb-0">{{ product.name }}</h2>
+                                                          </div>
+                                                          <div class="price-box">
+                                                              <h2 class="mb-0"><sup>$</sup>{{ price }} / Mo</h2>
+                                                          </div>
+                                                      </div>
+                                                      <div class="package-body">
+                                                          <div class="package-content">
+                                                              <p class="pkgDetails">{{ product.description }}</p>
+                                                              {% if product.name == "Basic Package" %}
+                                                              <ul>
+                                                                  <li>Patient can be tracked</li>
+                                                                  <li>Analyze daily and weekly sleep patterns<span> Yes</span></li>
+                                                                  <li>Find out when the patient is having sleep issues<span> Yes</span></li>
+                                                                  <li>Problem area are highlighted with alert<span> Yes</span></li>
+                                                                  <li>Free Trial Period<span> 1 Month</span></li>
+                                                                  <li>Minimum Subscription Limit<span> 1 Month</span></li>
+                                                              </ul>
+                                                              {% else %}
+                                                                  <ul>
+                                                                      <li>Patient can be tracked</li>
+                                                                      <li>Analyze daily and weekly sleep patterns<span> Yes</span></li>
+                                                                      <li>Find out when the patient is having sleep issues<span> Yes</span></li>
+                                                                      <li>Problem area are highlighted with alert<span> Yes</span></li>
+                                                                      <li>Free Trial Period<span> 15 Days</span></li>
+                                                                      <li>Minimum Subscription Limit<span> 1 Month</span></li>
+                                                                  </ul>
+                                                              {% endif %}
+                                                          </div>
+                                                      </div>
+                                                      <div class="package-footer">
+                                                         <!-- {% if status == "Active" %}
+                                                          <a href="/payments/cancel_request" class="btn btn-primary cancel-subscription border-danger text-danger button">Request Cancel Subscription</a>
+                                                          {% else %}
+                                                          <a href="/payments/cancel_pending_request" class="btn btn-primary cancel-subscription border-danger text-danger button">Cancel Pending Request</a>
+                                                            {% endif %}-->
+                                                          <!--                                                          <div class="pendingBox">-->
+<!--                                                              <h6 class="mb-0 text-warning">Your cancel request is pending.</h6>-->
+<!--                                                          </div>-->
+                                                          <!--
+  <button type="submit"  class="btn btn-primary cancel-subscription border-danger text-danger" id="submitBtn2">Cancel Subscription</button>-->
+                                                      </div>
+                                                  </div>
+                                 <div class="mt-4 success-message text-center">
+                                     <!--<p class="text-success text-capitalize">Your Subscription Cancel request has been sent successfully.</p>-->
+                                 </div>
+                                 {% if status == "" %}
+                                 <div class="noSubscription text-center">
+                                     <h5>You don't have any subscription.</h5>
+                                 </div>
+                                 {% endif %}
+                                    </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--------------------------------------------------------------------->
+                    <div id="menu1" class="table_mode tab-pane fade active in">
+
+                         <div class="align-items-center d-flex flex-wrap gap-15 justify-content-end mb-2 search-box" >
+
+                        <form method="POST" action="/dashboard/">
+                            {% csrf_token %}
+                        <div class="form-group mb-0">
+
+
+                            <input type="text" class="form-controls" placeholder="Patient Search" id="mysearch" name="mysearch" value="{{ mysearch }}">
+                            <button class="searchBtn"><i class="fa fa-search"></i></button>
+
+
+                        </div>
+                            </form>
+                    </div>
+                        <div class="table-responsive" id="provider-table">
+                            {% if user_ref_data_array %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient ID</th>
+                                        <!-- <th>Referral Id</th> -->
+                                        <th>Patient First Name</th>
+                                        <th>Patient Last Name</th>
+                                        <th>View License</th>
+                                        <th>Status</th>
+                                        <th>View Patient</th>
+
+
+                                    </tr>
+
+                                        {% for ref in user_ref_data_array %}
+                                            <tr>
+                                                <td>{{ ref.user_id }}</td>
+                                                <!-- <td>{{ ref.doctor_ref_number }}</td> -->
+                                                <td>{{ ref.first_name }}</td>
+                                                <td>{{ ref.last_name }}</td>
+                                                <td class="front" hidden>{{ ref.driving_license_front_img }}</td>
+                                                <td class="back" hidden>{{ ref.driving_license_back_img }}</td>
+                                                <td>
+                                                    {% if ref.driving_license_front_img %}
+
+                                                    <a class="userData"  style="color:#00a115;"><img id="myImg" src="{{ ref.driving_license_front_img }}" alt="Front license" style="height:20px;width:20px;"> Front</a>
+                                                    <a class="userPrice" style="color:#007bff;"><img id="myImg1" src="{{ ref.driving_license_back_img }}" alt="Back license" style="height:20px;width:20px;"> Back</a>
+
+                                                    {% else %}
+                                                    Not Available
+                                                    {% endif %}
+                                                 </td>
+                                                <td>
+                                                    <label class="switch-custom">
+                                                  <input type="checkbox" {% if ref.user.active_patient is True %} checked  {% endif %}>
+                                                  <span class="slider-custom round"></span>
+                                                </label>
+                                                    <a href="javascript:void(0)" class="activePatient {% if ref.user.active_patient is True %} Active {% else %} Inactive {% endif %}" data-user="{{ref.user.id}}" data-active="{{ ref.user.active_patient}}">{% if ref.user.active_patient is True %} Active {% else %} Inactive {% endif %} </a>
+                                                </td>
+                                                <td style="text-align: center;"><a href="/dashboard/patient/view-diary/0/{{ref.user.id}}" title="View Patient"><i style="color: #200b94;font-size: 21px;" class="fa fa-user"></i></a></td>
+                                            </tr>
+                                        {%  endfor %}
+
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient ID</th>
+                                        <!-- <th>Referral Id</th> -->
+                                        <th>Patient First Name</th>
+                                        <th>Patient Last Name</th>
+                                        <th>View License</th>
+                                        <th>Status</th>
+                                        <th>View Patient</th>
+
+
+                                    </tr>
+                                    </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                                    <div style="text-align: center;margin-top: 100px;">
+
+                                                    <p>Your Patients will appear here when they register.</p>
+
+                                    </div>
+
+
+                                    {% endif %}
+                            <div class="maBtn mt-5 text-center">
+                                <a data-toggle="tab" class="btn bg-theme-primary" href="#home4">Print out the Patient Instructions</a>
+<!--                                <a  href="#home4"> <button type="button" class="btn bg-theme-primary">Print out the Patient Instructions</button></a>-->
+                        </div>
+                            {% if total_record < 4 %}
+                            <p>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                            </p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div id="menu2" class="table_mode tab-pane fade">
+
+
+                        <div class="table-responsive" id="provider-table">
+                            {% if malist %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <!-- <th>Referral Id</th> -->
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Status</th>
+                                         <th>Type</th>
+
+
+                                    </tr>
+
+                                        {% for ref in ma_list %}
+
+                                                <tr>
+                                               <td id="main_id" hidden>{{ref.main_provider_id}}</td>
+                                                <td>{{ ref.provider_id }}</td>
+                                                <!-- <td>{{ ref.doctor_ref_number }}</td> -->
+                                                <td>{{ ref.provider_fname }}</td>
+                                                <td>{{ ref.provider_lname }}</td>
+
+
+                                                <td>
+                                                    <label class="switch-custom">
+                                                  <input type="checkbox" {% if ref.provider_status is True %} checked  {% endif %}>
+                                                  <span class="slider-custom round"></span>
+                                                </label>
+                                                    <a href="javascript:void(0)" class="activema {% if ref.provider_status is True %} Active {% else %} Inactive {% endif %}" data-user="{{ref.provider_id}}" data-active="{{ ref.provider_status}}">{% if ref.provider_status is True %} Active {% else %} Inactive {% endif %} </a>
+                                                </td>
+                                                <td>{{ ref.type }}</td>
+                                            </tr>
+                                        {%  endfor %}
+
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient ID</th>
+                                        <!-- <th>Referral Id</th> -->
+                                        <th>Patient First Name</th>
+                                        <th>Patient Last Name</th>
+                                        <th>View License</th>
+                                        <th>Status</th>
+                                        <th>View Patient</th>
+
+
+                                    </tr>
+                                    </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                                    <div style="text-align: center;margin-top: 100px;">
+
+                                                    <p>Your Ma / Provider will appear here when they register.</p>
+
+                                    </div>
+                                    {% endif %}
+                            {% if total_record < 4 %}
+                            <p>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                            </p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                     <div id="menu3" class="table_mode tab-pane fade">
+
+
+                        <div class="container">
+            <div class="row">
+
+                <div class="col-md-3 order-md-2 order-3">
+                    <div class="form-group">
+                        <label for="providerList">Select Provider</label>
+                        <select class="form-control" id="mySelect">
+                            <option value="" >Select Provider</option>
+                            {% for ma in provider_list %}
+                            <option value="{{ma.provider_id}}" data-refferal="{{ma.provider_ref}}">{{ma.provider_name}}</option>
+                            {% endfor %}
+
+                        </select>
+                      </div>
+                </div>
+                <div class="col-md-6 order-md-3 order-2">
+                    <div class="form-group">
+                        <p style="text-align: center; padding-top: 28px; font-size: 35px;">Patient Details</p>
+                      </div>
+                </div>
+                <div  class="col-md-3 order-md-4 order-4">
+                    <div class="form-group">
+                        <label for="providerList">Refferal ID</label>
+                        <input  id="refferal_id" type="text" value="" readonly class="bg-light f-18 rounded-0 text-success w-100">
+                      </div>
+                </div>
+                <div class="col-md-12 order-md-5 order-5">
+                    <div class="table-responsive" id="provider-table">
+
+                        <table class="table" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Patient First Name</th>
+                                        <th>Patient Last Name</th>
+                                        <th>View License</th>
+                                        <th>Status</th>
+                                        <th>View Patient</th>
+
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+                    </div>
+                    <div id="myModal" class="modal">
+
+                          <!-- The Close Button -->
+                          <span class="close">&times;</span>
+
+                          <!-- Modal Content (The Image) -->
+                          <img class="modal-content" id="img01">
+
+                          <!-- Modal Caption (Image Text) -->
+                          <div id="caption"></div>
+                    </div>
+                    <div id="myModal1" class="modal">
+
+                          <!-- The Close Button -->
+                          <span class="close1">&times;</span>
+
+                          <!-- Modal Content (The Image) -->
+                          <img class="modal-content1" id="img02">
+
+                          <!-- Modal Caption (Image Text) -->
+                          <div id="caption1"></div>
+                    </div>
+
+                    <!---------------------------------------------------------------------------------------->
+                         <!--------------------------------------------------------------------->
+                    <div id="home3" class="table_mode tab-pane fade">
+                        <div class="table-responsive" id="provider-table">
+                            <table class="table invoiceTable text-capitalize">
+                                <thead>
+                                    <tr>
+                                        <th>S.no</th>
+                                        <th>Invoice Date</th>
+                                        <!-- <th>Referral Id</th> -->
+                                        <th>Invoice Status</th>
+                                        <th>Invoice</th>
+
+
+
+                                    </tr>
+                                        {% for item in invoice %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <!-- <td>{{ ref.doctor_ref_number }}</td> -->
+                                                <td>{{ item.invoice_date }}</td>
+                                                <td> <span class="invoiceStatus">
+                                                    {{ item.invoice_status }}
+                                                </span> </td>
+<!--{{ item.invoice_url }}-->
+                                               <td> <a href="/payments/report/{{ item.invoice_id }}">View Invoice</a></td>
+                                            </tr>
+                                        {%  endfor %}
+                                </thead>
+                                <tbody>
+
+
+                                </tbody>
+                            </table>
+                            {% if total_invoice < 4 %}
+                            <p>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+
+
+                        <div id="home4" class="table_mode tab-pane fade">
+      <div class="container" id="doctorcard-container">
+           <div class="notshow">
+                        <h6 align="center">
+                            Tip: Scroll down to add additional notes (optional). This print to provide a copy of the instructions to your patients.
+                        </h6>
+                    </div>
+ <div style="text-align:center;">
+                <hr style="height:30px; background-color: darkblue;">
+                <img src="{% static "assets/images/logo-1.svg" %}" data-original="{% static "assets/images/logo-1.svg" %}" data-fixed="{% static "assets/images/logo-trimmed.png" %}" alt="" style="width: 35%;">
+                <hr style="background-color: darkblue; height:3px">
+            </div>
+            <div class="row align-items-md-center pb-4 mb-4">
+
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="text-blue">Doctor Name: </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-blue text-secondary">{{ userdata.first_name }} {{ userdata.last_name }} </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="text-blue">Referral ID: </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-blue text-secondary">{{ userdata.provider_ref }} </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="text-blue">Referral Contact: </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-blue text-secondary">{{ userdata.contact_no }} </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="text-blue">Medical Practice: </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-blue text-secondary">{{ userdata.practice_name }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="text-blue">Address: </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-blue text-secondary" >{{ userdata.practice_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-image">
+                        <img src="{{ userdata.provider_image }}" class="mw-100" alt="" draggable="false">
+                    </div>
+                </div>
+                <hr style="background-color: darkblue; height:3px">
+            </div>
+
+            {% comment %} instruction section  {% endcomment %}
+
+           <div class="row ">
+                <div class="col-md-12">
+                    <h4 class="head-blue">Instructions:</h4>
+                    <ul class="instruction_points">
+                        <li>Visit <a href="#">Cognisleep.com</a> and register as a patient.
+                        </li>
+                        <li>Use the referral ID <b>{{ userdata.provider_ref }}</b> to find our Medical Practice.</li>
+                        <li>You can start the program once you have registered.
+                        </li>
+                        <li>We will see you on your next visit to discuss your progress.</li>
+                    </ul>
+                </div>
+           </div>
+
+           {% comment %} Additional Info  {% endcomment %}
+
+           <div class="row border-bottom pb-4 mb-4">
+                <div class="col-md-12">
+                    <div class="row>"> <h4 class="head-blue" >Additional Notes: </h4>
+                    <textarea id="hello" class="notes" wrap="hard" rows="5" style="width:100%; overflow:hidden; resize:none;" maxlength="590"></textarea>
+                </div>
+               <img id="cardfooterid" src="{% static "assets/images/card_bottom.jpg" %}" data-original="{% static "assets/images/card_bottom.jpg" %}" data-fixed="{% static "assets/images/logo-trimmed.png" %}" alt="" style="width: 100%;
+                position: relative; bottom: 0;">
+           </div>
+        </div>
+
+                  {% comment %} buttons  {% endcomment %}
+                  <div class="row printBtn">
+                   <div class="col-md-12 text-center">
+                        <button onclick="window.print()"; value="print a div!" class="btn btn-lg" style="background-color: #00a115; color: white !important;">PRINT</button>
+                    </div>
+                </div>
+                        </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        </div>
+         {% endif %}
+    </section>
+
+
+    <div class="modal fade" id="invite" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content p-3">
+            <div class="modal-headers">
+              <h5 class="modal-title" id="exampleModalLabel">Invite MA / Provider</h5>
+              <button type="button" class="close closebtn" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="email" class="col-form-label">Email:</label>
+                  <input type="Email" class="form-control w-100" placeholder="Enter Email" id="email" name="newemail">
+                </div>
+                <div class="form-group">
+                  <label for="message-text" class="col-form-label">Select Option:</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" id="ma" value="ma">
+                    <label class="form-check-label" for="ma">
+                      MA
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" id="provider" value="provider">
+                    <label class="form-check-label" for="provider">
+                      Provider
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footers text-center">
+              <button type="button" class="btn btn-secondary closebtn" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary sendDetails">Send</button>
+              <p class="successMessage text-success d-none">Invitation Sent Successfully</p>
+              <p class="errorMessage text-danger d-none">Something went wrong</p>
+                <p class="errorMessage1 text-danger d-none">Already Exists</p>
+                <p class="errorMessage2 text-danger d-none">Only Ma Invitation Allowed</p>
+                <p class="errorMessage3 text-danger d-none">Only Provider Invitation Allowed</p>
+                <p class="errorMessage4 text-danger d-none">Please Fill All The Fields</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+{% endblock %}
+
+
+{% block jqueryScript %}
+<script>
+    // Get the select element and table
+let select = document.getElementById("mySelect");
+let tableBody = document.getElementById("myTable").getElementsByTagName("tbody")[0];
+
+// Add event listener for select change
+select.addEventListener("change", function() {
+  // Get the selected option value
+
+  let selectedValue = select.value;
+
+
+
+  // Fetch the API data
+  let myurl = 'https://cognisleep.com/accounts/ma_provider_patients/'+selectedValue+'/'
+  fetch(myurl)
+    .then(response => response.json())
+    .then(data => {
+    console.log(data);
+      // Clear existing table rows
+      tableBody.innerHTML = "";
+
+      // Loop through the data and add rows to the table
+      data.forEach(record => {
+
+        var row = tableBody.insertRow();
+        var cell1 = row.insertCell();
+        var cell2 = row.insertCell();
+        var cell3 = row.insertCell();
+        var cell4 = row.insertCell();
+        var cell5 = row.insertCell();
+        var cell6 = row.insertCell();
+
+
+
+        // Populate cells with data from the API response based on the selected value
+        cell1.textContent = record["user"];
+        cell2.textContent = record["first_name"];
+        cell3.textContent = record["last_name"];
+        console.log(record.user.active_patient);
+       var url = 'https://cognisleep.com/media';
+       var baseurlf = record.driving_license_front_img;
+       var baseurlb = record.driving_license_back_img;
+       var extractedUrlf = baseurlf.substring(baseurlf.lastIndexOf('/'));
+       var extractedUrlb = baseurlb.substring(baseurlb.lastIndexOf('/'));
+
+if (record.driving_license_front_img) {
+  cell4.innerHTML = '<a class="userData" style="color:#00a115;"><img id="myImg" src="' + url  + extractedUrlf+ '" alt="Front license" style="height:20px;width:20px;"> Front</a><a class="userPrice" style="color:#007bff;"><img id="myImg1" src="' + url + extractedUrlb+ '" alt="Back license" style="height:20px;width:20px;"> Back</a>';
+} else {
+  cell4.innerHTML = 'Not Available';
+}
+        cell5.innerHTML = '<a>Active</a>';
+
+
+        cell6.innerHTML = '<div style="text-align: center;"><a href="/dashboard/patient/view-diary/0/' + record["user"] + '" title="View Patient"><i style="color: #200b94;font-size: 21px;" class="fa fa-user"></i></a></div>';
+
+      });
+    })
+    .catch(error => {
+      console.log("Error fetching API data:", error);
+    });
+});
+
+</script>
+<!--<script>-->
+
+<!--jQuery('.sendDetails').click(function(){-->
+
+<!--            let emailAdrress = jQuery('input[name="newemail"]').val();-->
+<!--            let typeValue = document.querySelector('input[name="type"]:checked').value;-->
+<!--            let typeValidate = jQuery('input[value="ma"]').prop('checked');-->
+<!--            let typeValidate2 = jQuery('input[value="provider"]').prop('checked');-->
+
+<!--            let patientId = {{userdata.user_id}};-->
+
+<!--            let sendData = `https://cognisleep.com/accounts/submit_invite/${patientId}/${emailAdrress}/${typeValue}`-->
+
+<!--            if(emailAdrress!="" && (typeValidate == true || typeValidate2 == true)) {-->
+<!--             fetch(sendData)-->
+<!--            .then(res => {-->
+<!--            return res.json();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--            console.log(data);-->
+<!--            if(data == "Already Exists"){-->
+<!--             jQuery('.successMessage').addClass('d-none');-->
+<!--             jQuery('.errorMessage').addClass('d-none');-->
+<!--             jQuery('.errorMessage1').removeClass('d-none');-->
+<!--            }-->
+<!--            else{-->
+<!--            jQuery('.successMessage').removeClass('d-none');}-->
+<!--            setTimeout(function(){-->
+<!--                jQuery('.close').trigger('click');-->
+<!--            },500)-->
+<!--            })-->
+
+<!--            .catch(error => {-->
+
+<!--            jQuery('.successMessage').addClass('d-none');-->
+<!--            jQuery('.errorMessage').removeClass('d-none');-->
+<!--            console.log(error);-->
+<!--            setTimeout(function(){-->
+<!--                jQuery('.close').trigger('click');-->
+<!--            },500)-->
+<!--            });-->
+<!--            } else {-->
+<!--            alert("Please fill all the fields");-->
+<!--            }-->
+
+
+
+<!--});-->
+
+<!--jQuery('.resetFileds').click(function(){-->
+<!--    jQuery('.successMessage').addClass('d-none');-->
+<!--    jQuery('.errorMessage').addClass('d-none');-->
+<!--    jQuery('.errorMessage1').addClass('d-none');-->
+<!--    jQuery('#email').val('');-->
+<!--    $('input[name="type"]').prop('checked', false);-->
+<!--});-->
+<!--    -->
+<!--</script>-->
+<script>
+
+jQuery('.sendDetails').click(function(){
+
+            let emailAdrress = jQuery('input[name="newemail"]').val();
+            let typeValue = '';
+            let radioButtons = document.getElementsByName('type');
+            let isRadioButtonSelected = false;
+
+            for (let i = 0; i < radioButtons.length; i++) {
+              if (radioButtons[i].checked) {
+                isRadioButtonSelected = true;
+                break;
+              }
+            }
+            if (emailAdrress == "" || isRadioButtonSelected == false)
+            {
+                jQuery('.errorMessage4').removeClass('d-none');
+                setTimeout(function(){
+                    jQuery('.errorMessage4').addClass('d-none');
+                },1000)
+
+            }
+            else
+            {
+                typeValue = document.querySelector('input[name="type"]:checked').value;
+                let patientId = {{userdata.user_id}};
+                let sendData = `https://cognisleep.com/accounts/submit_invite/${patientId}/${emailAdrress}/${typeValue}`
+                fetch(sendData)
+                .then(res => {
+                return res.json();
+                })
+                .then(data => {
+                console.log(data);
+                if(data == "Already Exists"){
+                 jQuery('.errorMessage1').removeClass('d-none');
+                }
+                if(data == "Only MA"){
+                 jQuery('.errorMessage2').removeClass('d-none');
+                }
+                if(data == "Only Provider"){
+                 jQuery('.errorMessage3').removeClass('d-none');
+                }
+                if (data == "True"){
+                jQuery('.successMessage').removeClass('d-none');}
+                setTimeout(function(){
+                    jQuery('.close').trigger('click');
+                },1000)
+                })
+
+                .catch(error => {
+                jQuery('.errorMessage').removeClass('d-none');
+                console.log(error);
+                setTimeout(function(){
+                    jQuery('.close').trigger('click');
+                },1000)
+                });
+
+            }
+
+});
+
+jQuery('.resetFileds').click(function(){
+    jQuery('.successMessage').addClass('d-none');
+    jQuery('.errorMessage').addClass('d-none');
+    jQuery('.errorMessage1').addClass('d-none');
+    jQuery('.errorMessage2').addClass('d-none');
+    jQuery('.errorMessage3').addClass('d-none');
+    jQuery('.errorMessage4').addClass('d-none');
+    jQuery('#email').val('');
+    $('input[value="ma"]').prop('checked', false);
+    $('input[value="provider"]').prop('checked', false);
+});
+
+</script>
+<script>
+jQuery(document).ready(function(){
+jQuery('#mySelect').change(function(){
+    let refferal = jQuery(this).find(':selected').attr('data-refferal');
+    jQuery('#refferal_id').val(refferal);
+})
+    jQuery('.closebtn').click(function(){
+    jQuery('.modal-backdrop').remove();
+});
+});
+
+document.getElementById('contact_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+document.getElementById('fax_no').addEventListener('input', function (e) {
+  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+});
+
+</script>
+ <script type="text/javascript">
+
+
+        const endpoint = '/api/patient_status/';
+        const endpointma = '/api/ma_status/';
+
+
+        $("body").delegate(".switch-custom input","change",function () {
+            $(this).parent().parent().find(".activePatient").trigger("click");
+        });
+
+
+        $("body").delegate(".activePatient","click",function () {
+            var UserStatus = 1;
+            var activeThis = this;
+            var user_id = $(this).data("user");
+            if($(this).attr("data-active") == "True"){
+                    UserStatus = 0;
+                    $(activeThis).parent().find(".switch-custom input").prop('checked',false);
+                    //$(".switch-custom input").prop('checked',false)
+                }
+            else{
+                UserStatus = 1;
+                  $(activeThis).parent().find(".switch-custom input").prop('checked',true);
+                //$(".switch-custom input").prop('checked',true)
+                }
+            $.ajax({
+                method: 'POST',
+                data: {"user_id":user_id,'status_change': UserStatus},
+                url: endpoint,
+                success: function (response_data) {
+                    //alert(response_data.message);
+                    var response_data = response_data;
+                    if(response_data.success){
+                        if(UserStatus == 0){
+                            $(activeThis).html("Inactive");
+                            $(activeThis).addClass("Inactive");
+                            $(activeThis).removeClass("Active");
+                            $(activeThis).removeAttr("data-active");
+                            $(activeThis).attr("data-active","False");
+                        }else{
+                              $(activeThis).html("Active")
+                             $(activeThis).addClass("Active");
+                            $(activeThis).removeClass("Inactive");
+                            $(activeThis).removeAttr("data-active");
+                             $(activeThis).attr("data-active","True");
+                        }
+
+                    }else{
+                        alert("Something Wrong")
+                    }
+
+                }
+            });
+        });
+        //MA STATUS CHANGE
+        $("body").delegate(".switch-custom input","change",function () {
+            $(this).parent().parent().find(".activema").trigger("click");
+        });
+        $("body").delegate(".activema","click",function () {
+
+            var UserStatus = 1;
+            var activeThis = this;
+            var user_id = $(this).data("user");
+            var main_id = document.getElementById("main_id").textContent;
+            if($(this).attr("data-active") == "True"){
+
+                    UserStatus = 0;
+                    $(activeThis).parent().find(".switch-custom input").prop('checked',false);
+                    //$(".switch-custom input").prop('checked',false)
+                }
+            else{
+
+                UserStatus = 1;
+                  $(activeThis).parent().find(".switch-custom input").prop('checked',true);
+                //$(".switch-custom input").prop('checked',true)
+                }
+            $.ajax({
+
+                method: 'POST',
+                data: {"user_id":user_id,'status_change': UserStatus, 'main_id': main_id},
+                url: endpointma,
+                success: function (response_data) {
+                    //alert(response_data.message);
+                    var response_data = response_data;
+                    if(response_data.success){
+                        if(UserStatus == 0){
+                            $(activeThis).html("Inactive");
+                            $(activeThis).addClass("Inactive");
+                            $(activeThis).removeClass("Active");
+                            $(activeThis).removeAttr("data-active");
+                            $(activeThis).attr("data-active","False");
+                        }else{
+                              $(activeThis).html("Active")
+                             $(activeThis).addClass("Active");
+                            $(activeThis).removeClass("Inactive");
+                            $(activeThis).removeAttr("data-active");
+                             $(activeThis).attr("data-active","True");
+                        }
+
+                    }else{
+                        alert("Something Wrong")
+                    }
+
+                }
+            });
+        });
+        //END MA
+        jQuery('.invoiceStatus').each(function(){
+        var statusText = jQuery(this).text();
+        //alert(statu)
+        // statusText = statusText.toLowerCase()
+        if(statusText == 'Paid') {
+        jQuery(this).removeClass('pending');
+        jQuery(this).removeClass('cancel');
+        jQuery(this).addClass('paid');
+        }
+        });
+
+
+        //new code shakaib
+
+        function printcontent(el){
+
+        var restorepage = document.body.innerHTML;
+        document.getElementById('cardfooterid').style = 'width: 100%;position: absolute;bottom: 0;';
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+        //document.getElementById('cardfooterid').style = 'width: 100%;position: relative;bottom: 0;';
+
+    }
+
+
+
+
+
+
+
+
+// Get the modal
+var modal = document.getElementById("myModal1");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById("myImg1");
+var modalImg = document.getElementById("img02");
+var captionText = document.getElementById("caption1");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+  captionText.innerHTML = this.alt;
+}
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close1")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+ jQuery('.userData').click(function(){
+   var name =  jQuery(this).parents('tr').find('.front').text();
+    jQuery('.package_name').val(name);
+    // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = name//document.getElementById("myImg");
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+
+          modal.style.display = "block";
+          modalImg.src = name;
+          captionText.innerHTML = "Front License Image";
+
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+});
+jQuery('.userPrice').click(function(){
+    var name =  jQuery(this).parents('tr').find('.back').text();
+    jQuery('.package_name').val(name);
+    // Get the modal
+        var modal = document.getElementById("myModal1");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = name
+        var modalImg = document.getElementById("img02");
+        var captionText = document.getElementById("caption1");
+
+          modal.style.display = "block";
+          modalImg.src = name;
+          captionText.innerHTML = "Back License Image";
+
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+})
+
+    </script>
+
+{% endblock %}

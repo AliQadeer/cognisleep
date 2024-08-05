@@ -1,0 +1,497 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+  .backBtn:hover {
+    background-color: #79ce4a;
+  }
+
+  .modal-backdrop.fade.in {
+    opacity: 1;
+  }
+
+  .modal.fade.in {
+    display: block !important;
+    opacity: 1 !important;
+    z-index: 9999999999 !important;
+  }
+
+  .modal-backdrop.fade.in:not(:last-child) {
+    display: none;
+  }
+
+  .modal-backdrop.fade.in {
+    z-index: 9999999;
+  }
+
+  .modal-footers {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .modal-body>iframe {
+    overflow-y: auto;
+  }
+
+  #couponModal .modal-header{
+    background-color: #fff;  
+    border: none;  
+  }
+  #couponModal .modal-header .modal-title{
+    color: #212529;
+    font-size: 20px;
+
+  }
+  #couponModal .modal-header .modal-title .close:focus{
+    border: none;
+  }
+  
+    #couponModal .modal-footer{
+    background-color: #fff;
+    border: none;  
+      }
+
+  @media(min-width: 1170px) {
+    span#toggle_pwd {
+      bottom: 10%;
+    }
+
+    @media (min-width: 1200px) {
+      .modal-xl {
+        max-width: 100%;
+      }
+    }
+  }
+</style>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+  type="text/css" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<section class="provider_login_sec">
+  <div class="container">
+
+    <div class="row justify-content-center py-4">
+
+
+
+      <div class="col-md-6">
+        <div class="provider_registeration_form">
+          <div class="provider_registeration">
+            <div class="titleBoxArea text-center">
+              <button onclick="history.back();" class="backBtn left-0"><i class="fa fa-arrow-left"></i></button>
+              <h4 class="defaultHead">Create your <span class="d-md-inline d-block">Provider account</span></h4>
+            </div>
+            <form method="post" method="/accounts/signup">
+              {% csrf_token %}
+
+
+
+              <div id="div_id_email" class="form-group"> <label for="id_email" class=" requiredField">
+                  Email<span class="asteriskField">*</span> </label>
+                <div> <input type="email" name="email" class="emailinput form-control" required="" id="id_email"> </div>
+                <span id="email_message" style="font-weight: bold; color: red"></span>
+                <a class="emaillogin d-none" href="/accounts/provider_login/">Please login</a>
+              </div>
+
+              <div id="div_id_fullname" class="form-group">
+  <label for="id_fullname" class="requiredField">Full name<span class="asteriskField">*</span></label>
+  <div class="row">
+    <div class="col">
+      <input type="text" name="firstname" class="textinput textInput form-control" required="" id="firstname" placeholder="First name">
+    </div>
+    <div class="col">
+      <input type="text" name="lastname" class="textinput textInput form-control" required="" id="lastname" placeholder="Last name">
+    </div>
+  </div>
+</div>
+
+
+              <div id="div_id_providertype" class="form-group"> <label for="id_providertype" class=" requiredField" style="margin-top:-15px">
+                  Provider type<span class="asteriskField">*</span> </label>
+
+                <div>
+                  <select name="providertype" class="textinput textInput form-control" id="providertype">
+                    <option selected value="MD/DO">MD/DO</option>
+                    <option value="Associated PA, APRN">Associated PA, APRN</option>
+                    <option value="PHD">PHD</option>
+                    <option value="Independent PA, APRN">Independent PA, APRN</option>
+<!--                    <option value="Coupon User">Coupon User</option>-->
+                  </select>
+                </div>
+                <br>
+                <input type="hidden" id="flag" name="flag" value="">
+
+                 <div id="extraInputs" style="display:none;">
+                  <input value='{{ request.session.allform.code|default_if_none:"" }}'
+                    class="textinput textInput form-control" type="text"
+                    placeholder="Coupon Code" id="code" name="code"
+                    onblur="verify_refby(this.value,'office_name');">
+                  <br>
+                  <input value='{{ request.session.allform.title|default_if_none:"" }}'
+                    class="textinput textInput form-control" type="text" placeholder="Coupon Ttile"
+                    oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+"
+                    oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                    id="title" name="title" readonly>
+                </div>
+
+                <div id="extraInput" style="display:none;">
+                  <input value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}'
+                    class="textinput textInput form-control" type="text"
+                    placeholder="Supervising Physician Referral Number" id="doctor_ref_number" name="doctor_ref_number"
+                    onblur="verify_refby(this.value,'office_name');">
+                  <br>
+                  <input value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}'
+                    class="textinput textInput form-control" type="text" placeholder="Supervising Physician Name"
+                    oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+"
+                    oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                    id="primary_care_doctor_name" name="primary_care_doctor_name" readonly>
+                </div>
+              </div>
+
+
+
+
+              <div id="div_id_contact" class="form-group"> <label for="id_contact" class=" requiredField">
+                  Contact number<span class="asteriskField">*</span> </label>
+                <div> <input type="text" name="contact" class="textinput textInput form-control" required=""
+                    id="contact"> </div>
+              </div>
+              <div id="div_id_password" class="form-group"> <label for="id_password" class=" requiredField">
+                  Password<span class="asteriskField">*</span> </label>
+                <div class="position-relative passwordBox"> <input type="password" name="password"
+                    class="textinput textInput form-control" required="" id="id_password">
+                  <span id="toggle_pwd" class="fa fa-fw fa-eye field_icon"></span>
+                </div>
+              </div>
+
+                          <div class="form-group">
+              <div class="custom-control custom-checkbox ">
+                <input type="checkbox" class="custom-control-input d-none" id="signup_with_coupon">
+                <label class="custom-control-label" for="signup_with_coupon">Signup with user Coupon</label>
+              </div>
+            </div>
+
+            <!-- Modal -->
+<div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="couponModalLabel">Signup with user Coupon</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control" id="couponInput" placeholder="Enter Coupon">
+              <small id="couponError" class="form-text text-danger"></small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="applyCouponBtn">Apply Coupon</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+              <div class="form-group">
+                <input type="hidden" name="response_captcha" value="0" class="responseCaptcha">
+                <div style="margin-top: 13px;" id="g-recaptcha2" class="g-recaptcha2"
+                  data-sitekey="6Lf37LQUAAAAAIHIJDdoPYLF0pLXZ_zFwqbV2AAn"></div>
+              </div>
+              {% if error2 is not None %}
+              <br />
+              <b style="color: red;">{{error2}}</b>
+              {% endif %}
+              <div class="create_account_button">
+                <button type="button" class="login_buttonz" style="width: 100%;" onclick="providerSignUp()">Create
+                  Account</button>
+
+              </div>
+          </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+   <div class="loaderBox d-none">
+                    <div class="custom-loader"></div>
+                </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback2&render=explicit' async defer></script>
+<script>
+$( "#id_email" ).focusout(function() {
+    validateEmailAndChangeFocus();
+});
+  var recaptchaValid2 = 0;
+  $("#g-recaptcha-response-1").attr("required", true);
+
+  var onloadCallback2 = function () {
+    grecaptcha.render('g-recaptcha2', {
+      'sitekey': $("#g-recaptcha2").data("sitekey"),
+      'callback': correctCaptcha2
+    });
+  };
+
+  var correctCaptcha2 = function (response) {
+    //alert($('#g-recaptcha').length);
+    var response2 = grecaptcha.getResponse();
+    if (response.length == 0) {
+      recaptchaValid2 = 0;
+    } else {
+      recaptchaValid2 = 1;
+    }
+    setTimeout(function () {
+      recaptchaValid2 = 0;
+      $(".responseCaptcha").val(recaptchaValid2);
+      grecaptcha.reset();
+    }, 15000);
+
+    $(".responseCaptcha").val(recaptchaValid2);
+  };
+
+</script>
+<script type="text/javascript">
+  $('#email_message').hide();
+  $(function () {
+    $("#toggle_pwd").click(function () {
+      $(this).toggleClass("fa-eye fa-eye-slash");
+      var type = $(this).hasClass("fa-eye-slash") ? "text" : "password";
+      $("#id_password").attr("type", type);
+    });
+  });
+  document.getElementById('contact').addEventListener('input', function (e) {
+    var x = e.target.value
+      .replace(/\D/g, '')
+      .match(/(\d{0,3})(\d{0,3})(\d{0,4})/)
+    e.target.value = !x[2]
+      ? x[1]
+      : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '')
+  })
+
+
+</script>
+
+
+<script>
+  jQuery('.modal-footers button').click(function () {
+    jQuery('.modal-backdrop').remove();
+  });
+
+  /* jQuery('input#exampleCheck1').change(function () {
+    var modalTrigger = jQuery(this).prop('checked');
+    if (modalTrigger == true) {
+      jQuery('.openModalBox').trigger('click');
+    }
+  }) */
+
+
+
+  const select = document.getElementById("providertype");
+  const input = document.getElementById("extraInput");
+  const inputs = document.getElementById("extraInputs");
+  select.addEventListener("change", function () {
+    if (this.value === "Associated PA, APRN") {
+      input.style.display = "block";
+      document.getElementById("doctor_ref_number").required = true;
+      //document.getElementById("primary_care_doctor_name").required = true;
+    } else {
+      input.style.display = "none";
+      document.getElementById("doctor_ref_number").required = false;
+      document.getElementById("primary_care_doctor_name").required = false;
+    }
+  });
+</script>
+
+
+
+<script>
+
+
+  /* sign up  */
+
+  async function providerSignUp() {
+    jQuery('.loaderBox').removeClass('d-none');
+    const signupData = {}
+  var couponCode_user = $('#couponInput').val();
+  const emailID = document.getElementById('id_email').value;
+  const firstName = document.getElementById('firstname').value;
+  const lastName = document.getElementById('lastname').value;
+  const providerType = document.getElementById('providertype').value;
+  const contactNo = document.getElementById('contact').value;
+  const passWord = document.getElementById('id_password').value;
+  const docterName = document.getElementById('primary_care_doctor_name').value;
+  const docterNum = document.getElementById('doctor_ref_number').value;
+
+  if (!emailID || !passWord || !firstName || !lastName || !contactNo) {
+        alert("Please ensure all required fields are filled.");
+        jQuery('.loaderBox').addClass('d-none');
+        return; // Stop further execution
+    } 
+
+  await localStorage.setItem('email', emailID);
+
+  Object.assign(signupData, {
+    'email': emailID,
+    'password': passWord,
+    'first_name': firstName,
+    'last_name': lastName,
+    'contact_no': contactNo,
+    'providertype': providerType,
+    'package_type': providerType,
+    'primary_care_doctor_name': docterName,
+    'primary_care_doctor_id': docterNum,
+    'role_id': 1,
+    'code': couponCode_user,
+  })
+
+    fetch('{{ base_url }}/accounts/api/signup_provider/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(signupData)
+    })
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        console.log(data);
+        jQuery('.loaderBox').addClass('d-none');
+        console.log("data of create Account ID:" , data.user_id)
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('zero_coupon', data.zero_coupon);
+        window.location.href = `{{ base_url }}/accounts/baa_signature/${data.user_id}`;
+      })
+      .catch(error => {
+        jQuery('.loaderBox').addClass('d-none');
+        console.log(error);
+      });
+  }
+
+
+
+</script>
+<script type="text/javascript">
+  const endpoint = '/api/refby/';
+
+  function verify_refby(id, fieldid) {
+    var cname = "prp";
+    var cvalue = document.getElementById("doctor_ref_number").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', endpoint);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        var response_data = JSON.parse(xhr.responseText);
+        if (response_data.success) {
+          //document.getElementById("primary_care_office_name").value = response_data.primary_care_office_name;
+          document.getElementById("primary_care_doctor_name").value = response_data.primary_care_doctor_name;
+          document.getElementById("error_office_name").innerHTML = response_data.message;
+          document.getElementById("error_office_name").classList.remove('text-danger');
+          document.getElementById("error_office_name").classList.add('text-success');
+
+          var d = new Date();
+          d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000));
+          var expires = "expires=" + d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        } else {
+          document.cookie = cname + "=" + cvalue + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+          document.getElementById("error_office_name").innerHTML = response_data.message;
+          document.getElementById("primary_care_office_name").value = '';
+          document.getElementById("primary_care_doctor_name").value = '';
+          document.getElementById("error_office_name").classList.remove('text-success');
+          document.getElementById("error_office_name").classList.add('text-danger');
+        }
+      }
+    };
+
+    var params = 'ref_name=' + encodeURIComponent(document.getElementById("doctor_ref_number").value) + '&fieldid=' + encodeURIComponent(fieldid);
+    xhr.send(params);
+  }
+
+
+</script>
+<script type="text/javascript">
+//api/ValidateEmail
+
+ function validateEmailAndChangeFocus() {
+  var idEmailInput = document.getElementById('id_email');
+  var otherElement = document.getElementById('firstname');
+  var useremail = idEmailInput.value;
+  const endpoint = '/accounts/api/ValidateEmail/';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', endpoint);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var data = JSON.parse(xhr.responseText);
+      if (data.success) {
+        idEmailInput.style.border = '1px solid red';
+        document.getElementById('email_message').innerHTML = "This email is already in use.";
+        document.getElementById('email_message').style.display = "block";
+        document.querySelector('.emaillogin').classList.remove('d-none');
+        idEmailInput.focus(); // Change focus to the other element
+      } else {
+        idEmailInput.style.border = '1px solid #dedede';
+        document.getElementById('email_message').style.display = "none";
+        document.querySelector('.emaillogin').classList.add('d-none');
+        otherElement.focus();
+      }
+    }
+  };
+  var params = 'id_email=' + encodeURIComponent(useremail);
+  xhr.send(params);
+}
+
+// Call the function whenever you want to validate the email and change the focus
+
+</script>
+
+<script>
+$(document).ready(function(){
+    // Show modal when checkbox is clicked
+    $('.custom-checkbox').click(function(){
+        $('#couponModal').modal('show');
+        $('#signup_with_coupon').prop('checked', false);
+
+    });
+
+    // Apply coupon button click event
+    $('#applyCouponBtn').click(function(){
+        var couponValue = $('#couponInput').val();
+        // Perform AJAX call to check coupon validity
+        $.ajax({
+            url: '/payments/verify_coupon/',
+            type: 'POST',
+            data: {code: couponValue},
+            success: function(response){
+                if(response === true) {
+                    $('#signup_with_coupon').prop('checked', true);
+                    $('#couponModal').modal('hide');
+                } else {
+                    $('#couponError').text('Invalid coupon. Please try again.');
+                }
+            },
+            error: function(){
+                $('#couponError').text('Error occurred while processing. Please try again later.');
+            }
+        });
+    });
+});
+</script>
+
+  
+
+{% endblock %}

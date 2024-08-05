@@ -1,0 +1,41 @@
+a div span {
+    color: black;
+}
+.datepicker-days {
+    float: left;
+}
+.datepicker {
+    width: auto;
+}
+
+.filter-date {
+    width: 133px;
+    float: left;
+    margin-left: 20px;
+}
+button.btn.btn-secondary.mb-2 {
+width: 100%;
+    margin-bottom: 5px;
+    background: white;
+    border: 1px solid #bcbaba;
+    color: #4d4b4b;
+}
+.page-no-div {
+    width: auto;
+    float: right;
+    margin-right: 20px;
+}
+h5#current_page_no {
+    float: left;
+}
+h5#total_pages {
+    float: left;
+}
+img#eye {
+    position: absolute;
+    top: 52px;
+    right: 20px;
+    font-size: 21px;
+    color: #999999;
+    width: 29px;
+}

@@ -1,0 +1,1540 @@
+{% extends "base_login.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+    <style>
+    .information {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    color: #000;
+    font-size: 15px;
+}
+
+.information:hover {
+    background-color: transparent;
+    color: #2d2d82;
+}
+
+        #eye {
+            position: absolute;
+            top: 58px;
+            right: 20px;
+            font-size: 24px;
+            color: #999999;
+            width: 45px;
+        }
+
+        ul.nav.nav-tabs {
+        float: unset;
+        flex-wrap: nowrap;
+    }
+
+        #detailss a .content-val {
+            width: 100%;
+        }
+
+        ul.nav.nav-tabs li a {
+            padding: 10px 15px !important;
+            font-size: 12px;
+        }
+
+        p.mainTitle {
+    font-size: 14px;
+    position: absolute;
+    left: 5px;
+    right: 0;
+    text-align: center;
+    top: -60px;
+    color: #000;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+    margin: 0 20px;
+}
+
+.bg-yellow {
+    background-color: yellow;
+}
+
+.bg-yellow span.lastPrescribedTime {
+    font-weight: 600;
+}
+
+.bg-blue span.lastPrescribedTime, .bg-green span.previewWeekSE, .bg-greaish span.previewWeekSE {
+    font-weight: 600;
+    color: #fff;
+}
+
+
+.bg-blue {
+    background-color: #230c9a;
+}
+
+.bg-green {
+    background-color: #55b321;
+}
+
+.bg-greaish {
+    background-color: #444342;
+}
+
+
+.field-inner-div {
+    padding-top: 40px;
+}
+
+
+        span#third_message, span#third_message1, span#third_message2, span#third_message3, span#third_message4{
+            color: red;
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: -15px;
+
+}       span#went_message1 {
+            color: red;
+            float: left;
+            width: 100%;
+            margin-top: -15px;}
+
+
+         span#went_message2  {
+            color: red;
+            float: left;
+            width: 100%;
+            margin-top: -15px;}
+
+         span#went_message {
+            color: red;
+            float: left;
+            width: 100%;
+            margin-top: -15px;}
+
+             span#final_msg {
+            color: red;
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: -15px;}
+
+            abbr[title] {
+        border-bottom: none !important;
+        cursor: inherit !important;
+        text-decoration: none !important;
+        }
+
+        .weeks ul li {
+            min-width: auto;
+            flex-grow: 1 !important;
+            flex: unset;
+        }
+
+        .pd-40 {
+            padding: 0 30px;
+        }
+
+.modal.fade.confimPopup.in {
+    display: block !important;
+    opacity: 1 !important;
+}
+
+.modal-backdrop.fade {
+    display: none;
+}
+
+.modal-backdrop.fade:last-child {
+    opacity: 1;
+    display: block;
+}
+
+.iconBox {
+    font-size: 86px;
+    line-height: 1;
+}
+
+  .cogniClor {
+   background-color: #240c99;
+   color: #fff;
+  }
+
+  .addComment textarea {
+    width: 100%;
+    border-radius: 5px;
+    border-color: #dfdcdc;
+    margin-top: 15px;
+    outline: none;
+}
+
+.form-group.show {
+    display: block !important;
+}
+
+.addComment p {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+  @media(min-width: 1024px) {
+ .top-adjust {
+    position: relative;
+    top: -33px;
+}
+
+form#diaryf {
+    padding-top: 15px !important;
+}
+
+.field-inner-div .fields {
+    margin-top: -35px;
+}
+
+}
+
+
+@media(max-width: 1280px) {
+.field-inner-div .top-sec p {
+    font-size: 16px;
+}
+}
+    </style>
+
+
+
+    <section class="forward_sec addSleepDairy">
+        <div class="container-fluid pd-40">
+            <div class="row">
+                <div class="desktopTab d-md-block d-none m-auto">
+                    <ul class="nav nav-tabs justify-content-center">
+
+                        {% if request.user.package != 3 %}
+                        {% if ma %}
+
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} magoVideos({{patient}}); {% else %}magoVideos(0){% endif %}" >Videos</a></li>
+                        {% else %}
+
+                            <li id="videos" class="" style=""><a class="tablinks" data-toggle="tab" href="#"
+                                                         aria-expanded="false" onclick="{% if patient > 0 %} goVideos({{patient}}); {% else %}goVideos(0){% endif %}">Videos</a></li>
+                        {% endif %}
+                    {% endif %}
+
+                       {% if sleep_diary_entries not in rest_day %}
+                        {% if ma %}
+                    <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} magoDiary({{patient}}); {% else %}magoDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% else %}
+                        <li id="sleep_diary" class="" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} goDiary({{patient}}); {% else %}goDiary(0);{% endif %}">Sleep Diary Entries</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                            {% if ma %}
+                    <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} maviewDiary({{patient}}); {% else %}maviewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                            {% else %}
+                          <li id="view_sleep_diary" class="view_sleep_diary" style=""><a class="tablinks" data-toggle="tab"
+                                                                  href="javascript:void(0);"
+                                                                  aria-expanded="false"
+                                                                  onclick="{% if patient > 0 %} viewDiary({{patient}}); {% else %}viewDiary(0);{% endif %}">Sleep Data</a>
+                        </li>
+                        {% endif %}
+                      {% if request.user.package != 3 %}
+                        {% if ma %}
+                    <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} magoDashboardsub({{patient}}); {% else %}magoDashboardsub(0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% else %}
+                        <li id="progress" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu3"
+                                                               aria-expanded="false"
+                                                               onclick="{% if patient > 0 %} goDashboardsub('progress',{{patient}}); {% else %}goDashboardsub('progress',0);{% endif %}">Your Progress</a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+
+                        </li>
+                        {% if ma %}
+                    <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/ma-relaxation/{{patient}}"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% else %}
+                         <li id="dash" class="" style=""><a class="tablinks" href="/dashboard/relaxation"
+                                                                 aria-expanded="true"
+                                                                 onclick="openCity(event, 'responsivez0')">Relax</a>
+                        </li>
+                        {% endif %}
+                            {% if ma %}
+                    <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} magoNtl({{patient}}); {% else %}magoNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                            {% else %}
+                        <li id="detailss" class="" style="">
+
+
+                            <a class="bg-greaish tablinks" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                <div class="content-val"><span class="tooltipp">Negative Thought Lockbox <sup>TM</sup></span>
+
+                            <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span></div>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                            {% if patient == 0 %}
+        {#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+        {#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+        {#                        Us</a></li>#}
+                            {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                               aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                            </li>{% endcomment %}
+                             {% endif %}
+                        <!-- <li id="detailss" class="" style="">
+                            <a>
+                                <div class="content-val"><span >Previous week's sleep efficiency</span><span class="previewWeekSE">N/A</span></div>
+                                <div class="content-val"><span>Prescribed Bedtime</span><span class="lastPrescribedTime">N/A</span></div>
+                                 <div class="content-val"><span>Wake-up Time</span><span class="lastWeekWakeupTime">N/A</span></div>
+                            </a>
+                            </li>-->
+                            <li id="detailss" style="">
+                            <a class="bg-green">
+                                <div class="content-val"><span class="tooltipp">Previous week's sleep efficiency</span>
+                                <span class="previewWeekSE">{{avgsleep}}%</span></div>
+                            </a>
+                            </li>
+                           <span class="d-flex position-relative">
+                               <p class="mainTitle">Sleep Restriction</p>
+                                <li id="detailss" style="">
+                                <a class="bg-blue">
+                                    <div class="content-val"><span class="tooltipp">Prescribed Bedtime</span><span class="lastPrescribedTime">{{avgbedtime}}</span></div>
+                                </a>
+                                </li>
+                                <li id="detailss" style="">
+                                <a class="bg-yellow">
+                                    <div class="content-val"><span class="tooltipp">Suggested Wake Up</span><span class="lastPrescribedTime">{{sug_time}}</span></div>
+                                </a>
+                                </li>
+                           </span>
+
+                        </ul>
+                </div>
+
+
+                 <div class="mobieTabs d-md-none m-auto">
+                <ul class="nav nav-tabs justify-content-center">
+                    {% if patient == 0 %}
+{#                    <li id="cont" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu4"#}
+{#                                                       aria-expanded="false" onclick="goDashboardsub('contactus');">Contact#}
+{#                        Us</a></li>#}
+                    {% comment %}<li id="tuts" class="" style=""><a class="tablinks" data-toggle="tab" href="#menu5"
+                                                       aria-expanded="false" onclick="goDashboardsub('tutorials');">Tutorials</a>
+                    </li>{% endcomment %}
+                     {% endif %}
+                <!-- <li class="" style="">
+                    <a>
+                        <div class="content-val"><span >Previous week's sleep efficiency</span><span class="previewWeekSE">N/A</span></div>
+                        <div class="content-val"><span>Prescribed Bedtime</span><span class="lastPrescribedTime">N/A</span></div>
+                         <div class="content-val"><span>Wake-up Time</span><span class="lastWeekWakeupTime">N/A</span></div>
+                    </a>
+                    </li>-->
+                    <li class="" style="">
+                    <a class="tabsColor">
+                        <div class="content-val_mobile">
+                        <span class="previewWeekSE">{{avgsleep}}%</span>
+                        <span class="toolData">Previous week's sleep efficiency</span></div>
+                    </a>
+                    </li>
+                    <li  style="">
+                        <a class="tabsColor">
+                            <div class="content-val_mobile">
+                                <span class="lastPrescribedTime">{{avgbedtime}}</span>
+                                <span class="toolData">Prescribed Bedtime</span></div>
+                        </a>
+                        </li>
+                        <li  style="">
+                        <a class="tabsColor">
+                            <div class="content-val_mobile">
+                                <span class="lastPrescribedTime">{{sug_time}}</span>
+                                <span class="toolData">Suggested Wake Up</span>
+                            </div>
+                        </a>
+                        </li>
+
+                        <li class="ntlTabs" style="">
+                            <a class="tabsColor" data-toggle="tab"
+                            href="javascript:void(0);"
+                            aria-expanded="false"
+                            onclick="{% if patient > 0 %} goNtl({{patient}}); {% else %}goNtl(0);{% endif %}">
+                                <div class="content-val_mobile">
+                                    <span class="previewWeekSE"><i class="fa fa-lock" aria-hidden="true"></i> NTL</span>
+                                    <span class="toolData">Negative Thought Lockbox<sup>TM</sup></span>
+                                </div>
+                            </a>
+                        </li>
+
+                </ul>
+                </div>
+
+
+
+
+                <div id="responsivez1" class="sleep_diary tabcontent" style="display:block;">
+
+                    <div class="desktopEntries d-md-block d-none">
+
+                        <nav class="weeks">
+                            <ul>
+
+                                {% for x in weekDays_array %}
+                                    {% if 1 in x.is_selected %}
+                                    <li style="width: calc(100% / {{ weekDays_array.count }}); background-color: rgb(62, 76, 206);"><a {% if current_week|add:1 ==  x.x   %} class="active active-week"  {% endif %} >
+                                        <button   id="weeks_id_1"
+                                                onclick="{% if patient > 0 %} get_weeks_days({{ x.x }},{{patient}}); {% else %}get_weeks_days({{ x.x }},{{patient}});{% endif %}">
+                                            Week {{ x.x }} - SE {{ x.eff }}%
+                                        </button>
+                                    </a></li>
+                                    {% else %}
+
+                                    <li style="width: calc(100% / {{ weekDays_array.count }});background-color: rgb(32, 11, 148); "><a {% if current_week|add:1 == x.x   %} class="active active-week" {% endif %} >
+                                        <button  id="weeks_id_1"
+                                                onclick="{% if patient > 0 %} get_weeks_days({{ x.x }},{{patient}}); {% else %}get_weeks_days({{ x.x }},{{patient}});{% endif %}">
+                                            Week {{ x.x }} - SE {{ x.eff }}%
+                                        </button>
+                                    </a></li>
+
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="desktopEntries d-md-none">
+
+                        <nav class="weeks">
+                            <ul>
+
+                                {% for x in weekDays_array %}
+                                    {% if 1 in x.is_selected %}
+                                    <li style="width: calc(100% / {{ weekDays_array.count }}); background-color: rgb(62, 76, 206);"><a {% if current_week|add:1 ==  x.x   %} class="active active-week"  {% endif %} >
+                                        <button   id="weeks_id_1"
+                                                onclick="{% if patient > 0 %} get_weeks_days({{ x.x }},{{patient}}); {% else %}get_weeks_days({{ x.x }},{{patient}});{% endif %}">
+                                            Week {{ x.x }} - SE {{ x.eff }}%
+                                        </button>
+                                    </a></li>
+                                    {% else %}
+
+                                    <li style="width: calc(100% / {{ weekDays_array.count }});background-color: rgb(32, 11, 148); "><a {% if current_week|add:1 == x.x   %} class="active active-week" {% endif %} >
+                                        <button  id="weeks_id_1"
+                                                onclick="{% if patient > 0 %} get_weeks_days({{ x.x }},{{patient}}); {% else %}get_weeks_days({{ x.x }},{{patient}});{% endif %}">
+                                            Week {{ x.x }} - SE {{ x.eff }}%
+                                        </button>
+                                    </a></li>
+
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </ul>
+                        </nav>
+                    </div>
+
+
+
+                    <nav class="days-menu">
+                        <ul id="week_days">
+
+                            {% for week in user_sleep_diarys %}
+                                {% if week.is_updated %}
+                                <li><a>
+                                    <button class="btn btn-block  btn-box btn-lg green daybtn" id="week_days_{{ forloop.counter }}"
+                                            onclick="week_days('{{ week.date|date:"m/d/Y"}}','{{ week.date|date:"Y-m-d"}}', '{{ week.is_updated }}','{{ week.time_went_to_bed }}', '{{ week.time_fell_asleep }}','{{ week.time_got_up }}', '{{ week.out_of_bed }}', '{{ week.nap_time_asleep }}', '{{ week.no_of_times_awakend }}', '{{ week.total_time_awakened }}',
+                                     '{{ week.lights_out }}','{{ week.minutes_fall_asleep }}','{{ week.minutes_fellback_sleep }}',
+                                    '{{ week.desire_wakeup_time }}','{{ week.number_of_naps }}','{{ week.totlatime_napping_minutes }}')">Day {{ forloop.counter }}</button>
+                                </a></li>
+                                {% else %}
+                                <li><a>
+                                    <button class="btn btn-block btn-box btn-lg red daybtn" id="week_days_{{ forloop.counter }}"
+                                            onclick="week_days('{{ week.date|date:"m/d/Y"}}','{{ week.date|date:"Y-m-d"}}', '{{ week.is_updated }}','{{ week.time_went_to_bed }}', '{{ week.time_fell_asleep }}','{{ week.time_got_up }}', '{{ week.out_of_bed }}', '{{ week.nap_time_asleep }}', '{{ week.no_of_times_awakend }}', '{{ week.total_time_awakened }}',
+                                     '{{ week.lights_out }}','{{ week.minutes_fall_asleep }}','{{ week.minutes_fellback_sleep }}',
+                                    '{{ week.desire_wakeup_time }}','{{ week.number_of_naps }}','{{ week.totlatime_napping_minutes }}')">Day {{ forloop.counter }}</button>
+                                </a></li>
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </ul>
+                    </nav>
+
+                    <div class="titleBoxArea">
+                        <button onclick="history.back();" class="backBtn"><i class="fa fa-arrow-left"></i></button>
+                        <h3 class="text-align-center">SLEEP DIARY</h3>
+                        <div class="create_account_button text-align-center">
+
+                            <p><b>{{ entrydate }} &nbsp;-&nbsp;</b> Enter each field below from recollected memory as the preferred method. This will give your physician the information needed to diagnose and treat your condition.</p>
+                        </div>
+                    </div>
+
+                    <form method="post" id="diaryf" class="row">
+                        {% csrf_token %}
+
+
+                    <input type="hidden" id="sdate" name="sdate" value="{{start_date}}">
+                        <input type="hidden" id="patient" name="patient" value={{ loggedUser }}>
+                        <input type="hidden" id="entrydate" name="datename" value={{ entrydate }}>
+                        <input type="hidden" id="timeinbed" name="timeinbed" value="">
+                        <input type="hidden" id="totalsleeptime" name="totalsleeptime" value="">
+                        <input type="hidden" id="sleepefficiency" name="sleepefficiency" value="">
+                        <input type="hidden" id="problemfallingasleep" name="problemfallingasleep" value="">
+                        <input type="hidden" id="awakeduringnight" name="awakeduringnight" value="">
+                        <input type="hidden" id="awaketooearly" name="awaketooearly" value="">
+                        <input type="hidden" id="delayedgettingup" name="delayedgettingup" value="">
+                        <input type="hidden" id="totalgotup" name="totalgotup" value="">
+                        <input type="hidden" id="totalsleep" name="totalsleep" value="">
+                        <input type="hidden" id="overslept" name="overslept" value="">
+
+                         <div class="field no-mar col-md-12 col-lg-4" hidden>
+                            {{ form.message.errors }}
+                            {{ form.date|as_crispy_field }}
+
+                        </div>
+
+
+                        <div class="field no-mar col-md-12 col-lg-3 bg-light-blue ">
+
+                            <div class="field-inner-div">
+                                <div class="top-sec">
+                                    <p>Falling Asleep</p>
+                                </div>
+                            <div class="fields">
+                                {{ form.message.errors }}
+                                {{ form.time_went_to_bed|as_crispy_field }}
+
+                                {{ form.message.errors }}
+                                {{ form.lights_out|as_crispy_field }}
+
+                                {{ form.message.errors }}
+                                {{ form.minutes_fall_asleep|as_crispy_field }}
+                            </div>
+                            </div>
+<!--                            <span id="went_message" style="display: none;"></span>-->
+<!--                            <span id="went_message1" style="display: none;"></span>-->
+<!--                            <span id="went_message2" style="    display: none;"></span>-->
+
+                        </div>
+                        <div class="field no-mar col-md-12 col-lg-2 bg-dark-blue">
+
+                            <div class="field-inner-div">
+                                <div class="top-sec">
+                                    <p>Middle Of Night Sleep</p>
+                                </div>
+                            <div class="fields">
+                                {{ form.message.errors }}
+                                {{ form.no_of_times_awakend|as_crispy_field }}
+                                {{ form.message.errors }}
+                                {{ form.total_time_awakened|as_crispy_field }}
+
+                            </div>
+                            </div>
+<!--                            <span id="second_message"></span>-->
+
+                        </div>
+                        <div class="field no-mar col-md-12 col-lg-5 bg-light-yellow">
+
+                            <div class="field-inner-div">
+                                <div class="top-sec">
+                                    <p>Morning Wake Up Process</p>
+                                </div>
+                            <div class="fields">
+                                {{ form.message.errors }}
+                                {{ form.time_got_up|as_crispy_field }}
+
+                                {{ form.message.errors }}
+                                {{ form.minutes_fellback_sleep|as_crispy_field }}
+
+                                {{ form.message.errors }}
+                                {{ form.out_of_bed|as_crispy_field }}
+                                {{ form.message.errors }}
+                                {{ form.desire_wakeup_time|as_crispy_field }}
+
+
+                            </div>
+                            </div>
+<!--                            <span id="third_message" style="display: none;"></span>-->
+<!--                            <span id="third_message1" style="display: none;"></span>-->
+<!--                            <span id="third_message2" style="display: none;"></span>-->
+<!--                            <span id="third_message3" style="display: none;"></span>-->
+<!--                            <span id="third_message4" style="display: none;"></span>-->
+
+                        </div>
+                        <div class="field no-mar col-md-12 col-lg-2 bg-light-pink">
+
+                            <div class="field-inner-div">
+                                <div class="top-sec top-adjust">
+                                    <p class="mb-0 border-0">Previous Day </p>
+                                    <p>Middle Of Day Naps</p>
+                                </div>
+                            <div class="fields">
+                                {{ form.message.errors }}
+                                {{ form.number_of_naps|as_crispy_field }}
+                                {{ form.message.errors }}
+                                {{ form.totlatime_napping_minutes|as_crispy_field }}
+
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 field mt-3">
+                             <div id="error_message" class="alert alert-danger" style="display: none;text-align:center;"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="row justify-content-between px-md-3 mobileBtn">
+                                        <div class="actionBtns">
+                                        <button type="button" class="btn btn-primary bg-blue" onClick="window.location.reload()">
+                                        Reload Page
+                                    </button>
+
+                                            <button class="btn btn-primary bg-blue mr-1" type="button"><a href="/contactus" target="_blank" class="text-white">Contact us</a></button>
+
+
+                                    </div>
+                                    <div class="addComment">
+                                        <button class="btn btn-primary bg-blue" id="addcomment" type="button">Add Comment</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 addComment p-4">
+                            <div class="row form-group align-items-center" style="display: none;">
+                            <div class="col-md-2">
+                                <h5>Comments:</h5>
+                                <p>Brief information about your sleep. </p>
+                            </div>
+                            <div class="col-md-7">
+                            <div class="addComment">
+                                <div class="form-group" style="display: none;">
+                                     <textarea rows="5" name="comment" placeholder="Write your comment..." class="p-3"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                            <div class="col-md-3">
+                                <p>Your Medical provider will review the information you provide before your next appointment. </p>
+                                <p>If you are experiencing a medical emergency, call <a href="tel: 911" class="font-weight-bold text-dark">911</a> immediately.</p>
+                            </div>
+                        </div>
+                        </div>
+                         {% if messages %}
+                            {% for message in messages %}
+
+                                <div class="field submit create_account_button text-center">
+                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                </div>
+
+
+                            {% endfor %}
+                        {% endif %}
+
+
+
+
+
+
+                        <div class="field submit create_account_button text-center" id="btn_div">
+
+                            <span id="final_msg"></span>
+                            <button type="button" class="btn btn-primary mobile_btn" data-toggle="modal" data-target=".confimPopup" id="openPopup">SUBMIT</button>
+
+                      <br> <br>
+                            <span class="alert alert-danger missingDate" style="display: none;">Please select a day before updating</span>
+
+                        </div>
+                        <div class="w-100"></div>
+                        <span class="alert-msg" id="time_sleep_guid_msg">Sleep Restriction Disclaimer: We advise during the course of this program to only restrict your sleep to a minimum of 5.5 hours. If you need further sleep restriction in order to maintain your sleep efficiency at or above 85%, You may need additional personalized consultation.</span>
+                            <!-- Modal -->
+                            <div class="modal fade confimPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header bg-white border-0">
+                                    <button type="button" class="close text-dark" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <div class="iconBox text-center">
+                                          <img src="{% static "assets/images/doctor-uncle.png" %}" draggable="false">
+                                      </div>
+                                      <div class="warning-text text-center pb-3">
+                                          <p class="mb-0">Are you sure want to submit the form?</p>
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer justify-content-center border-0 bg-white pb-3">
+                                      <button type="button" class="btn cogniClor" id="submitDiaryForm">Yes</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        </div>
+         <div class="d-flex gap-15 justify-content-right align-items-right float-left">
+                        <div class="buttonLink">
+                                      <a class="btn-primary btn text-white" href="/dashboard/" style="margin-top: 10px; background-color: #28a745; border-color: #28a745; margin-left: 30px;"><i class="fa fa-angle-double-left" style="font-size:48px;color:#ffff; text-alignment: center;"></i></a>
+
+                                  </div>
+                            </div>
+    </section>
+
+
+{% endblock %}
+
+{% block jqueryScript %}
+{% include "dashboard-js.html" %}
+<script>
+    <!--tooltips -->
+
+jQuery(document).ready(function(){
+
+jQuery('div#div_id_time_went_to_bed label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter the time you laid down in bed."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_lights_out label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter the time the lights were turned off."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_minutes_fall_asleep label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter how many minutes you believe it took for you to fall asleep."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_no_of_times_awakend label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter how many times did you wake up during the middle of the night"><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_total_time_awakened label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter you the total amount in minutes you believe you were awake."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_time_got_up label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter when you woke up in the morning."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_minutes_fellback_sleep label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="If you fell back asleep, enter how much additional time in minutes did you sleep for."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_out_of_bed label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="From memory, once awake, enter what time you physically got up from bed."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_desire_wakeup_time label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter at what time you wanted to wake up."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_number_of_naps label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter how many times during the previous day did you nap."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+jQuery('div#div_id_totlatime_napping_minutes label').append('<button type="button" class="information" data-toggle="tooltip" data-placement="top" title="Enter the total time in minutes you napped during the previous day."><i class="fa fa-info-circle" aria-hidden="true"></i></button>');
+
+
+});
+</script>
+<script type="text/javascript">
+
+ var tbedtime24 = 0;
+ var tsleeptime24 = 0;
+ var eff24 = 0;
+
+<!--modal -->
+jQuery('#openPopup').click(function(){
+   setTimeout(function(){
+      jQuery('.modal-backdrop.fade:not(:last-child)').remove();
+   }, 500)
+});
+
+jQuery('.addComment button').click(function(){
+    jQuery('.addComment .form-group').toggleClass('d-flex');
+})
+
+
+jQuery('input[type="number"]').each(function(){
+    jQuery(this).attr('min', '0');
+    jQuery(this).attr('oninput', 'this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null');
+})
+    var endresult = true;
+
+    var datee = $('#entrydate').val();
+    $('input[name="date"]').val(datee);
+
+    $('#id_time_went_to_bed').blur(function(){
+        if($('#id_time_went_to_bed').val()=="")
+        {
+            $('#id_time_went_to_bed').focus();
+            $(this).val('');
+<!--            $("#went_message").text("Enter proper time : hh-mm  AM/PM");-->
+<!--            $("#went_message").show();-->
+            $("#error_message").text("Enter proper time : hh-mm  AM/PM");
+            $("#error_message").show();
+            $("#id_time_went_to_bed").css('border', '1px solid red');
+
+        }
+        else
+        {
+
+            $("#id_time_went_to_bed").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+        }
+
+    });
+
+    $('#id_lights_out').blur(function(){
+       if($('#id_lights_out').val()=="")
+        {
+            $('#id_lights_out').focus();
+             $(this).val('');
+            $("#error_message").text("Enter proper time : hh-mm AM/PM");
+            $("#error_message").show();
+            $("#id_lights_out").css('border', '1px solid red');
+
+
+
+        }
+        else
+        {
+            $("#id_lights_out").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+
+        }
+
+    });
+
+
+
+     $('#id_minutes_fall_asleep').focus(function(){
+        var checkTimeChange = timeChange($("#id_time_went_to_bed").val(), $("#id_lights_out").val());
+
+        if(!checkTimeChange)
+        {
+            $("#id_lights_out").focus();
+            $('#id_lights_out').val('');
+            $("#error_message").text('Invalid time - Enter a time after the time you went to bed.');
+            $("#error_message").show();
+             $("#id_lights_out").css('border', '1px solid red');
+
+
+        }
+        else
+        {
+            $("#id_lights_out").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+
+        }
+     });
+     $('#id_minutes_fall_asleep').blur(function(){
+        if($("#id_minutes_fall_asleep").val() == '')
+        {
+            $("#id_minutes_fall_asleep").val(0);
+        }
+        else
+        {
+            $('#id_no_of_times_awakend').focus();
+        }
+
+
+     });
+
+    $('#id_time_got_up').blur(function(){
+
+        if($('#id_time_got_up').val()=="")
+        {
+            $('#id_time_got_up').focus();
+            $('#id_time_got_up').val('');
+            $("#error_message").text("Enter proper time : hh-mm AM/PM");
+            $("#error_message").show();
+            $("#id_time_got_up").css('border', '1px solid red');
+
+        }
+
+        else
+        {
+            $("#id_time_got_up").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+            //$('#id_minutes_fellback_sleep').focus();
+
+        }
+
+    });
+     $('#id_minutes_fellback_sleep').focus(function(){
+        var mynewtime = timeadd($("#id_lights_out").val(), $("#id_minutes_fall_asleep").val());
+        console.log(mynewtime);
+        var newtime = timeadd(mynewtime, $("#id_total_time_awakened").val());
+        console.log(newtime);
+        var checkTimeChange = timeChange(newtime, $("#id_time_got_up").val());
+        console.log(checkTimeChange);
+        if(!checkTimeChange)
+        {
+            $("#id_time_got_up").focus();
+            $("#id_time_got_up").val('');
+            $("#error_message").text('Invalid time - Enter a time after the time you fell asleep.');
+            $("#error_message").show();
+            $("#id_time_got_up").css('border', '1px solid red');
+
+
+        }
+        else
+        {
+            $("#id_time_got_up").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+
+        }
+
+     });
+
+
+     $('#id_minutes_fellback_sleep').focusout(function(){
+
+
+        if($("#id_minutes_fellback_sleep").val() == '')
+        {
+
+            $("#id_minutes_fellback_sleep").val(0);
+        }
+
+        else
+        {
+            $('#id_out_of_bed').focus();
+
+
+        }
+
+
+     });
+
+     $('#id_desire_wakeup_time').blur(function(){
+
+
+
+     });
+    $('#id_desire_wakeup_time').focus(function(){
+         var mynewtime = timeadd($("#id_time_got_up").val(), $("#id_minutes_fellback_sleep").val());
+         //alert(mynewtime);
+         var checkTimeChange = timeChange(mynewtime, $("#id_out_of_bed").val());
+
+        if(!checkTimeChange)
+        {
+
+            setTimeout(function(){
+                $("#error_message").text('Invalid time - Enter a time after the time you woke up.');
+                $("#error_message").show();
+                $("#id_out_of_bed").css('border', '1px solid red');
+                $("#id_out_of_bed").focus();
+                $("#id_out_of_bed").val('');
+            }, 400)
+
+        }
+        else
+        {
+            $("#id_out_of_bed").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+
+        }
+
+
+     });
+
+
+    $('#id_out_of_bed').blur(function(){
+
+         if($('#id_out_of_bed').val()=="")
+        {
+            $('#id_out_of_bed').focus();
+            $(this).val('');
+            $("#error_message").text("Enter proper time : hh-mm AM/PM");
+            $("#error_message").show();
+            $("#id_out_of_bed").css('border', '1px solid red');
+
+
+        }
+        else
+        {
+          var wentToBedInput = document.getElementById('id_time_went_to_bed');
+          var lightsOutInput = document.getElementById('id_lights_out');
+          var timeGotUpInput = document.getElementById('id_time_got_up');
+          var gotUpFromBedInput = document.getElementById('id_out_of_bed');
+
+          var wentToBedTime = wentToBedInput.value;
+          var lightsOutTime = lightsOutInput.value;
+          var wakeupTime = timeGotUpInput.value;
+          var gotUpTime = gotUpFromBedInput.value;
+
+          var wentToBed = new Date(`2000/01/01 ${wentToBedTime}`);
+          var lightsOut = new Date(`2000/01/01 ${lightsOutTime}`);
+          var wakeup = new Date(`2000/01/01 ${wakeupTime}`);
+          var gotUp = new Date(`2000/01/01 ${gotUpTime}`);
+
+          // Check if wakeup time is before the went to bed time or lights out time
+          if (wakeup < wentToBed || wakeup < lightsOut) {
+            // Add one day to the wakeup time
+            wakeup.setDate(wakeup.getDate() + 1);
+            gotUp.setDate(gotUp.getDate() + 1);
+          }
+
+
+
+          var totalInBedTime = gotUp - wentToBed;
+          var totalSleepTime = wakeup - lightsOut;
+          var sleepEfficiency = (totalSleepTime / totalInBedTime) * 100;
+
+          if (totalInBedTime > 24 * 60 * 60 * 1000) {
+            console.log("Error: Total time in bed exceeds 24 hours");
+            setTimeout(function(){
+            $("#error_message").text("Total time in bed exceeds 24 hours");
+            $("#error_message").show();
+            $("#id_out_of_bed").css('border', '1px solid red');
+            $('#id_out_of_bed').focus();
+            $(this).val('');
+            }, 400);
+
+
+          } else {
+            $("#id_out_of_bed").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+            console.log("Total time in bed:", formatTime(totalInBedTime));
+            console.log("Total sleep time:", formatTime(totalSleepTime));
+            console.log("Sleep efficiency:", sleepEfficiency.toFixed(2) + "%");
+            tbedtime24 = parseFloat(formatTime(totalInBedTime));
+            tsleeptime24 = parseFloat(formatTime(totalSleepTime));
+            eff24 = parseFloat(sleepEfficiency.toFixed(2));
+            $('#id_desire_wakeup_time').focus();
+
+          }
+
+
+          function formatTime(timeInMilliseconds) {
+          var hours = Math.floor(timeInMilliseconds / (60 * 60 * 1000));
+          var minutes = Math.floor(
+            (timeInMilliseconds % (60 * 60 * 1000)) / (60 * 1000)
+          );
+            var tt = hours+":"+minutes;
+            var timemin = tt.split(":");
+            var hour = parseFloat(timemin[0]);
+            var minute = parseInt(timemin[1]);
+            var milminutes = ((minute/60) * 100).toFixed(0);
+            if(milminutes == 0)
+            {
+                milminutes = milminutes+"0";
+            }
+            if(milminutes < 10 && milminutes != 0)
+            {
+                milminutes = "0"+milminutes;
+            }
+            var miltime = hour+"."+milminutes;
+            return miltime;
+          }
+          $("#id_out_of_bed").css('border', '1px solid #e2e2e2');
+          $("#error_message").hide();
+
+          $('#id_desire_wakeup_time').focus();
+
+        }
+
+    });
+
+    $('#id_number_of_naps').focus(function(){
+        if($('#id_desire_wakeup_time').val()=="")
+        {
+            $('#id_desire_wakeup_time').focus();
+            $(this).val('');
+            $("#error_message").text("Enter proper time : hh-mm AM/PM");
+            $("#error_message").show();
+            $("#id_desire_wakeup_time").css('border', '1px solid red');
+
+
+        }
+        else
+        {
+            $("#id_desire_wakeup_time").css('border', '1px solid #e2e2e2');
+            $("#error_message").hide();
+            $('#id_number_of_naps').focus();
+            //$('#id_out_of_bed').focus();
+
+        }
+
+     });
+      $('#id_number_of_naps').blur(function(){
+
+            if($("#id_number_of_naps").val() == 0)
+        {
+
+            $("#id_totlatime_napping_minutes").val(0);
+        }
+
+        if($("#id_number_of_naps").val() == '')
+        {
+
+            $("#id_number_of_naps").val(0);
+            $("#id_totlatime_napping_minutes").val(0);
+
+
+        }
+         if($("#id_number_of_naps").val() > 0)
+        {
+
+            //$("#id_no_of_times_awakend").val(0);
+            $("#id_totlatime_napping_minutes").val(1).focus();
+
+        }
+
+      });
+
+   $("#id_no_of_times_awakend").blur(function(){
+
+        if($("#id_no_of_times_awakend").val() == 0)
+        {
+
+            $("#id_total_time_awakened").val(0);
+        }
+
+        if($("#id_no_of_times_awakend").val() == '')
+        {
+
+            $("#id_no_of_times_awakend").val(0);
+
+
+        }
+         if($("#id_no_of_times_awakend").val() > 0)
+        {
+
+            //$("#id_no_of_times_awakend").val(0);
+            $("#id_total_time_awakened").val(1).focus();
+
+        }
+
+   });
+
+<!--function timeadd(lightout,sleeptime) {-->
+<!--        var mytime;-->
+<!--        var getslightouttime = lightout.split(":");-->
+<!--        var getsleeptime = parseInt(sleeptime);-->
+<!--        var theTimehour = parseInt(getslightouttime[0]);-->
+<!--        var theTimemin = parseInt(getslightouttime[1]);-->
+<!--        var totalminutes = theTimemin + getsleeptime;-->
+<!--        if (totalminutes >= 60) {-->
+<!--            theTimehour += Math.floor(totalminutes / 60);-->
+<!--            totalminutes= totalminutes % 60;-->
+<!--            if (totalminutes < 10)-->
+<!--            {-->
+<!--                 totalminutes = "0" + totalminutes;-->
+<!--                 mytime = theTimehour + ":" + totalminutes;-->
+<!--                 return mytime;-->
+<!--            }-->
+<!--            else-->
+<!--            {-->
+<!--                mytime = theTimehour + ":" + totalminutes;-->
+<!--                return mytime;-->
+<!--            }-->
+
+<!--        }-->
+<!--        else-->
+<!--        {-->
+<!--            theTimemin += getsleeptime;-->
+<!--            mytime = theTimehour+":"+theTimemin;-->
+<!--            return mytime;-->
+<!--        }-->
+
+
+<!--}-->
+function timeadd(lightout, sleeptime) {
+    var getLightOutTime = lightout.split(":");
+    var lightOutHour = parseInt(getLightOutTime[0]);
+    var lightOutMinute = parseInt(getLightOutTime[1]);
+    var sleepMinutes = parseInt(sleeptime);
+
+    // Calculate total minutes
+    var totalMinutes = lightOutHour * 60 + lightOutMinute + sleepMinutes;
+
+    // Calculate new hours and minutes
+    var newHour = Math.floor(totalMinutes / 60) % 24;
+    var newMinute = totalMinutes % 60;
+
+    // Format the result
+    var formattedHour = newHour < 10 ? "0" + newHour : newHour;
+    var formattedMinute = newMinute < 10 ? "0" + newMinute : newMinute;
+
+    return formattedHour + ":" + formattedMinute;
+}
+
+
+function militarytime2(fulltime,timeorminute) {
+        if(timeorminute == 'time')
+        {
+            var timemin = fulltime.split(":");
+            var hour = parseFloat(timemin[0]);
+            var minute = parseInt(timemin[1]);
+            var milminutes = (minute/60) * 100;
+            if(milminutes == 0){ milminutes = milminutes+"0"; }
+            if(milminutes < 10 && milminutes != 0){milminutes = "0"+milminutes; }
+            var miltime = hour+""+milminutes;
+            //alert(miltime);
+
+                //alert("greater 1200",miltime)
+            miltime = parseFloat(miltime) + 2400;
+            return miltime;
+
+            }
+            }
+
+
+
+
+function militarytime(fulltime,timeorminute) {
+        if(timeorminute == 'time')
+        {
+            var timemin = fulltime.split(":");
+            var hour = parseFloat(timemin[0]);
+            var minute = parseInt(timemin[1]);
+            var milminutes = (minute/60) * 100;
+            if(milminutes == 0){ milminutes = milminutes+"0"; }
+            if(milminutes < 10 && milminutes != 0){milminutes = "0"+milminutes; }
+            var miltime = hour+""+milminutes;
+            //alert(miltime);
+            if(miltime < 1200)
+            {
+                //alert("greater 1200",miltime)
+                miltime = parseFloat(miltime) + 2400;
+                return miltime;
+            }
+            else
+            {
+                return miltime;
+            }
+
+        }
+        if(timeorminute == 'minute')
+        {
+            var minute = parseInt(fulltime);
+            var milminutes = (minute/60) * 100;
+            return milminutes
+        }
+         if(timeorminute == 'notime')
+        {
+            var timemin = fulltime.split(":");
+            var hour = parseFloat(timemin[0]);
+            var minute = parseInt(timemin[1]);
+            var milminutes = (minute/60) * 100;
+            if(milminutes == 0){ milminutes = milminutes+"0"; }
+            if(milminutes < 10 && milminutes != 0){milminutes = "0"+milminutes; }
+            var miltime = hour+""+milminutes;
+            miltime = parseFloat(miltime) + 2400;
+            return miltime;
+        }
+
+        else
+        {
+            console.log("NO TIME");
+        }
+
+
+
+}
+function timeChange(startTime, endTime) {
+	    firstTime = startTime.split(":");
+        secondTime = endTime.split(":");
+
+        var startTimeObject = new Date();
+        startTimeObject.setHours(firstTime[0], firstTime[1], 00);
+
+        var endTimeObject = new Date();
+        endTimeObject.setHours(secondTime[0], secondTime[1], 00);
+
+       // if(firstTime[0]<=12)
+        //{
+         //   startTimeObject.setDate(startTimeObject.getDate() + 1);
+       // }
+
+       // if(secondTime[0]<=12)
+        //{
+        //    endTimeObject.setDate(endTimeObject.getDate() + 1);
+        //    console.log(endTimeObject);
+       // }
+
+        if(firstTime[0] < 12 && secondTime[0] < 12)
+        {
+            console.log("smaller / smaller")
+            console.log("one")
+            //startTimeObject.setDate(startTimeObject.getDate() + 1);
+            //endTimeObject.setDate(endTimeObject.getDate() + 1);
+        }
+
+        if(firstTime[0] < 12 && secondTime[0] > 12)
+        {
+            console.log("smaller / greater")
+            console.log("two")
+            //add by shakaib 16/05/2023 startTimeObject
+            //startTimeObject.setDate(startTimeObject.getDate() + 1);
+            //endTimeObject.setDate(endTimeObject.getDate() + 1);
+        }
+
+        if(firstTime[0] > 12 && secondTime[0] > 12)
+        {
+            console.log("greater / greater")
+            console.log("three")
+            //startTimeObject.setDate(startTimeObject.getDate() - 1);
+            //changes made by shakaib 16/05/2023
+            //endTimeObject.setDate(endTimeObject.getDate() + 1);
+            //console.log(endTimeObject);
+
+        }
+         if(firstTime[0]>12 && secondTime[0]<12)
+        {
+            console.log("grater / smaller")
+            console.log("four")
+            //startTimeObject.setDate(startTimeObject.getDate() - 1);
+            endTimeObject.setDate(endTimeObject.getDate() + 1);
+        }
+        if(startTimeObject > endTimeObject)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+
+        }
+    }
+$(function () {
+            $("#submitDiaryForm").click(function () {
+            if($("#error_message").is(":visible"))
+            {
+                endresult = false;
+
+                $('#openPopup').attr('disabled','disabled');
+
+            }
+            else
+            {
+                endresult = true;
+                $('#openPopup').removeAttr('disabled');
+
+            }
+           // var gotuptime = timeadd($("#id_time_got_up").val(), $("#id_minutes_fellback_sleep").val());
+           // var sleeptime = timeadd($("#id_lights_out").val(), $("#id_minutes_fall_asleep").val());
+           // alert(sleeptime);
+           // $('#avgsleep').val(sleeptime);
+           // $('#avggotup').val(gotuptime);
+
+
+            if(endresult == true)
+            {
+
+
+                 var totalgotuptime = timeadd($("#id_time_got_up").val(), $("#id_minutes_fellback_sleep").val());
+
+                 var x = totalgotuptime.split(":");
+                 var theTimehour = parseInt(x[0]);
+                 var theTimemin = parseInt(x[1]);
+                 if(theTimehour < 10)
+                 {
+                    theTimehour = "0" + theTimehour;
+                 }
+                 if(theTimemin < 10)
+                 {
+                    theTimemin = "0" + theTimemin;
+                 }
+                 var reslt = theTimehour+":"+theTimemin;
+                 $('input[name="totalgotup"]').val(reslt);
+
+                 var oldfallsleeptime = timeadd($("#id_lights_out").val(), $("#id_minutes_fall_asleep").val());
+
+                 var xx = oldfallsleeptime.split(":");
+                 var theTimehourx = parseInt(xx[0]);
+                 var theTimeminx = parseInt(xx[1]);
+                 if(theTimehourx < 10)
+                 {
+                    theTimehourx = "0" + theTimehourx;
+                 }
+                 if(theTimeminx < 10)
+                 {
+                    theTimeminx = "0" + theTimeminx;
+                 }
+                 var resltx = theTimehourx+":"+theTimeminx;
+                 $('input[name="totalsleep"]').val(resltx);
+
+                 //$('#id_time_fell_asleep').val(oldfallsleeptime);
+
+                 var militarywent = militarytime($("#id_time_went_to_bed").val(), 'time');
+                 //alert(militarywent);
+                 var militarylightout = militarytime($("#id_lights_out").val(), 'time');
+                 //alert(militarylightout);
+                 var militaryfallasleep = militarytime($("#id_minutes_fall_asleep").val(), 'minute');
+                 //alert(militaryfallasleep);
+                 //var oldfallsleeptime = timeadd($("#id_lights_out").val(), $("#id_minutes_fall_asleep").val());
+                 //$('input[name="oldfallsleeptime"]').val(oldfallsleeptime);
+                 var militiaryawakenight = militarytime($("#id_total_time_awakened").val(), 'minute');
+                 //alert(militiaryawakenight);
+                 var militarywokeup = militarytime2($("#id_time_got_up").val(), 'time');
+                 //alert(militarywokeup);
+                 var militaryagainsleep = militarytime($("#id_minutes_fellback_sleep").val(), 'minute');
+                 //alert(militaryagainsleep);
+                 var militarydesiretime = militarytime2($("#id_desire_wakeup_time").val(), 'time');
+                 //alert(militarydesiretime);
+                 var militarygotup = militarytime2($("#id_out_of_bed").val(), 'time');
+                 //alert(militarygotup);
+                 var timeinbed = militarygotup - militarywent;
+                 if(tbedtime24 > 0)
+                 {
+                    timeinbed = tbedtime24.toFixed(2);
+                    //alert(tbedtime24);
+                 }
+                 else
+                 {
+                    timeinbed = (timeinbed / 100).toFixed(2);
+                 }
+                 //alert(timeinbed);
+                 $('input[name="timeinbed"]').val(timeinbed);
+                 var totalsleeptime = parseFloat(militarywokeup) - (parseFloat(militarylightout) + parseFloat(militaryfallasleep)) - parseFloat(militiaryawakenight) + parseFloat(militaryagainsleep);
+                 //alert(totalsleeptime);
+                 if(tsleeptime24 > 0)
+                 {
+                    totalsleeptime = tsleeptime24.toFixed(2);
+                    //alert(totalsleeptime);
+                 }
+                 else
+                 {
+                    totalsleeptime = (totalsleeptime / 100).toFixed(2);
+                    //alert(totalsleeptime);
+                 }
+                 if(totalsleeptime > 9.5)
+                 {
+                    overslept = (totalsleeptime - 9.5) * 60;
+                    overslept = Math.round(overslept);
+                    $('input[name="overslept"]').val(overslept);
+                    //alert(overslept);
+                 }
+                 //alert(totalsleeptime);
+                 $('input[name="totalsleeptime"]').val(totalsleeptime);
+                 var sleepefficiency = totalsleeptime / timeinbed;
+                 if(eff24 > 0)
+                 {
+                    sleepefficiency = eff24;
+                    //alert(sleepefficiency);
+                 }
+                 else
+                 {
+                    sleepefficiency = (sleepefficiency * 100).toFixed(2);
+                 }
+                 //alert(sleepefficiency);
+                 if(sleepefficiency == 'NaN')
+                 {
+                    sleepefficiency = 0.00;
+                    //alert(sleepefficiency);
+                 }
+                 $('input[name="sleepefficiency"]').val(sleepefficiency);
+                 if($("#id_minutes_fall_asleep").val() > 29)
+                 {
+                    var probfallingsleep = ($("#id_minutes_fall_asleep").val() / 60).toFixed(2);
+                    //alert(probfallingsleep);
+                    $('input[name="problemfallingasleep"]').val(probfallingsleep);
+                 }
+                 else
+                 {
+                    var probfallingsleep = "";
+                    //alert(probfallingsleep);
+                    $('input[name="problemfallingasleep"]').val(probfallingsleep);
+                 }
+                 if($("#id_total_time_awakened").val() > 29)
+                 {
+                    var awakeduringnight = ($("#id_total_time_awakened").val() / 60).toFixed(2);
+                    //alert(awakeduringnight);
+                    $('input[name="awakeduringnight"]').val(awakeduringnight);
+                 }
+                 else
+                 {
+                    var awakeduringnight = "";
+                    //alert(awakeduringnight);
+                    $('input[name="awakeduringnight"]').val(awakeduringnight);
+                 }
+                 if((militarydesiretime-militarywokeup-militaryagainsleep)/100 > 0.49)
+                 {
+                    var awaketooearly = ((militarydesiretime-militarywokeup-militaryagainsleep) / 100).toFixed(2);
+                    //alert(awaketooearly);
+                    $('input[name="awaketooearly"]').val(awaketooearly);
+                 }
+                 else
+                 {
+                    var awaketooearly = "";
+                    //alert(awaketooearly);
+                    $('input[name="awaketooearly"]').val(awaketooearly);
+                 }
+                 if((militarygotup-militarywokeup)/100 > 0.49)
+                 {
+                    var delayedgettingup = ((militarygotup-militarywokeup) / 100).toFixed(2);
+                    //alert(delayedgettingup);delayedgettingup
+                    $('input[name="delayedgettingup"]').val(delayedgettingup);
+                 }
+                 else
+                 {
+                    var delayedgettingup = "";
+                    //alert(delayedgettingup);
+                    $('input[name="delayedgettingup"]').val(delayedgettingup);
+                 }
+                 var sdateAv = $("#sdate").val();
+                 if(sdateAv !== "")
+                 {
+                     $("#diaryf").submit();
+                 }
+                 else
+                 {
+                     $(".missingDate").show();
+                 }
+
+            }else{
+                 $('#openPopup').removeAttr('disabled');
+            }
+
+            } );
+
+
+
+
+});
+
+</script>
+<script>
+    function applyMinMaxLimit(inputField, min, max) {
+    inputField.min = min;
+    inputField.max = max;
+
+    inputField.addEventListener('input', function() {
+      if (inputField.value > max) {
+        inputField.value = max;
+      }
+    });
+  }
+
+  var minutesFallAsleepInput = document.getElementById('id_minutes_fall_asleep');
+  applyMinMaxLimit(minutesFallAsleepInput, 0, 300);
+
+  var minutesWakeUpInput = document.getElementById('id_total_time_awakened');
+  applyMinMaxLimit(minutesWakeUpInput, 0, 300);
+  var minutesWakeUpInput = document.getElementById('id_minutes_fellback_sleep');
+  applyMinMaxLimit(minutesWakeUpInput, 0, 300);
+  var minutesWakeUpInput = document.getElementById('id_totlatime_napping_minutes');
+  applyMinMaxLimit(minutesWakeUpInput, 0, 300);
+  var minutesWakeUpInput = document.getElementById('id_no_of_times_awakend');
+  applyMinMaxLimit(minutesWakeUpInput, 0, 10);
+  var minutesWakeUpInput = document.getElementById('id_number_of_naps');
+  applyMinMaxLimit(minutesWakeUpInput, 0, 10);
+
+
+</script>
+{% endblock %}

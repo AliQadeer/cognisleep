@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <section class="forward_sec" xmlns="http://www.w3.org/1999/html">
+        <div class="container">
+            <div class="row">
+
+                <div class="text-center">
+                    <h2>COGNISLEEP RESULT</h2>
+                    <div class="forward_quest_outer">
+                        <div class="{{ class_name }}" id="result_bar">
+                            <h4>{{ txt_insomnia_points }}</h2>
+                                <p> {{ txt_insomnia_msg }} </p>
+                        </div>
+
+
+                    </div>
+                    <input type="hidden" name="txt_insomnia_points" id="txt_insomnia_points"
+                           value="{{ txt_insomnia_points }}">
+                    <input type="hidden" name="txt_insomnia_msg" id="txt_insomnia_msg"
+                           value="{{ txt_insomnia_msg }}">
+                    <input type="hidden" name="class_name" id="class_name"
+                           value="{{ class_name }}">
+                    <input type="hidden" name="insomnia_value" id="insomnia_value"
+                           value="{{ insomnia_value }}">
+
+                    {% if insomnia_value == '100'  %}
+                        <a href="/questions/cogni_questionsv2" class="btn btn-primary">Next</a>
+                    {% else %}
+                        <a href="/pricing/6/" class="btn btn-primary">Next</a>
+                    {% endif %}
+                <br>
+                <br>
+            <!--<img src="{% static "assets/images/doctor.png" %}" class="img-sm img-thumbnail img-responsive" alt="" width="200">-->
+                    <img src="{% static "assets/images/doctor.png" %}" alt = "" width="200" height="120" >
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

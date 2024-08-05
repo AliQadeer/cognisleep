@@ -1,0 +1,546 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+   span#war_msg {
+   color: red;
+   float: left;
+   width: 100%;
+   font-weight:bold;
+   margin-top: -15px;}
+
+.patient_regist_form img {
+    width: 100%;
+    height: 200px !important;
+    object-fit: cover;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.take_btn button {
+  font-size: 12px !important;
+  white-space: nowrap;
+}
+
+.gap-15 {
+  gap: 15px;
+}
+
+.provider_registeration form input {
+  margin-bottom: 0;
+}
+
+video {
+  display: none;
+  width: 100%;
+  height: auto !important;
+}
+
+.uploadedImage {
+  width: 100%;
+  height: 340px;
+  overflow: hidden;
+  display: none;
+}
+
+.uploadedImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.take_btn {
+  display: flex;
+  gap: 15px;
+}
+
+.provider_registeration form > .row:nth-of-type(1) > div:not(:last-child), .provider_registeration form > div >.row:nth-of-type(1) > div:not(:last-child):not(:first-child) {
+    border-right: 1px solid #afafafb0 !important;
+}
+
+.openImage.show.in, .reason.show.in {
+    display: block !important;
+}
+
+button.close {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    z-index: 999;
+    right: -20px;
+    background-color: #5eb82d;
+    border-radius: 50px;
+    font-size: 33px;
+    opacity: 1;
+    color: #fff;
+    top: -20px;
+}
+
+.reasonBox label {
+    font-size: 16px;
+}
+
+.fade.show {
+    display: block !important;
+    opacity: 1;
+}
+
+.modal-backdrop {
+    background-color: #0000007a !important;
+}
+
+
+
+
+.container-image {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    
+.bigImage {
+      display: block;
+      width: 100%;
+      transition: transform 0.2s ease-in-out;
+      transform-origin: top left;
+}
+
+
+.container-image {
+  cursor: zoom-in;
+}
+
+
+
+@media(min-width: 1024px) {
+  .signDoc .modal-dialog {
+    width: 1280px !important;
+    max-width: 100%;
+}
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<div class="content-wrap verify_provider pt-4">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 p-r-0 title-margin-right">
+                      <div class="row">
+   <div class="provider_login_form col-md-12">
+ <button  style=" margin-top: -10px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i>Back</button>
+      <h3 class="hilight_text mb-4">PROVIDER VERIFICATION</h3>
+
+   </div>
+   {% if messages %} {% for message in messages %}
+   <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+   {% endfor %} {% endif %}
+   <div class="col-sm-12 col-md-12 col-lg-12">
+      <div class="provider_registeration_form">
+         <div class="provider_registeration patient_regist_form">
+            <form method="POST" action="" enctype="multipart/form-data">
+               {% csrf_token %}
+               <div class="row">
+
+
+
+                 <div class="col-sm-12 col-md-3 col-lg-3">
+                  <h5>First Name</h5>
+
+                   <p>{{ provider.first_name }}</p>
+
+                </div>
+
+
+
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                  <h5>Last Name</h5>
+
+                  <p>{{ provider.last_name }}</p>
+
+                </div>
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+                  <h5>Email</h5>
+                  <p>{{ email }}</p>
+
+
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                  <h5>Contact Number</h5>
+
+                  <p>{{ provider.contact_no }}</p>
+
+
+                </div>
+
+              </div>
+
+
+
+                  <div class="clearfix"></div>
+                  <div class="row py-4 uploadedImages">
+                    <div class="col-sm-12 col-md-6 col-lg-3 my-3">
+                       <h5>Profile Picture</h5>
+
+                        <img src="{{ provider.provider_image }}" alt="Profile Picture" data-toggle="modal" data-target=".openImage">
+
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 my-3">
+                       <h5>Medical License</h5>
+
+                        <img src="{{ provider.medical_license_image }}" alt="Medical License" data-toggle="modal" data-target=".openImage">
+
+
+                    </div>
+
+                     <div class="col-sm-12 col-md-6 col-lg-3 my-3" >
+                       <div class="input-groups">
+
+                             <h5>Drivers License Front</h5>
+
+                           <img src="{{ provider.driving_license_front_img }}" alt="Driving License Front" data-toggle="modal" data-target=".openImage">
+
+                       </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 my-3">
+                       <h5>Drivers License Back</h5>
+
+                        <img src="{{ provider.driving_license_back_img }}" alt="Driving License Back" data-toggle="modal" data-target=".openImage">
+
+                    </div>
+
+                  </div>
+                  <div class="">
+
+                      <div class="row py-4">
+                        <div class="col-md-12">
+                            <h4 class="provide_details mb-4">PRACTICE LOCATION</h4>
+                        </div>
+                         <div class="col-sm-12 col-md-4 col-lg-4">
+                              <h5>Practice Name</h5>
+
+                               <p>{{ provider.practice_name }}</p>
+
+
+                           </div>
+                           <div class="col-sm-12 col-md-4 col-lg-4">
+                              <h5>Practice Phone Number</h5>
+
+                               <p>{{ provider.practice_phone_number }}</p>
+
+                           </div>
+                           <div class="col-sm-12 col-md-4 col-lg-4">
+                              <h5>Practice Address</h5>
+
+
+                               <p>{{ provider.practice_address }}</p>
+
+
+
+
+                           </div>
+
+
+
+                     </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                              <div class="d-flex gap-15 justify-content-center align-items-center">
+                                  <div class="buttonLink docSignBtn">
+                                    <a class="btn-primary btn text-white" href="javascript: void();" data-target=".signDoc" data-toggle="modal" onclick="checkApi()">Sign Document</a>
+                                  </div>
+                                  <div class="buttonLink verifiedBtn d-none">
+                                      <a class="btn-primary btn text-white" href="/backend/verified/{{ provider.user_id }}">Verify Now</a>
+
+                                  </div>
+                                   <div class="buttonLink">
+                                      <a class="btn-primary btn text-white" href="javascript:void();"  data-toggle="modal" data-target=".reason">Disapproved</a>
+
+                                  </div>
+                                  {% if provider.flag == "NV" %}
+                                  <div class="buttonLink">
+                                    <a class="btn-primary btn text-white" href="javascript: void();" data-toggle="modal" data-target=".refferal">Update Referral Id</a>
+                                  </div>
+                                  {% endif %}
+
+                              </div>
+                          </div>
+                      </div>
+
+
+
+            </form>
+            </div>
+
+            </div>
+         </div>
+      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade openImage" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md text-center  modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body position-relative p-1">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="container-image">
+            <img src="" class="bigImage mw-100">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- sign document -->
+<div class="modal fade signDoc" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md text-center  modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body position-relative p-1">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="doc-content">
+            <iframe src="{{second_signing_link}}" frameborder="0" height="768" width="100%"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    {% comment %} refferal {% endcomment %}
+
+<div class="modal fade refferal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md text-center  modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body position-relative p-1">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="p-md-4 reasonBox">
+          <h3 class="mb-0">Update Referral ID</h3>
+            <form method="POST" action="/accounts/updateid/">
+                {% csrf_token %}
+          <div class="py-4 text-left">
+            <div class="form-group">
+              <label for="reffereralID">Referral Id:</label>
+             <input class="form-control"  value='{{ request.session.allform.doctor_ref_number|default_if_none:"" }}'   type="text"  required
+                                               id="doctor_ref_number" name="doctor_ref_number"
+                                        onblur="verify_refby(this.value,'office_name');">
+                <input type="hidden" name="pid" value="{{ provider.user_id }}">
+            </div>
+            <div class="form-group">
+              <label for="providerName">Provider Name:</label>
+              <input required class="form-control"  value='{{ request.session.allform.primary_care_doctor_name|default_if_none:"" }}' readonly type="text" required="" oninput="setCustomValidity('')" oninput="setCustomValidity('')" pattern="[a-zA-Z][a-zA-Z ]+" oninvalid="this.setCustomValidity('Primary Care Doctor Name field should be alpha only')"
+                                               id="primary_care_doctor_name" name="primary_care_doctor_name"
+                                               >
+                <div style="margin-top:10px;">
+                                             <span class="text-danger" id="error_office_name">{% if verifiedRefId is not None  %}  {{verifiedRefId}} {% endif %}</span>
+                                         </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="button" class="btn-primary btn text-white" id="providerValidation" >Submit</button>
+          </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade reason" tabindex="-1" role="dialog" aria-labelledby="reasonTitle" aria-hidden="true">
+  <div class="modal-dialog modal-md text-center  modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body position-relative p-1">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="p-md-4 reasonBox">
+    <h3 class="mb-0">Reason</h3>
+    <form method="post" action="/accounts/disapproved/">
+        {% csrf_token %}
+        <div class="py-4">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="reason" id="reason1" value="1" required>
+                <label class="form-check-label" for="reason1">Unable to read submitted documents</label>
+                 <input type="hidden" name="email" value="{{ email }}">
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="reason" id="reason2" value="2">
+                <label class="form-check-label" for="reason2">Inactive/lapsed</label>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn-primary btn text-white closeBtn" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+{% endblock %} {% block jqueryScript %}
+<script
+   src="https://www.google.com/recaptcha/api.js?onload=onloadCallback2&render=explicit"
+   async
+   defer
+   ></script>
+
+
+<script type="text/javascript">
+
+      var container = document.querySelector('.container-image');
+    var image = document.querySelector('.bigImage');
+    
+    container.addEventListener('mousemove', function(event) {
+      var containerRect = container.getBoundingClientRect();
+      var x = event.clientX - containerRect.left;
+      var y = event.clientY - containerRect.top;
+      
+      var offsetX = (x / containerRect.width) * 100;
+      var offsetY = (y / containerRect.height) * 100;
+      
+      image.style.transformOrigin = offsetX + '% ' + offsetY + '%';
+      image.style.transform = 'scale(2)';
+    });
+    
+    container.addEventListener('mouseleave', function() {
+      image.style.transformOrigin = 'top left';
+      image.style.transform = 'scale(1)';
+    });
+
+
+
+
+    jQuery('select[name="status"]').change(function(){
+    jQuery(this).find('option').attr('selected', false);
+    var selectedValue =  jQuery(this).val();
+    jQuery(this).removeAttr('class');
+    jQuery(this).addClass(selectedValue);
+    jQuery(this).find('option:selected').attr('selected', true);
+    localStorage.setItem('status', selectedValue);
+    var hid = jQuery(this).parents('tr').find('.hiddenFeild').text();
+    localStorage.setItem('id', hid);
+    var getStatus = localStorage.getItem('status');
+    var getId = localStorage.getItem('id');
+    jQuery('.modalStatus').text(getStatus);
+    if(getStatus == 'Verified') {
+    window.location.href = "{{ base_url }}/backend/verified/"+getId+"";
+     }
+});
+
+jQuery('.uploadedImages img').click(function(){
+    var getImage = jQuery(this).attr('src');
+    jQuery('.bigImage').attr('src', getImage)
+});
+
+jQuery('.close, .closeBtn').click(function(){
+    jQuery('.modal-backdrop.fade').remove();
+})
+
+
+</script>
+ <script type="text/javascript">
+        const endpoint = '/api/refby/';
+
+        function verify_refby(id, fieldid) {
+                        var cname =  "prp";
+                        var cvalue =  $("#doctor_ref_number").val();
+            $.ajax({
+                method: 'POST',
+                data: {'ref_name': $("#doctor_ref_number").val(), fieldid: fieldid},
+                url: endpoint,
+                success: function (response_data) {
+                   // alert(response_data.message);
+                    var response_data = response_data;
+                    if(response_data.success){
+                        $("#primary_care_office_name").val(response_data.primary_care_office_name);
+                        $("#primary_care_doctor_name").val(response_data.primary_care_doctor_name);
+                        $("#error_office_name").html(response_data.message);
+                        $("#error_office_name").removeClass('text-danger');
+                        $("#error_office_name").addClass('text-success');
+                         $('#providerValidation').attr('type', 'submit');
+                        var d = new Date();
+
+                      d.setTime(d.getTime() + (1*24*60*60*1000));
+                      var expires = "expires="+ d.toUTCString();
+                      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                    }else{
+                        document.cookie = cname + "=" + cvalue + "; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/";
+                        $("#error_office_name").html(response_data.message);
+                         $("#primary_care_office_name").val('');
+                        $("#primary_care_doctor_name").val('');
+                        $("#error_office_name").removeClass('text-success');
+                        $("#error_office_name").addClass('text-danger');
+                         $('#providerValidation').attr('type', 'button');
+                    }
+
+                }
+            });
+        }
+
+
+        // close modal api 
+
+let checkApiInterval;
+
+function checkApi() {
+  checkApiInterval = setInterval(function () {
+    closeModal();
+  }, 4000)
+}
+
+
+
+function closeModal() {
+  const proid = {{provider.user_id}};
+
+  const postData = {
+    'id': proid
+  };
+
+  fetch('{{ base_url }}/accounts/signup_BBA_done_admin/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(postData)
+  })
+    .then(response => {
+      return response.json();
+    })
+
+    .then(data => {
+      console.log(data);
+      if (data.sigature_done == true) {
+        clearInterval(checkApiInterval);
+        jQuery('.signDoc .close').trigger('click');
+        jQuery('.signDoc').hide();
+        jQuery('.signDoc').removeClass("show");
+        jQuery('.verifiedBtn').removeClass('d-none');
+        jQuery('.docSignBtn').addClass('d-none');
+<!--        jQuery('.signDoc .close').trigger('click');-->
+<!--        jQuery('.verifiedBtn').removeClass('d-none');-->
+<!--        jQuery('.docSignBtn').addClass('d-none');-->
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    })
+}
+
+    </script>
+
+
+{% endblock %}

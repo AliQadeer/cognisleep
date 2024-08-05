@@ -1,0 +1,177 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    .gap-15 {
+        gap: 15px;
+    }
+</style>
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8 p-r-0 title-margin-right">
+                    <div class="page-header">
+                         <button  style=" margin-top: -2px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i>Back</button>
+                        <div class="page-title">
+                            <h1>Add New Package</h1>
+                               {% if messages %}
+                                {% for message in messages %}
+                                    <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- /# column -->
+
+                <!-- /# column -->
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view">
+
+                    <div class="row col-sm-12">
+
+                        <form method="post" action="/payments/create_product/">
+                            {% csrf_token %}
+                            <div class="form-row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="form-group w-100">
+                                        <label for="package_name">Add Package Name:</label>
+                                        <input type="text" class="form-control" name="package_name"
+                                                value="">
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label for="package_price">Add Package Price:</label>
+                                        <input type="number" class="form-control" name="package_price"
+                                                value="">
+                                    </div>
+                                    <div class="form-group w-100" >
+                                        <label for="add_package_Description">Add Package Description:</label>
+                                        <textarea rows="5"  class="form-control" name="package_description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <br>
+                                    <input type="submit" class="btn btn-primary mb-2" value="Submit">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+   <div class="modal fade" id="confirmUser" role="dialog" style="">
+                        <div class="modal-dialog modal-md">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Administration Credentials</h5>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <div class="btn-group col-md-12">
+
+                                     <div class="provider_registeration" style="width: 100%; ">
+        <p>Please provide admin credentials to view normal patient</p>
+        <div id="div_id_email" class="form-group"> <label for="id_email" class="col-form-label  requiredField">
+                Email<span class="asteriskField">*</span> </label> <div class=""> <input type="email" name="email" class="emailinput form-control" required="" id="id_email"> </div> </div> <div id="div_id_password" class="form-group"> <label for="id_password" class="col-form-label  requiredField">
+                Password<span class="asteriskField">*</span> </label> <div class=""> <input type="password" name="password" class="passinput textInput form-control" required="" id="id_password"> </div> </div>
+                                         
+                                <div class="create_account_button" align="center">
+                                 <div class="error" style="display: none;color: red;">All fields are required!</div>
+                                    <button type="button" class="btn btn-md btn-primary col-sm-6 providerVerification" data-id="" >Verify
+                                        </button>
+                                </div>
+
+                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+{% endblock %}
+
+
+{% block javascript %}
+
+<script>
+
+    $(document).ready(function (){
+        $("body").delegate("a.viewPatient","click",function (e) {
+            e.preventDefault();
+            $("#confirmUser").modal('show');
+            $(".emailinput").val("");
+            $(".passinput").val("");
+            $(".providerVerification").attr('data-id',$(this).data('id'));
+
+        });
+        $("body").delegate("button.providerVerification","click",function (e) {
+            e.preventDefault();
+            var email = $(".emailinput").val();
+            var pass = $(".passinput").val();
+            var user_id = $(this).data("id");
+            if(!email || !pass){
+               $("div.error").html("All fields are required!");
+                $("div.error").show();
+            }else{
+              $("div.error").hide();
+               const endpoint = '/backend/admin_verify/';
+               $.ajax({
+                    method: 'POST',
+                    data: {"email": email,"pass": pass,'user_id':user_id},
+                    url: endpoint,
+                    success: function (response_data) {
+                        console.log(response_data)
+                        var response_data = response_data;
+                        if(response_data.status){
+                           $("div.error").html("<span style='color:green !important;'>Login Successfully</span>");
+                            $("div.error").show();
+                            setTimeout(function (){
+                                window.location.href = response_data.url
+                            },2000);
+                        }else{
+                            $("div.error").html("Wrong credentials");
+                              $("div.error").show();
+                        }
+
+                    }
+                });
+            }
+          //  $("#confirmUser").modal('show');
+            //$(".providerVerification").attr('data-id',$(this).data('id'));
+
+        });
+    });
+
+
+
+    function loadModel(id) {
+        $("#pid").val(id);
+        $("#myModal").modal('show');
+
+    }
+
+    function del_p() {
+        var id = $("#pid").val();
+        window.location.href = "/delete_patient/" + id + "/current_active_patient";
+    }
+
+
+</script>
+
+{% endblock %}

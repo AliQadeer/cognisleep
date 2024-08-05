@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+{% load  tagss %}
+{% block content %}
+    <div class="container">
+
+    <section class="calculator-section">
+    <div class="calculator-container clearfix">
+
+	<div class="sleep-calculator">
+
+       <h2 align="center"><i class="fa fa-calculator" style="font-size: 49px;"></i> Sleep Efficiency Calculator</h2>
+
+		<p>Answer the sleep efficiency calculator questions based on your typical night's sleep in the past week to estimate your typical sleep efficiency.</p>
+		<div class="sleep-calc-fields">
+		<div class="question" id="question-1">
+			<p>What time did you go to bed?</p>
+			<input id="answer-1" value="9:00pm" class="ui-timepicker-input" type="text" autocomplete="off">
+		</div>
+
+
+		<div class="question" id="question-2">
+			<p>What time did you try to go to sleep?</p>
+			<input id="answer-2" value="10:00pm" class="ui-timepicker-input" type="text" autocomplete="off">
+		</div>
+
+		<div class="question" id="question-3">
+			<p>What time did you fall asleep?</p> <input id="answer-3" value="11:00pm" class="ui-timepicker-input" type="text" autocomplete="off">
+		</div>
+
+		<div class="question" id="question-4">
+			<p>How many times did you wake up during the night?</p> <input id="answer-4" value="1" class="" type="number">
+		</div>
+
+		<div class="question" id="question-5">
+			<p>In total, how long did these awakenings last (in minutes)?</p>
+			<input id="answer-5" value="60" class="" type="number">
+		</div>
+
+		<div class="question" id="question-6">
+			<p>What time was your final awakening?</p>
+			<input id="answer-6" value="6:00am" class="ui-timepicker-input" type="text" autocomplete="off">
+		</div>
+
+		<div class="question" id="question-7">
+			<p>What time did you get out of bed to start your day?</p>
+			<input id="answer-7" value="7:00am" class="ui-timepicker-input" type="text" autocomplete="off">
+		</div>
+		<div class="w-100"></div>
+		<button type="button" id="calculate">CALCULATE</button>
+		</div>
+		<div id="error-message" class="alert alert-danger" style="display: none; text-align: center;"></div>
+
+		<div class="results calculated">
+			<p>Total time in bed: <span id="ttib"></span></p>
+			<p>Total time awake in bed: <span id="ttaib"></span></p>
+			<p>Your sleep efficiency: <span id="sleep-efficiency"></span></p>
+			<p>Your sleep duration: <span id="sleep-duration"></span></p>
+		</div>
+
+	</div>
+
+
+	<div class="results">
+
+		<p>Now that you have calculated your sleep efficiency and sleep duration, take a look at the table to get an idea of where you fall on the sleep efficiency scale.&nbsp;You can use your sleep efficiency calculation for making adjustments to your Sleep Prescription.</p>
+<table>
+<tbody>
+<tr>
+<td style="text-align: right;" width="50%"><strong class="percentage">95%&nbsp;<strong>or greater </strong></strong></td>
+<td width="50%"><strong>Perfect result!</strong> Your should get at least 5.5 hours of sleep each night without exceeding 9.5 hours.<p></p>
+<p><span class="sleep-perscription"><img loading="lazy" class="alignleft wp-image-3643" src="{% static "assets/images/sleep-diary.jpg" %}" alt="" width="44" height="50" sizes="(max-width: 44px) 100vw, 44px">Your sleep
+recommendation: set bedtime for this week should be <strong>30 minutes earlier</strong></span></p></td>
+</tr>
+<tr>
+<td style="text-align: right;" width="50%"><strong class="percentage">90% to 94%</strong></td>
+<td width="50%"><strong>Great result!</strong> When you are in bed you are spending most of your time asleep.<p></p>
+<p><span class="sleep-perscription"><img loading="lazy" class="alignleft wp-image-3643" src="{% static "assets/images/sleep-diary.jpg" %}" alt="" width="44" height="50"  sizes="(max-width: 44px) 100vw, 44px">Your sleep
+recommendation: set bedtime for this week should be <strong>15 minutes earlier</strong></span></p></td>
+</tr>
+<tr>
+<td style="text-align: right;" width="50%"><strong class="percentage">85% to 89%</strong></td>
+<td width="50%"><strong>Great result!</strong> When you are in bed you are spending most of your time asleep.<p></p>
+<p><span class="sleep-perscription"><img loading="lazy" class="alignleft wp-image-3643" src="{% static "assets/images/sleep-diary.jpg" %}" alt="" width="44" height="50" sizes="(max-width: 44px) 100vw, 44px">Your sleep
+recommendation: set bedtime for this week should be <strong>unchanged</strong></span></p></td>
+</tr>
+<tr>
+<td style="text-align: right;" width="50%"><strong class="percentage">70% to 84%</strong></td>
+<td width="50%"><strong>Some opportunity for improvement.</strong> Ideally, you should be spending a larger proportion of your time in bed asleep.<p></p>
+<p><span class="sleep-perscription"><img loading="lazy" class="alignleft wp-image-3643" src="{% static "assets/images/sleep-diary.jpg" %}" alt="" width="44" height="50"  sizes="(max-width: 44px) 100vw, 44px">Your sleep
+recommendation: set bedtime for this week should be <strong>15 minutes later</strong></span></p></td>
+</tr>
+<tr>
+<td style="text-align: right;" width="50%"><strong class="percentage">Less than 70%</strong></td>
+<td width="50%"><strong>Lots of opportunity for improvement.</strong> You are spending more time in bed while awake than is recommended. You may be finding it difficult to get to sleep, stay asleep, or both.<p></p>
+<p><span class="sleep-perscription"><img loading="lazy" class="alignleft wp-image-3643" src="{% static "assets/images/sleep-diary.jpg" %}" alt="" width="44" height="50"  sizes="(max-width: 44px) 100vw, 44px">Your sleep
+recommendation: set bedtime for this week should be <strong>15 minutes later</strong></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Needing 8 hours of sleep per night is a myth. Everyone is different. Some people function very well during the day, without feeling excessively tired, with less than 8 hours of sleep per night. Other people do best with 8 or 9 hours per night. Visit the <a href="https://sleepfoundation.org/press-release/national-sleep-foundation-recommends-new-sleep-times/page/0/1" target="_blank" rel="noopener">National Sleep Foundation</a> for more information about recommended duration of sleep for different age groups.</p>
+
+	</div>
+
+
+
+</div>
+    </section>
+
+    </div>
+{% endblock %}
+
+{% block jqueryScript %}
+{% include "dashboard-js.html" %}
+    <script>
+
+        jQuery(function($) {
+$('.results').hide();
+$('.ui-timepicker-input').timepicker({ 'step': 15 });
+
+$('#calculate').click(function() {
+calculate(); });
+
+
+function calculate() {
+	 // Reset error message container before validation
+    $('#error-message').text('').hide();
+	var answer1 = $('#answer-1').timepicker('getTime');
+	var answer2 = $('#answer-2').timepicker('getTime');
+	var answer3 = $('#answer-3').timepicker('getTime');
+	var answer4 = $('#answer-4').val();
+	var answer5 = $('#answer-5').val();
+	var answer6 = $('#answer-6').timepicker('getTime');
+	var answer7 = $('#answer-7').timepicker('getTime');
+
+	if (answer1 > answer2) {
+		answer1.setDate(answer1.getDate() - 1); // Lose a day of milliseconds.
+	}
+
+	if (answer3 < answer2) {
+		answer3.setDate(answer3.getDate() + 1); // Add a day of milliseconds.
+	}
+
+	if (answer7 < answer2) {
+		answer7.setDate(answer7.getDate() + 1);
+	}
+
+	if (answer6 < answer2) {
+		answer6.setDate(answer6.getDate() + 1);
+	}
+
+	var ttib = (answer7 - answer1) / 60000;	// Result in minutes
+	ttib = parseInt(ttib);
+  // Check if the total time in bed is greater than 24 hours
+	if (ttib > 24 * 60) {
+		showError("Total time in bed cannot exceed 24 hours.");
+		return;
+	}
+	var ttibHours = ttib / 60;
+	ttibHours = Math.round(ttibHours * 10) / 10; // Rounding
+	$('#ttib').html(ttib + ' minutes (' + ttibHours + ' hours)');
+
+	var ttaib = ((answer3 - answer1) + (answer7 - answer6)) / 60000;
+	ttaib = parseInt(ttaib)+parseInt(answer5); // add awakenings
+	if (ttaib > 24 * 60) {
+		showError("Total time awake in bed cannot exceed 24 hours.");
+		return;
+	}
+	var ttaibHours = ttaib / 60;
+	ttaibHours = Math.round(ttaibHours * 10) / 10; // Rounding
+	$('#ttaib').html(ttaib + ' minutes (' + ttaibHours + ' hours)');
+
+	var sleepEfficiency = ( (ttib - ttaib) / ttib ) * 100;
+	sleepEfficiency = Math.round(sleepEfficiency);
+	$('#sleep-efficiency').html(sleepEfficiency + '%');
+
+	var sleepDuration = (answer6 - answer3) / 60000;
+	sleepDuration = parseInt(sleepDuration)-parseInt(answer5); // minus awakenings
+	var sleepDurationHours = sleepDuration / 60;
+	sleepDurationHours = Math.round(sleepDurationHours * 10) / 10; // Rounding
+	$('#sleep-duration').html(sleepDuration + ' minutes (' + sleepDurationHours + ' hours)');
+
+	$('.results').addClass('visible');
+	$('.results').show();
+
+}
+function showError(message) {
+            // Display the error message in the error message container
+            $('#error-message').text(message).show();
+
+         // Hide the error message after 5 seconds
+            setTimeout(function() {
+                $('#error-message').hide();
+            }, 5000);
+}
+});
+    </script>
+{% endblock %}
