@@ -1244,9 +1244,28 @@ def all_packages(request):
 
 def all_packages_coupon(request):
     try:
-        pkg = Coupon_Product_detail.objects.all()
+        pkg = Coupon_Product_detail.objects.all().order_by("-id")
         notify = Provider.objects.filter(subscription_status='Pending').count()
         n_notify = Provider_Verification.objects.filter(user_position=3).count()
+
+        # Add provider count and provider details to each package
+        for package in pkg:
+            providers = Provider.objects.filter(coupon_code=package.code)
+            provider_count = providers.count()
+            provider_data = [
+                {
+                    'first_name': provider.first_name,
+                    'last_name': provider.last_name,
+                    'email': provider.user.email,  # Fetch email from the related User model
+                    'provider_ref': provider.provider_ref,
+                    'total_patients': provider.total_patients,
+                    'subscription_type': provider.subscription_type,
+                }
+                for provider in providers
+            ]
+            package.provider_count = provider_count
+            package.provider_data = provider_data
+
         context = {
             'n_notify': n_notify,
             'notification': notify,

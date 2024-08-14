@@ -84,6 +84,7 @@ class User(AbstractBaseUser):
     signing_link_2 = models.URLField(blank=True, null=True)
     invite_id = models.CharField(max_length=250, default="")
     status = models.CharField(max_length=100)
+    access_token = models.CharField(max_length=255, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

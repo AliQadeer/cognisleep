@@ -1658,6 +1658,7 @@ def update_id(request):
 
 
 class Signup_BBA(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
 
@@ -1671,7 +1672,7 @@ class Signup_BBA(APIView):
             # response = requests.post(url, headers=headers, json=data)
             # if response.status_code != 200:
             #     return Response({'exception': "Unverified email/already exit"}, status=status.HTTP_400_BAD_REQUEST)
-
+            user = User.objects.get(id=uid)
             # Getting token
             url_ = "https://api.signnow.com/oauth2/token"
             headers_ = {
@@ -1680,13 +1681,15 @@ class Signup_BBA(APIView):
                 "username": "support@cognisleep.com",
                 "password": "SignThisAndThatCogni1990",
                 "grant_type": "password",
-                "scope": "password",
+                "scope": "*",
             }
             response = requests.post(url_, headers=headers_, json=data_)
             token_response = response.json()
 
             # Extract the access token from the JSON response
             access_token = token_response.get("access_token")
+            user.access_token = access_token
+            user.save()
 
             # uploading document
             url2 = "https://api.signnow.com/document/"
@@ -1695,15 +1698,13 @@ class Signup_BBA(APIView):
             filename = filepath + '/' + fname
             files = {'file': open(filename, 'rb')}
             # files = {'file': open('static/Sample-Contract-Agreement-Template-PDF.pdf', 'rb')}
-            headers2 = {"Authorization": "bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+            headers2 = {"Authorization": "bearer " + access_token}
             response = requests.post(url2, headers=headers2, files=files)
             document_id = (response.json())['id']
 
             # Adding signature field
             url3 = "https://api.signnow.com/document/" + document_id
-            headers3 = {
-                # 'Content-Type: application/json'
-                "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+            headers3 = {"Authorization": "bearer " + access_token}
             provider = Provider.objects.get(user_id=uid)
             current_date = datetime.date.today()
             formatted_date = current_date.strftime("%b %d, %Y")
@@ -1933,9 +1934,7 @@ class Signup_BBA(APIView):
             ### Get role ids
 
             get_roles_url = f'https://api.signnow.com/document/' + document_id
-            headers7 = {
-                # 'Content-Type: application/json'
-                "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+            headers7 = {"Authorization": "bearer " + access_token}
             response = requests.get(get_roles_url, headers=headers7)
 
             if response.status_code == 200:
@@ -1949,21 +1948,20 @@ class Signup_BBA(APIView):
 
             # Step 4: Create invites for the signers
             create_invites_url = f'https://api.signnow.com/v2/documents/{document_id}/embedded-invites'
-            headers8 = {
-                # 'Content-Type: application/json'
-                "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+            headers8 = {"Authorization": "bearer " + access_token}
+            user = User.objects.get(id=uid)
 
             invites_data = {
                 "invites": [
                     {
-                        "email": "signer@email.com",
+                        "email": user.email,
                         "role_id": role_id_1['unique_id'],
                         "order": 1,
                         "auth_method": "none",
 
                     },
                     {
-                        "email": "signer2@email.com",
+                        "email": "Raza.ali@islandsinmotion.com",
                         "role_id": role_id_2['unique_id'],
                         "order": 1,
                         "auth_method": "none",
@@ -1996,9 +1994,7 @@ class Signup_BBA(APIView):
                         instance.invite_id = second
                         instance.save()
                 signing_link_url = f'https://api.signnow.com/v2/documents/{document_id}/embedded-invites/{invite_id}/link'
-                headers9 = {
-                    # 'Content-Type: application/json'
-                    "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+                headers9 = {"Authorization": "bearer " + access_token}
 
                 link_data = {
                     "document_id": document_id,
@@ -2069,11 +2065,10 @@ def signup_BBA_done_admin_two(request, pid):
     print("Invite Id: ", invite_id)
     document_id = user_data.document_id
     print("document_id: ", document_id)
+    user = User.objects.get(id=pid)
+    access_token = user.access_token
     url3 = f"https://api.signnow.com/document/{document_id}"
-    headers3 = {
-        # 'Content-Type: application/json'
-        "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"
-    }
+    headers3 = {"Authorization": "bearer " + access_token}
     # provider = Provider.objects.get(user_id=uid)
     current_date = datetime.date.today()
     formatted_date = current_date.strftime("%m/%d/%Y")
@@ -2081,10 +2076,7 @@ def signup_BBA_done_admin_two(request, pid):
     try:
 
         signing_link_url = f'https://api.signnow.com/v2/documents/{document_id}/embedded-invites/{invite_id}/link'
-        headers9 = {
-            "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"
-            # Replace with your SignNow access token
-        }
+        headers9 = {"Authorization": "bearer " + access_token}
 
         link_data = {
             "document_id": document_id,
@@ -2116,6 +2108,7 @@ def signup_BBA_done_admin_two(request, pid):
             'error': str(e)
         })
 class Signup_BBA_Done(APIView):
+    permission_classes = [AllowAny]
 
 
     def post(self, request):
@@ -2127,9 +2120,10 @@ class Signup_BBA_Done(APIView):
             uid = request.data.get("id", None)
             get_user_document = User.objects.get(id=uid).document_id
             document = get_user_document
+            user = User.objects.get(id=uid)
+            access_token = user.access_token
             url = "https://api.signnow.com/document/"+document
-            headers = {
-                "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+            headers = {"Authorization": "bearer " + access_token}
 
             response = requests.get(url, headers=headers)
             if response.status_code != 200:
@@ -2157,6 +2151,7 @@ class Signup_BBA_Done(APIView):
 
 
 class Signup_BBA_Done_admin(APIView):
+    permission_classes = [AllowAny]
 
 
     def post(self, request):
@@ -2168,9 +2163,10 @@ class Signup_BBA_Done_admin(APIView):
             uid = request.data.get("id", None)
             get_user_document = User.objects.get(id=uid).document_id
             document = get_user_document
+            user = User.objects.get(id=uid)
+            access_token = user.access_token
             url = "https://api.signnow.com/document/"+document
-            headers = {
-                "Authorization": "Bearer 0684dccd7f1f246824f75d4d8dbf70ae73511d5cf607f1db6fcaa5d38196ee7f"}
+            headers = {"Authorization": "bearer " + access_token}
 
             response = requests.get(url, headers=headers)
             if response.status_code != 200:
