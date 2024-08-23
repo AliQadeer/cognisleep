@@ -65,6 +65,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.CharField(max_length=100, unique=True)
+    first_name = models.CharField(max_length=100,null=True, blank=True)
+    last_name = models.CharField(max_length=100,null=True, blank=True)
     username = models.CharField(max_length=100)
     passwordstr = models.CharField(max_length=100, default="")
     first_login = models.BooleanField(default=False)
@@ -72,6 +74,12 @@ class User(AbstractBaseUser):
     active_patient = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
     role_id = models.IntegerField(default=False)
+    role = models.CharField(max_length=60, null=True, blank=True)
+    city = models.CharField(max_length=60, null=True, blank=True)
+    state = models.CharField(max_length=60, null=True, blank=True)
+    zip = models.CharField(max_length=60, null=True, blank=True)
+    birthdate = models.CharField(max_length=60, null=True, blank=True)
+    role_name = models.CharField(max_length=60, null=True, blank=True)
     isprovider = models.BooleanField(default=False)
     isverified = models.BooleanField(default=False)
     package = models.IntegerField(default=False)
@@ -84,7 +92,7 @@ class User(AbstractBaseUser):
     signing_link_2 = models.URLField(blank=True, null=True)
     invite_id = models.CharField(max_length=250, default="")
     status = models.CharField(max_length=100)
-    access_token = models.CharField(max_length=255, null=True, blank=True)
+    access_token = models.CharField(max_length=255, null=True, blank=True)  # Add this field
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

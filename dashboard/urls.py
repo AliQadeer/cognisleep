@@ -59,6 +59,7 @@ urlpatterns = [
     path('api/providerhandbooks/', ProviderhandbooksAPIView, name='providerhandbooks-api'),
     path('gethandbooks/<int:pid>/<int:wid>/', gethandbooks, name='gethandbooks'),
     path('downloadhandbooks/<int:pid>/<int:weekno>/', provider_handbook_report),
+    
 
 
 

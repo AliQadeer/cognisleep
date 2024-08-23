@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'backend',
     'dashboard',
+    # 'payments',
+    'Permissions',
     'payments.apps.PaymentsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
     'django_user_agents',
     'dashboard.templatetags',
     'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -134,7 +137,13 @@ WSGI_APPLICATION = 'cogni.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':
-        ('knox.auth.TokenAuthentication',),
+        ('knox.auth.TokenAuthentication',
+         'rest_framework.authentication.TokenAuthentication',
+         ),
+    'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.IsAuthenticated',
+        ),
+
 }
 
 from datetime import timedelta
@@ -222,6 +231,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = '/home/ubuntu/django/media/'
+# Increase the maximum upload size allowed for files (in bytes)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB, adjust as needed
+
+# Increase the maximum size allowed for files uploaded via a multipart/form-data POST
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB, adjust as needed
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -233,10 +248,10 @@ STRIPE_PUBLISHABLE_KEY = 'pk_test_51LBfcLKxLHATWwe7cusrpfripSNOxKgdyh2UyjcwyHcY7
 STRIPE_SECRET_KEY = 'sk_test_51LBfcLKxLHATWwe7yJr8k5XYrxGAlb8LdEhmnWaRm2Q8Z2wzKKT2MYf9sjZDzHnfZzpdVtPXw53CUzys8hwtpXbd00QssamM1K'
 
 ADMIN_SITE_HEADER = "Cognisleep Administration"
-
+AUTH_USER_MODEL = 'accounts.User'
 LOGIN_GUEST_URL = '/login'
 
-AUTH_USER_MODEL = 'accounts.User'
+
 
 LOGIN_NOT_REQUIRED_URLS = [
     r'^accounts/logout/$',

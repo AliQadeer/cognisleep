@@ -1397,3 +1397,12 @@ def refPatient_log(request):
 
 def createcoupon(request):
     return render(request, "backend/create_coupon.html")
+
+def employee_management(request):
+    return render(request, "backend/employee_management.html")
+
+def add_new_employee(request):
+    return render(request, "backend/add_new_employee.html")
+
+def role_management(request):
+    return render(request, "backend/role_management.html")

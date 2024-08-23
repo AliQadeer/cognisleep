@@ -47,6 +47,7 @@ urlpatterns = [
     path('', home_page, name="home_page"),
     path('accounts/',include('accounts.urls')),
     path('payments/',include('payments.urls')),
+    path('Permissions/',include('Permissions.urls')),
     path('login/',guestLogin),
     path('about/', about_page),
     path('questions/', include('taketester.urls')),

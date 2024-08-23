@@ -1,0 +1,484 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    .gap-15 {
+        gap: 15px;
+    }
+
+    /* accordian */
+    #main {
+  margin: 25px 0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header .btn {
+    margin-left: auto;
+}
+
+.card-header .fa-angle-down {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.card-body .form-check-inline {
+    display: flex;
+    margin-bottom: 10px;
+}
+/* Pre-loader styling */
+#preLoader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3em;
+}
+
+</style>
+<div class="content-wrap">
+    <div class="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8 p-r-0 title-margin-right">
+                    <div class="page-header">
+                         <button  style=" margin-top: -2px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
+                                        aria-hidden="true"></i>Back</button>
+                        <div class="page-title">
+                            <h1>Add New Package</h1>
+                               {% if messages %}
+                                {% for message in messages %}
+                                    <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- /# column -->
+
+                <!-- /# column -->
+            </div>
+            <!-- /# row -->
+            <div class="dashboard-wrapper">
+                <div id="w0" class="grid-view">
+                        <form id="addEmployeeForm">
+                            <div class="row">
+                                <div class="col-3">
+                                      <!-- First Name -->
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                  <!-- Last Name -->
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                    </div>
+                              </div>
+                              <div class="col-3">   
+                                <!-- Email -->
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                <!-- City -->
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                <!-- State -->
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    <input type="text" class="form-control" id="state" name="state" required>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                <!-- Zip -->
+                                <div class="form-group">
+                                    <label for="zip">Zip</label>
+                                    <input type="text" class="form-control" id="zip" name="zip" required>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                       <!-- Birthdate -->
+                                <div class="form-group">
+                                    <label for="birthdate">Birthdate (mm/dd/yyyy)</label>
+                                    <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="mm/dd/yyyy" required>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                     <!-- Password -->
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                <!-- Confirm Password -->
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                                <i class="fa fa-eye" id="eyeIcon"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col-3">
+                                        <!-- Role Type -->
+                                <div class="form-group">
+                                    <label for="roleType">Role Type</label>
+                                    <select class="form-control" id="roleType" name="roleType" required>
+                                        <option value="default_role">Default Role</option>
+                                        <option value="custom_role">Custom Role</option>
+                                        <!-- Add more options as needed -->
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="col-3" id="roleNameContainer">
+                                    <!-- Role Name -->
+                                    <div class="form-group">
+                                        <label for="roleName">Role Name</label>
+                                        <select class="form-control" id="roleName" name="roleName" required>
+                                            <!-- Options will be populated dynamically -->
+                                        </select>
+                                        <input type="text" class="form-control" id="customRoleName" name="customRoleName" placeholder="Enter custom role name" style="display: none;" />
+                                    </div>
+                                </div>
+                                     <!-- Pre-loader -->
+                                <div id="preLoader" style="display: none;">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div id="main">
+                                            <div class="accordion" id="permissionsAccordion">
+                                                <!-- Dynamic content will be inserted here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>                           
+                        </form>
+                   
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascript %}
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const roleTypeSelect = document.getElementById('roleType');
+    const roleNameSelect = document.getElementById('roleName');
+    const customRoleNameInput = document.getElementById('customRoleName');
+    const permissionsAccordion = document.getElementById('permissionsAccordion');
+    const preLoader = document.getElementById('preLoader');
+
+    // Function to show or hide the permissionsAccordion
+    function togglePermissionsAccordion() {
+        if (roleTypeSelect.value === 'custom_role') {
+            permissionsAccordion.style.display = 'block';
+            fetchPermissions();
+        } else {
+            permissionsAccordion.style.display = 'none';
+        }
+    }
+
+    // Set the initial role type to 'default_role' and fetch role names
+    function initializePage() {
+        roleTypeSelect.value = 'default_role';
+        fetchRoleNames(); // Fetch role names on initial load
+        togglePermissionsAccordion(); // Set initial state of permissions accordion
+    }
+
+    // Add event listener to roleType select
+    roleTypeSelect.addEventListener('change', function () {
+        if (roleTypeSelect.value === 'custom_role') {
+            customRoleNameInput.style.display = 'block';
+            roleNameSelect.style.display = 'none';
+        } else {
+            customRoleNameInput.style.display = 'none';
+            roleNameSelect.style.display = 'block';
+            fetchRoleNames();
+        }
+        togglePermissionsAccordion();
+    });
+
+    // Call initializePage to set up initial state
+    initializePage();
+
+    function fetchPermissions() {
+        preLoader.style.display = 'flex'; // Show pre-loader
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8000/Permissions/permissions/', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            preLoader.style.display = 'none'; // Hide pre-loader
+            if (xhr.status === 200) {
+                const response_data = JSON.parse(xhr.responseText);
+                console.log('Permissions:', response_data);
+
+                if (response_data.success && response_data.data.length > 0) {
+                    populatePermissions(response_data.data);
+                }
+            } else {
+                console.error('Error fetching permissions:', xhr.statusText);
+                alert('Failed to fetch permissions.');
+            }
+        };
+
+        xhr.onerror = function () {
+            preLoader.style.display = 'none'; // Hide pre-loader
+            console.error('Request failed');
+            alert('Request failed.');
+        };
+
+        xhr.send();
+    }
+
+    function fetchRoleNames() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8000/Permissions/userrolelist/', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response_data = JSON.parse(xhr.responseText);
+                console.log('Role Names:', response_data);
+
+                if (response_data.success && response_data.data.length > 0) {
+                    populateRoleNames(response_data.data);
+                }
+            } else {
+                console.error('Error fetching role names:', xhr.statusText);
+                alert('Failed to fetch role names.');
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Request failed');
+            alert('Request failed.');
+        };
+
+        xhr.send();
+    }
+
+    function populatePermissions(data) {
+        const accordionContainer = document.getElementById('permissionsAccordion');
+        accordionContainer.innerHTML = ''; // Clear any previous content
+
+        data.forEach((module, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            const cardHeader = document.createElement('div');
+            cardHeader.classList.add('card-header', 'd-flex', 'justify-content-between', 'align-items-center');
+            cardHeader.id = `faqhead${index}`;
+
+            const mainCheckboxWrapper = document.createElement('div');
+            mainCheckboxWrapper.classList.add('form-check', 'form-check-inline');
+
+            const mainCheckbox = document.createElement('input');
+            mainCheckbox.type = 'checkbox';
+            mainCheckbox.classList.add('form-check-input');
+            mainCheckbox.id = `mainCheckbox_${index}`;
+            mainCheckbox.checked = module.can_access;
+
+            const mainCheckboxLabel = document.createElement('label');
+            mainCheckboxLabel.classList.add('form-check-label');
+            mainCheckboxLabel.setAttribute('for', `mainCheckbox_${index}`);
+            mainCheckboxLabel.innerText = module.module_name;
+
+            mainCheckboxWrapper.appendChild(mainCheckbox);
+            mainCheckboxWrapper.appendChild(mainCheckboxLabel);
+
+            const toggleIcon = document.createElement('i');
+            toggleIcon.classList.add('fa', 'fa-angle-down');
+            toggleIcon.setAttribute('aria-hidden', 'true');
+
+            const toggleLink = document.createElement('a');
+            toggleLink.href = '#';
+            toggleLink.classList.add('btn', 'collapsed');
+            toggleLink.setAttribute('data-toggle', 'collapse');
+            toggleLink.setAttribute('data-target', `#faq${index}`);
+            toggleLink.setAttribute('aria-expanded', 'false');
+            toggleLink.setAttribute('aria-controls', `faq${index}`);
+
+            toggleLink.appendChild(toggleIcon);
+
+            cardHeader.appendChild(mainCheckboxWrapper);
+            cardHeader.appendChild(toggleLink);
+
+            const collapseDiv = document.createElement('div');
+            collapseDiv.id = `faq${index}`;
+            collapseDiv.classList.add('collapse');
+            collapseDiv.setAttribute('aria-labelledby', `faqhead${index}`);
+            collapseDiv.setAttribute('data-parent', '#permissionsAccordion');
+
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            for (let key in module) {
+                if (key !== 'module_name') {
+                    const permissionCheckboxWrapper = document.createElement('div');
+                    permissionCheckboxWrapper.classList.add('form-check', 'form-check-inline');
+
+                    const permissionCheckbox = document.createElement('input');
+                    permissionCheckbox.type = 'checkbox';
+                    permissionCheckbox.classList.add('form-check-input');
+                    permissionCheckbox.id = `${module.module_name}_${key}`;
+                    permissionCheckbox.checked = module[key];
+
+                    const permissionLabel = document.createElement('label');
+                    permissionLabel.classList.add('form-check-label');
+                    permissionLabel.setAttribute('for', `${module.module_name}_${key}`);
+                    permissionLabel.innerText = key.replace(/_/g, ' ');
+
+                    permissionCheckboxWrapper.appendChild(permissionCheckbox);
+                    permissionCheckboxWrapper.appendChild(permissionLabel);
+
+                    cardBody.appendChild(permissionCheckboxWrapper);
+                }
+            }
+
+            collapseDiv.appendChild(cardBody);
+            card.appendChild(cardHeader);
+            card.appendChild(collapseDiv);
+
+            accordionContainer.appendChild(card);
+
+            mainCheckbox.addEventListener('change', function () {
+                const checkboxes = collapseDiv.querySelectorAll('.form-check-input');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = mainCheckbox.checked;
+                });
+            });
+        });
+    }
+
+    function populateRoleNames(data) {
+        roleNameSelect.innerHTML = ''; // Clear any previous options
+        data.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.name;
+            option.textContent = role.name;
+            roleNameSelect.appendChild(option);
+        });
+
+        // Set the default selected option if available
+        if (roleNameSelect.options.length > 0) {
+            roleNameSelect.value = roleNameSelect.options[0].value;
+        }
+    }
+
+    document.getElementById('addEmployeeForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Manually construct the JSON object with the expected shape
+        var data = {
+            "first_name": document.getElementById('firstName').value,
+            "last_name": document.getElementById('lastName').value,
+            "email": document.getElementById('email').value,
+            "city": document.getElementById('city').value,
+            "state": document.getElementById('state').value,
+            "zip": document.getElementById('zip').value,
+            "birthdate": document.getElementById('birthdate').value, // Format mm/dd/yyyy
+            "password": document.getElementById('password').value,
+            "default_role": roleTypeSelect.value === 'default_role',
+            "role_name": roleTypeSelect.value === 'default_role' ? roleNameSelect.value : customRoleNameInput.value,
+            "role_id": "1",
+        };
+
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Set up the request
+        xhr.open('POST', 'http://127.0.0.1:8000/Permissions/add/user/', true); // Replace with your actual endpoint
+        xhr.setRequestHeader('Content-Type', 'application/json'); // Send JSON data
+
+        // Set up the callback for handling the response
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log('Response:', xhr.responseText);
+                alert('Employee added successfully!');
+            } else {
+                console.error('Error:', xhr.statusText);
+                alert('Failed to add employee.');
+            }
+        };
+
+        // Handle errors
+        xhr.onerror = function () {
+            console.error('Request failed');
+            alert('Request failed.');
+        };
+
+        // Send the request with the JSON data
+        xhr.send(JSON.stringify(data));
+    });
+});
+
+     
+
+
+    document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordField.type === 'password' && confirmPasswordField.type === 'password') {
+        passwordField.type = 'text';
+        confirmPasswordField.type='text'
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        confirmPasswordField.type='password'
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+    });
+</script>
+
+{% endblock %}

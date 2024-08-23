@@ -1,0 +1,319 @@
+{% extends "backend/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    /* dasboard design   */
+
+    section#main-content2, section#main-content3, section#main-content4 {
+    margin-top: 25px !important;
+}
+
+.main .page-header h1 {
+    font-size: 22px;
+}
+
+.counter-info {
+  text-align: center;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: .5s;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.title-box h4 i {
+    font-size: 35px;
+    text-transform: capitalize;
+    color: #5eb82d;
+}
+
+.counter-box h2 {
+  font-size: 50px;
+  color: #323232;
+  font-weight: 600;
+}
+
+.counter-desc {
+  font-size: 12px;
+}
+</style>
+ <div class="content-wrap">
+            <div class="main">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-8 p-r-0 title-margin-right">
+                            <div class="page-header">
+                                <div class="page-title">
+                                    <h1>Overall CogniSleep Statistics</h1>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# column -->
+
+                        <!-- /# column -->
+                    </div>
+                    <!-- /# row -->
+                    <section id="main-content">
+                        <div class="row">
+
+						<div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="counter-info shadow p-3 border">
+                                <a href="/backend/refpatients/" class="link-box">
+                                <div class="title-box">
+                                    <h4><i class="fa fa-user-circle"></i></h4>
+                                </div>
+                                <div class="counter-box">
+                                    <h2>{{ refPatients }}</h2>
+                                </div>
+                                <div class="counter-desc">
+                                    <p class="mb-0">Total Active Referral Patient’s</p>
+                                </div>
+                                </a>
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+						<div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="counter-info shadow p-3 border">
+                                <a href="/backend/providers/" class="link-box">
+                                <div class="title-box">
+                                    <h4><i class="fa fa-stethoscope"></i></h4>
+                                </div>
+                                <div class="counter-box">
+                                    <h2>{{ providers }}</h2>
+                                </div>
+                                <div class="counter-desc">
+                                    <p class="mb-0">Total Active Medical Professionals</p>
+                                </div>
+                                </a>
+                            </div>
+                        </div>
+						{% comment %}<div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="counter-info shadow p-3 border">
+                                <div class="title-box">
+                                    <h4><i class="fa fa-credit-card"></i></h4>
+                                </div>
+                                <div class="counter-box">
+                                    <h2>0</h2>
+                                </div>
+                                <div class="counter-desc">
+                                    <p class="mb-0">Successful Completion Rate (AP)</p>
+                                </div>
+                                <a href="javascript: void();" class="link-box"></a>
+                            </div>
+
+                        </div>{% endcomment %}
+						{% comment %}
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="counter-info shadow p-3 border">
+                                <div class="title-box">
+                                    <h4><i class="fa fa-credit-card"></i></h4>
+                                </div>
+                                <div class="counter-box">
+                                    <h2>0</h2>
+                                </div>
+                                <div class="counter-desc">
+                                    <p class="mb-0">Successful Completion Rate (ARP)</p>
+                                </div>
+                                <a href="javascript: void();" class="link-box"></a>
+                            </div>
+
+                        </div>{% endcomment %}
+
+                            <!-- /# column -->
+                        </div>
+                        <!-- /# row -->
+</section>
+
+ <section id="main-content2">
+ <div class="row">
+                        <div class="col-lg-8 p-r-0 title-margin-right">
+                            <div class="page-header">
+                                <div class="page-title">
+                                    <h1>Specific CogniSleep Platform Statistics</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="counter-info shadow p-3 border">
+                                    <div class="title-box">
+                                        <h4><i class="fa fa-windows"></i></h4>
+                                    </div>
+                                    <div class="counter-box">
+                                        <h2>{{user_agent_window}}</h2>
+                                    </div>
+                                    <div class="counter-desc">
+                                        <p class="mb-0">Windows</p>
+                                    </div>
+                                    <a href="javascript: void();" class="link-box"></a>
+                                </div>
+                                    <!-- /.info-box -->
+                                </div>
+								<div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="counter-info shadow p-3 border">
+                                        <div class="title-box">
+                                            <h4><i class="fa fa-apple"></i></h4>
+                                        </div>
+                                        <div class="counter-box">
+                                            <h2>{{user_agent_mac_IOS}}</h2>
+                                        </div>
+                                        <div class="counter-desc">
+                                            <p class="mb-0">MAC/IOS</p>
+                                        </div>
+                                        <a href="javascript: void();" class="link-box"></a>
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+								<div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    <div class="counter-info shadow p-3 border">
+                                        <div class="title-box">
+                                            <h4><i class="fa fa-android"></i></h4>
+                                        </div>
+                                        <div class="counter-box">
+                                            <h2>{{user_agent_android}}</h2>
+                                        </div>
+                                        <div class="counter-desc">
+                                            <p class="mb-0">Android</p>
+                                        </div>
+                                        <a href="javascript: void();" class="link-box"></a>
+                                    </div>
+                                                                    
+                                    <!-- /.info-box -->
+                                </div>
+								<div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    <div class="counter-info shadow p-3 border">
+                                        <div class="title-box">
+                                            <h4><i class="fa fa-apple"></i></h4>
+                                        </div>
+                                        <div class="counter-box">
+                                            <h2>{{user_agent_IOS}}</h2>
+                                        </div>
+                                        <div class="counter-desc">
+                                            <p class="mb-0">IOS</p>
+                                        </div>
+                                        <a href="javascript: void();" class="link-box"></a>
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                            <!-- /# column -->
+                        </div>
+                        <!-- /# row -->
+</section>
+<section id="main-content3">
+ <div class="row">
+                        <div class="col-lg-8 p-r-0 title-margin-right">
+                            <div class="page-header">
+                                <div class="page-title">
+                                    <h1>Fainancial Statistics</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                          {% comment %}  <div class="col-md-4 col-sm-6 col-xs-12">
+
+                            <div class="counter-info shadow p-3 border">
+                                <div class="title-box">
+                                    <h4><i class="fa fa-users"></i></h4>
+                                </div>
+                                <div class="counter-box">
+                                    <h2>{{ PRIMARY_CARE_SUBSCRIPTION_COUNTER }}</h2>
+                                </div>
+                                <div class="counter-desc">
+                                    <p class="mb-0">PRIMARY CARE SUBSCRIPTION</p>
+                                </div>
+                                <a href="javascript: void();" class="link-box"></a>
+                            </div>
+
+                                </div>{% endcomment %}
+								<div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="counter-info shadow p-3 border">
+                                        <div class="title-box">
+                                            <h4><i class="fa fa-user-circle"></i></h4>
+                                        </div>
+                                        <div class="counter-box">
+                                            <h2>{{ REFERRAL_SUBSCRIPTION_FROM_PHYSICIAN_PROVIDER_COUNTER }}</h2>
+                                        </div>
+                                        <div class="counter-desc">
+                                            <p class="mb-0">REFERRAL SUBSCRIPTION FROM PHYSICIAN/PROVIDER</p>
+                                        </div>
+                                        <a href="javascript: void();" class="link-box"></a>
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+								{% comment %}<div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    <div class="counter-info shadow p-3 border">
+                                        <div class="title-box">
+                                            <h4><i class="fa fa-credit-card"></i></h4>
+                                        </div>
+                                        <div class="counter-box">
+                                            <h2>{{ COGNISLEEP_PLUS_COUNTER }}</h2>
+                                        </div>
+                                        <div class="counter-desc">
+                                            <p class="mb-0">COGNISLEEP PLUS</p>
+                                        </div>
+                                        <a href="javascript: void();" class="link-box"></a>
+                                    </div>
+
+                                </div>{% endcomment %}
+								{% comment %}<div class="col-md-4 col-sm-6 col-xs-12">
+
+                                    <div class="counter-info shadow p-3 border">
+                                        <div class="title-box">
+                                            <h4><i class="fa fa-credit-card"></i></h4>
+                                        </div>
+                                        <div class="counter-box">
+                                            <h2>{{ COGNISLEEP_TRADITIONAL_COUNTER }}</h2>
+                                        </div>
+                                        <div class="counter-desc">
+                                            <p class="mb-0">COGNISLEEP TRADITIONAL</p>
+                                        </div>
+                                        <a href="javascript: void();" class="link-box"></a>
+                                    </div>
+
+                                </div>{% endcomment %}
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+
+                                <div class="counter-info shadow p-3 border">
+                                    <div class="title-box">
+                                        <h4><i class="fa fa-credit-card"></i></h4>
+                                    </div>
+                                    <div class="counter-box">
+                                        <h2>{{ COGNISLEEP_INTENSE_LEARNERS_COUNTER }}</h2>
+                                    </div>
+                                    <div class="counter-desc">
+                                        <p class="mb-0">COGNISLEEP INTENSE LEARNERS</p>
+                                    </div>
+                                    <a href="javascript: void();" class="link-box"></a>
+                                </div>
+                                    <!-- /.info-box -->
+                                </div>
+                            <!-- /# column -->
+                        </div>
+                        <!-- /# row -->
+</section>
+{% comment %}<section id="main-content4">
+ <div class="row">
+                        <div class="col-lg-8 p-r-0 title-margin-right">
+                            <div class="page-header">
+                                <div class="page-title">
+                                    <h1>ACTIVE MP’S</h1>
+									<h4>Coming Soon</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+</section>{% endcomment %}
+            </div>
+        </div>
+        </div>
+
+{% endblock %}
