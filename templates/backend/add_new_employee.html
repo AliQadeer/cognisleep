@@ -31,8 +31,12 @@
 
 .card-body .form-check-inline {
     display: flex;
-    margin-bottom: 10px;
 }
+
+div#w0 form label{
+    margin: 1px 0px 0px 0px;
+}
+
 /* Pre-loader styling */
 #preLoader {
     position: fixed;
@@ -169,7 +173,7 @@
                                         <select class="form-control" id="roleName" name="roleName" required>
                                             <!-- Options will be populated dynamically -->
                                         </select>
-                                        <input type="text" class="form-control" id="customRoleName" name="customRoleName" placeholder="Enter custom role name" style="display: none;" />
+                                        <input type="text" class="form-control" id="customRoleName" name="customRoleName" placeholder="Enter custom role name" style="display: none;" required/>
                                     </div>
                                 </div>
                                      <!-- Pre-loader -->
@@ -212,7 +216,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const permissionsAccordion = document.getElementById('permissionsAccordion');
     const preLoader = document.getElementById('preLoader');
 
-    // Function to show or hide the permissionsAccordion
+    let permissionsData = []; // To store permissions data
+
     function togglePermissionsAccordion() {
         if (roleTypeSelect.value === 'custom_role') {
             permissionsAccordion.style.display = 'block';
@@ -222,44 +227,46 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Set the initial role type to 'default_role' and fetch role names
     function initializePage() {
         roleTypeSelect.value = 'default_role';
-        fetchRoleNames(); // Fetch role names on initial load
-        togglePermissionsAccordion(); // Set initial state of permissions accordion
+        fetchRoleNames(); 
+        togglePermissionsAccordion(); 
     }
 
-    // Add event listener to roleType select
     roleTypeSelect.addEventListener('change', function () {
         if (roleTypeSelect.value === 'custom_role') {
             customRoleNameInput.style.display = 'block';
             roleNameSelect.style.display = 'none';
+            roleNameSelect.removeAttribute('required'); 
+            customRoleNameInput.setAttribute('required', 'true'); 
         } else {
             customRoleNameInput.style.display = 'none';
             roleNameSelect.style.display = 'block';
+            customRoleNameInput.removeAttribute('required'); 
+            roleNameSelect.setAttribute('required', 'true'); 
             fetchRoleNames();
         }
         togglePermissionsAccordion();
     });
 
-    // Call initializePage to set up initial state
     initializePage();
 
     function fetchPermissions() {
-        preLoader.style.display = 'flex'; // Show pre-loader
+        preLoader.style.display = 'flex';
 
         const xhr = new XMLHttpRequest();
         xhr.open('GET', 'http://127.0.0.1:8000/Permissions/permissions/', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function () {
-            preLoader.style.display = 'none'; // Hide pre-loader
+            preLoader.style.display = 'none';
             if (xhr.status === 200) {
                 const response_data = JSON.parse(xhr.responseText);
                 console.log('Permissions:', response_data);
 
                 if (response_data.success && response_data.data.length > 0) {
-                    populatePermissions(response_data.data);
+                    permissionsData = response_data.data; // Store permissions data
+                    populatePermissions(permissionsData);
                 }
             } else {
                 console.error('Error fetching permissions:', xhr.statusText);
@@ -268,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         xhr.onerror = function () {
-            preLoader.style.display = 'none'; // Hide pre-loader
+            preLoader.style.display = 'none';
             console.error('Request failed');
             alert('Request failed.');
         };
@@ -305,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function populatePermissions(data) {
         const accordionContainer = document.getElementById('permissionsAccordion');
-        accordionContainer.innerHTML = ''; // Clear any previous content
+        accordionContainer.innerHTML = '';
 
         data.forEach((module, index) => {
             const card = document.createElement('div');
@@ -397,66 +404,76 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function populateRoleNames(data) {
-        roleNameSelect.innerHTML = ''; // Clear any previous options
+        roleNameSelect.innerHTML = '';
         data.forEach(role => {
             const option = document.createElement('option');
-            option.value = role.name;
-            option.textContent = role.name;
+            option.value = role.id;
+            option.text = role.name;
             roleNameSelect.appendChild(option);
         });
 
-        // Set the default selected option if available
         if (roleNameSelect.options.length > 0) {
-            roleNameSelect.value = roleNameSelect.options[0].value;
+            roleNameSelect.value = ''
         }
     }
 
     document.getElementById('addEmployeeForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault();
 
-        // Manually construct the JSON object with the expected shape
-        var data = {
+        let permissions = [];
+        permissionsData.forEach(module => {
+            const modulePermissions = {};
+            for (let key in module) {
+                if (key !== 'module_name') {
+                    const checkbox = document.getElementById(`${module.module_name}_${key}`);
+                    if (checkbox) {
+                        modulePermissions[key] = checkbox.checked;
+                    }
+                }
+            }
+            if (Object.keys(modulePermissions).length > 0) {
+                permissions.push({
+                    module_name: module.module_name,
+                    ...modulePermissions
+                });
+            }
+        });
+
+        let data = {
             "first_name": document.getElementById('firstName').value,
             "last_name": document.getElementById('lastName').value,
             "email": document.getElementById('email').value,
             "city": document.getElementById('city').value,
             "state": document.getElementById('state').value,
             "zip": document.getElementById('zip').value,
-            "birthdate": document.getElementById('birthdate').value, // Format mm/dd/yyyy
+            "birthdate": document.getElementById('birthdate').value, 
             "password": document.getElementById('password').value,
-            "default_role": roleTypeSelect.value === 'default_role',
-            "role_name": roleTypeSelect.value === 'default_role' ? roleNameSelect.value : customRoleNameInput.value,
-            "role_id": "1",
+            "default_role": roleTypeSelect.value === 'default_role' ? true : false,
+            "role_name": roleTypeSelect.value === 'default_role' ? roleNameSelect.options[roleNameSelect.selectedIndex].text : customRoleNameInput.value,
+            "role_id": roleTypeSelect.value === 'default_role' ? roleNameSelect.value : '',
+            "permissions": permissions,
         };
 
-        // Create a new XMLHttpRequest object
         var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/Permissions/add/user/', true); 
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
-        // Set up the request
-        xhr.open('POST', 'http://127.0.0.1:8000/Permissions/add/user/', true); // Replace with your actual endpoint
-        xhr.setRequestHeader('Content-Type', 'application/json'); // Send JSON data
-
-        // Set up the callback for handling the response
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('Response:', xhr.responseText);
-                alert('Employee added successfully!');
+                alert('Employee added successfully');
+                window.location.href ="/backend/employee_management"
+                document.getElementById('addEmployeeForm').reset();
+                roleTypeSelect.value = 'default_role';
+                togglePermissionsAccordion();
             } else {
-                console.error('Error:', xhr.statusText);
-                alert('Failed to add employee.');
+                alert('Failed to add employee');
             }
         };
-
-        // Handle errors
-        xhr.onerror = function () {
-            console.error('Request failed');
-            alert('Request failed.');
-        };
-
-        // Send the request with the JSON data
+console.log(JSON.stringify(data))
         xhr.send(JSON.stringify(data));
     });
 });
+
 
      
 

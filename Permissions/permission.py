@@ -30,9 +30,9 @@ all_permissions = [
     {
         "module_name": "Incomplete Provider",
         "can_access": False,
-        # "can_add": False,
-        # "can_edit": False,
-        # "can_delete": False,
+        "can_add": False,
+        "can_edit": False,
+        "can_delete": False,
         "can_view": False
     },
     {
@@ -70,7 +70,7 @@ all_permissions = [
         "can_access": False,
         "can_add": False,
         "can_edit": False,
-        # "can_delete": False,
+        "can_delete": False,
         "can_view": False
     },
     {
@@ -78,7 +78,7 @@ all_permissions = [
         "can_access": False,
         "can_add": False,
         "can_edit": False,
-        # "can_delete": False,
+        "can_delete": False,
         "can_view": False
     },
     {
@@ -86,23 +86,23 @@ all_permissions = [
         "can_access": False,
         "can_add": False,
         "can_edit": False,
-        # "can_delete": False,
+        "can_delete": False,
         "can_view": False
     },
     {
             "module_name": "Ciq Report",
             "can_access": False,
-            # "can_add": False,
-            # "can_edit": False,
-            # "can_delete": False,
+            "can_add": False,
+            "can_edit": False,
+            "can_delete": False,
             "can_view": False
     },
     {
                 "module_name": "patient Entry Log",
                 "can_access": False,
-                # "can_add": False,
-                # "can_edit": False,
-                # "can_delete": False,
+                "can_add": False,
+                "can_edit": False,
+                "can_delete": False,
                 "can_view": False
     }
 ]
