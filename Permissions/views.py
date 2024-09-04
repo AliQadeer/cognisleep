@@ -108,12 +108,19 @@ class UserRoleList(APIView):
     """
 
     def get(self, request, format=None):
-        user_roles = UserRole.objects.all()
-        serializer = GetUserRoleSerializer(user_roles, many=True)
-        # return Response(serializer.data)
-        return Response(
-            backend_utils.success_response(status_code=status.HTTP_200_OK, data=serializer.data,
-                                           msg='Action Successful'))
+            search_query = request.query_params.get('search', None)
+            print(f"Search Query: {search_query}")  # Log the search query
+
+            if search_query:
+                user_roles = UserRole.objects.filter(name__icontains=search_query)
+            else:
+                user_roles = UserRole.objects.all()
+
+            serializer = GetUserRoleSerializer(user_roles, many=True)
+            return Response(
+                backend_utils.success_response(status_code=status.HTTP_200_OK, data=serializer.data,
+                                            msg='Action Successful')
+            )
 
     def post(self, request, format=None):
         try:
