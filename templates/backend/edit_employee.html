@@ -135,27 +135,6 @@ div#w0 form label{
                                 </div>
                                 </div>
                                 <div class="col-3">
-                                     <!-- Password -->
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                </div>
-                                </div>
-                                <div class="col-3">
-                                <!-- Confirm Password -->
-                                <div class="form-group">
-                                    <label for="confirmPassword">Confirm Password</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                                <i class="fa fa-eye" id="eyeIcon"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="col-3">
                                         <!-- Role Type -->
                                 <div class="form-group">
                                     <label for="roleType">Role Type</label>
@@ -209,6 +188,15 @@ div#w0 form label{
 
 <script>
 
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Retrieve userId and userName from the query params
+const userId = getQueryParam('userId');
+console.log("user iD", userId)
+
 document.addEventListener('DOMContentLoaded', function () {
     const roleTypeSelect = document.getElementById('roleType');
     const roleNameSelect = document.getElementById('roleName');
@@ -229,8 +217,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function initializePage() {
         roleTypeSelect.value = 'default_role';
-        fetchRoleNames(); 
-        togglePermissionsAccordion(); 
+        fetchRoleNames();
+        togglePermissionsAccordion();
+        if (userId) {
+            fetchUserData();
+        }
     }
 
     roleTypeSelect.addEventListener('change', function () {
@@ -283,33 +274,67 @@ document.addEventListener('DOMContentLoaded', function () {
         xhr.send();
     }
 
-    function fetchRoleNames() {
+    function fetchRoleNames(selectedRole) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://127.0.0.1:8000/Permissions/userrolelist/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const response_data = JSON.parse(xhr.responseText);
+            console.log('Role Names:', response_data);
+
+            if (response_data.success && response_data.data.length > 0) {
+                // Call `populateRoleNames` with fetched role data and selected role ID
+                populateRoleNames(response_data.data, selectedRole);
+            }
+        } else {
+            console.error('Error fetching role names:', xhr.statusText);
+            alert('Failed to fetch role names.');
+        }
+    };
+
+    xhr.onerror = function () {
+        console.error('Request failed');
+        alert('Request failed.');
+    };
+
+    xhr.send();
+}
+
+    function fetchUserData() {
+        preLoader.style.display = 'flex';
+
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://127.0.0.1:8000/Permissions/userrolelist/', true);
+        xhr.open('GET', `http://127.0.0.1:8000/Permissions/users/${userId}/`, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function () {
+            preLoader.style.display = 'none';
             if (xhr.status === 200) {
                 const response_data = JSON.parse(xhr.responseText);
-                console.log('Role Names:', response_data);
+                console.log('User Data:', response_data);
 
-                if (response_data.success && response_data.data.length > 0) {
-                    populateRoleNames(response_data.data);
+                if (response_data.success) {
+                    populateUserData(response_data.data);
+                } else {
+                    console.error('Failed to fetch user data:', response_data.message);
                 }
             } else {
-                console.error('Error fetching role names:', xhr.statusText);
-                alert('Failed to fetch role names.');
+                console.error('Error fetching user data:', xhr.statusText);
+                alert('Failed to fetch user data.');
             }
         };
 
         xhr.onerror = function () {
+            preLoader.style.display = 'none';
             console.error('Request failed');
             alert('Request failed.');
         };
 
         xhr.send();
     }
-
+    
     function populatePermissions(data) {
         const accordionContainer = document.getElementById('permissionsAccordion');
         accordionContainer.innerHTML = '';
@@ -403,19 +428,44 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function populateRoleNames(data) {
-        roleNameSelect.innerHTML = '';
-        data.forEach(role => {
-            const option = document.createElement('option');
-            option.value = role.id;
-            option.text = role.name;
-            roleNameSelect.appendChild(option);
-        });
+    function populateRoleNames(data, selectedRole) {
+    roleNameSelect.innerHTML = '';
+    
+    // Populate the dropdown options
+    data.forEach(role => {
+        const option = document.createElement('option');
+        option.value = role.id;
+        option.text = role.name;
+        roleNameSelect.appendChild(option);
+    });
 
-        if (roleNameSelect.options.length > 0) {
-            roleNameSelect.value = ''
-        }
+    // Set the default value if provided
+    if (selectedRole) {
+        roleNameSelect.text = selectedRole;
+    } else {
+        roleNameSelect.value = ''; // Set an empty default if no role is selected
     }
+}
+
+function populateUserData(data) {
+    document.getElementById('firstName').value = data.first_name || '';
+    document.getElementById('lastName').value = data.last_name || '';
+    document.getElementById('email').value = data.email || '';
+    document.getElementById('city').value = data.city || '';
+    document.getElementById('state').value = data.state || '';
+    document.getElementById('zip').value = data.zip || '';
+    document.getElementById('birthdate').value = data.birthdate || '';
+    
+    if (data.role) {
+        roleTypeSelect.value = 'default_role';
+        console.log("check role----",data.role)
+        fetchRoleNames(data.role);
+    }
+
+    togglePermissionsAccordion();
+}
+
+    initializePage();
 
     document.getElementById('addEmployeeForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -447,7 +497,6 @@ document.addEventListener('DOMContentLoaded', function () {
             "state": document.getElementById('state').value,
             "zip": document.getElementById('zip').value,
             "birthdate": document.getElementById('birthdate').value, 
-            "password": document.getElementById('password').value,
             "default_role": roleTypeSelect.value === 'default_role' ? true : false,
             "role_name": roleTypeSelect.value === 'default_role' ? roleNameSelect.options[roleNameSelect.selectedIndex].text : customRoleNameInput.value,
             "role_id": roleTypeSelect.value === 'default_role' ? roleNameSelect.value : '',
@@ -469,33 +518,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Failed to add employee');
             }
         };
-console.log(JSON.stringify(data))
         xhr.send(JSON.stringify(data));
     });
 });
-
-
-     
-
-
-    document.getElementById('togglePassword').addEventListener('click', function () {
-    const passwordField = document.getElementById('password');
-    const confirmPasswordField = document.getElementById('confirmPassword');
-
-    const eyeIcon = document.getElementById('eyeIcon');
-    
-    if (passwordField.type === 'password' && confirmPasswordField.type === 'password') {
-        passwordField.type = 'text';
-        confirmPasswordField.type='text'
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-    } else {
-        passwordField.type = 'password';
-        confirmPasswordField.type='password'
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-    }
-    });
 </script>
 
 {% endblock %}

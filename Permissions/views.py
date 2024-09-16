@@ -189,6 +189,7 @@ class UserRoleList(APIView):
 
 
 class UserRoleDetail(APIView):
+    permission_classes = [AllowAny]
     """
     API view to retrieve, update or delete a specific user role.
     """
@@ -284,26 +285,50 @@ def get_user_permissions(user):
 
 
 class UserPermissionList(APIView):
-    """
-    API view to retrieve all permissions assigned to a specific user.
-    """
+    permission_classes = [AllowAny]
 
     def get(self, request, pk, format=None):
         try:
-            print(pk)
             if not pk:
                 return Response(
-                    backend_utils.failure_response(status_code=status.HTTP_200_OK,
-                                                   msg='field please add id'))
-            user = account_models.UserProfile.objects.get(user__pk=pk)
-            # Get permissions from user roles with default_permission=True
-            data = get_user_permissions(user)
-            return Response(
-                backend_utils.success_response(status_code=status.HTTP_200_OK, data=data,
-                                               msg='Action Successful'))
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)  # German for "not found"
+                    backend_utils.failure_response(
+                        status_code=status.HTTP_200_OK,
+                        msg='field please add id'
+                    )
+                )
 
+            user = account_models.User.objects.get(id=pk)
+
+            if user.user_role:  # Check if user has a role
+                role_data = {
+                    'role_id': user.user_role.id,
+                    'role_name': user.user_role.name,
+                    'actual_roles': user.user_role.actual_roles,
+                }
+            else:
+                role_data = {}
+
+            data = {
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'city': user.city,
+                'state': user.state,
+                'zip': user.zip,
+                'birthdate': user.birthdate,
+                'role': role_data,
+            }
+
+            return Response(
+                backend_utils.success_response(
+                    status_code=status.HTTP_200_OK,
+                    data=data,
+                    msg='Action Successful'
+                )
+            )
+
+        except account_models.User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 # class AddRolePermission(APIView):
 #     """
@@ -394,15 +419,17 @@ class AddUser(APIView):
                                                msg="Role Name Already Exist"))
         user = User.objects.create_user(email=email, password=password)
 
+        user_role = UserRole.objects.get(id=role_id)
         # user_profile = account_models.User.objects.create(user=user, city=city, state=state, zip=zip,
         #                                                          birth_date=birthdate, first_name=first_name, last_name=last_name)
         user.city = city
         user.state = state
         user.zip = zip
-        user.birth_date = birthdate
+        user.birthdate = birthdate
         user.first_name = first_name
         user.last_name = last_name
         user.role_name = role_name
+        user.user_role = user_role
         user.set_password(password)
         user.save()
         print("default===", default_role)
@@ -503,13 +530,14 @@ class EditUser(APIView):
 
 
 class DeleteUser(APIView):
+    permission_classes = [AllowAny]
     """
     API view to assign a specific permission to a user, overriding default role permissions.
     """
 
     def delete(self, request, id, format=None):
         user = User.objects.get(pk=id)
-        UserRolePermission.objects.filter(user__user=user).delete()
+        UserRolePermission.objects.filter(user=user).delete()
         user.delete()
         return Response(
             backend_utils.success_response(status_code=status.HTTP_200_OK, data=[],
@@ -539,4 +567,56 @@ class AllUsers(APIView):
         return Response(
             backend_utils.success_response(status_code=status.HTTP_200_OK, data=serializer.data,
                                            msg='Action Successful')
+        )
+
+class UpdateUserRole(APIView):
+    permission_classes = [AllowAny]
+
+    def patch(self, request, user_id, format=None):
+        try:
+            # Fetch the user by user_id
+            user = account_models.User.objects.get(pk=user_id)
+        except account_models.User.DoesNotExist:
+            return Response(
+                backend_utils.failure_response(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    msg="User not found"
+                )
+            )
+
+        # Get the role name from the request data
+        role_name = request.data.get('name', None)
+
+        if not role_name:
+            return Response(
+                backend_utils.failure_response(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    msg="Please enter a role name"
+                )
+            )
+
+        # Check if the role exists in UserRole model
+        try:
+            role = UserRole.objects.get(name=role_name)
+        except UserRole.DoesNotExist:
+            return Response(
+                backend_utils.failure_response(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    msg="Role not found"
+                )
+            )
+
+        # Update the user's role field
+        user.role = role_name
+        user.save()
+
+        # Serialize the updated user data
+        serializer = permission_serializers.AllUserSerializer(user)
+
+        return Response(
+            backend_utils.success_response(
+                status_code=status.HTTP_200_OK,
+                data=serializer.data,
+                msg='Role updated successfully for the user'
+            )
         )

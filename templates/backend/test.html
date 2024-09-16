@@ -1,0 +1,556 @@
+<!-- <script>
+
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+    
+    // Retrieve userId from the query params
+    const userId = getQueryParam('userId');
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleTypeSelect = document.getElementById('roleType');
+        const roleNameSelect = document.getElementById('roleName');
+        const customRoleNameInput = document.getElementById('customRoleName');
+        const permissionsAccordion = document.getElementById('permissionsAccordion');
+        const preLoader = document.getElementById('preLoader');
+        const addEmployeeForm = document.getElementById('addEmployeeForm');
+    
+        let permissionsData = []; // To store permissions data
+    
+        function togglePermissionsAccordion() {
+            if (roleTypeSelect.value === 'custom_role') {
+                permissionsAccordion.style.display = 'block';
+                fetchPermissions();
+            } else {
+                permissionsAccordion.style.display = 'none';
+            }
+        }
+    
+        function initializePage() {
+            if (userId) {
+                fetchUserData();  // Fetch user data for edit mode
+            } else {
+                roleTypeSelect.value = 'default_role';
+                fetchRoleNames(); 
+                togglePermissionsAccordion();
+            }
+        }
+    
+        roleTypeSelect.addEventListener('change', function () {
+            if (roleTypeSelect.value === 'custom_role') {
+                customRoleNameInput.style.display = 'block';
+                roleNameSelect.style.display = 'none';
+                roleNameSelect.removeAttribute('required'); 
+                customRoleNameInput.setAttribute('required', 'true'); 
+            } else {
+                customRoleNameInput.style.display = 'none';
+                roleNameSelect.style.display = 'block';
+                customRoleNameInput.removeAttribute('required'); 
+                roleNameSelect.setAttribute('required', 'true'); 
+                fetchRoleNames();
+            }
+            togglePermissionsAccordion();
+        });
+    
+        initializePage();
+    
+        function fetchPermissions() {
+            preLoader.style.display = 'flex';
+    
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://127.0.0.1:8000/Permissions/permissions/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+    
+            xhr.onload = function () {
+                preLoader.style.display = 'none';
+                if (xhr.status === 200) {
+                    const response_data = JSON.parse(xhr.responseText);
+                    console.log('Permissions:', response_data);
+    
+                    if (response_data.success && response_data.data.length > 0) {
+                        permissionsData = response_data.data; // Store permissions data
+                        populatePermissions(permissionsData);
+                    }
+                } else {
+                    console.error('Error fetching permissions:', xhr.statusText);
+                    alert('Failed to fetch permissions.');
+                }
+            };
+    
+            xhr.onerror = function () {
+                preLoader.style.display = 'none';
+                console.error('Request failed');
+                alert('Request failed.');
+            };
+    
+            xhr.send();
+        }
+    
+        function fetchRoleNames() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://127.0.0.1:8000/Permissions/userrolelist/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+    
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response_data = JSON.parse(xhr.responseText);
+                    console.log('Role Names:', response_data);
+    
+                    if (response_data.success && response_data.data.length > 0) {
+                        populateRoleNames(response_data.data);
+                    }
+                } else {
+                    console.error('Error fetching role names:', xhr.statusText);
+                    alert('Failed to fetch role names.');
+                }
+            };
+    
+            xhr.onerror = function () {
+                console.error('Request failed');
+                alert('Request failed.');
+            };
+    
+            xhr.send();
+        }
+        
+        function fetchUserData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `http://127.0.0.1:8000/Permissions/users/${userId}/Permissions/`, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+    
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response_data = JSON.parse(xhr.responseText);
+                    console.log('User Data:', response_data);
+    
+                    if (response_data.success) {
+                        populateFormData(response_data.data);
+                        permissionsData = response_data.data.permissions || [];
+                        populatePermissions(permissionsData);
+                    }
+                } else {
+                    console.error('Error fetching user data:', xhr.statusText);
+                    alert('Failed to fetch user data.');
+                }
+            };
+    
+            xhr.onerror = function () {
+                console.error('Request failed');
+                alert('Request failed.');
+            };
+    
+            xhr.send();
+        }
+    
+        function populateFormData(data) {
+            document.getElementById('firstName').value = data.first_name;
+            document.getElementById('lastName').value = data.last_name;
+            document.getElementById('email').value = data.email;
+            document.getElementById('city').value = data.city;
+            document.getElementById('state').value = data.state;
+            document.getElementById('zip').value = data.zip;
+            document.getElementById('birthdate').value = data.birthdate;
+    
+            if (data.default_role) {
+                roleTypeSelect.value = 'default_role';
+                roleNameSelect.value = data.role_id;
+            } else {
+                roleTypeSelect.value = 'custom_role';
+                customRoleNameInput.value = data.role_name;
+            }
+    
+            togglePermissionsAccordion();
+        }
+    
+        function populatePermissions(data) {
+            const accordionContainer = document.getElementById('permissionsAccordion');
+            accordionContainer.innerHTML = '';
+    
+            data.forEach((module, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+    
+                const cardHeader = document.createElement('div');
+                cardHeader.classList.add('card-header', 'd-flex', 'justify-content-between', 'align-items-center');
+                cardHeader.id = `faqhead${index}`;
+    
+                const mainCheckboxWrapper = document.createElement('div');
+                mainCheckboxWrapper.classList.add('form-check', 'form-check-inline');
+    
+                const mainCheckbox = document.createElement('input');
+                mainCheckbox.type = 'checkbox';
+                mainCheckbox.classList.add('form-check-input');
+                mainCheckbox.id = `mainCheckbox_${index}`;
+                mainCheckbox.checked = module.can_access;
+    
+                const mainCheckboxLabel = document.createElement('label');
+                mainCheckboxLabel.classList.add('form-check-label');
+                mainCheckboxLabel.setAttribute('for', `mainCheckbox_${index}`);
+                mainCheckboxLabel.innerText = module.module_name;
+    
+                mainCheckboxWrapper.appendChild(mainCheckbox);
+                mainCheckboxWrapper.appendChild(mainCheckboxLabel);
+    
+                const toggleIcon = document.createElement('i');
+                toggleIcon.classList.add('fa', 'fa-angle-down');
+                toggleIcon.setAttribute('aria-hidden', 'true');
+    
+                const toggleLink = document.createElement('a');
+                toggleLink.href = '#';
+                toggleLink.classList.add('btn', 'collapsed');
+                toggleLink.setAttribute('data-toggle', 'collapse');
+                toggleLink.setAttribute('data-target', `#faq${index}`);
+                toggleLink.setAttribute('aria-expanded', 'false');
+                toggleLink.setAttribute('aria-controls', `faq${index}`);
+    
+                toggleLink.appendChild(toggleIcon);
+    
+                cardHeader.appendChild(mainCheckboxWrapper);
+                cardHeader.appendChild(toggleLink);
+    
+                const collapseDiv = document.createElement('div');
+                collapseDiv.id = `faq${index}`;
+                collapseDiv.classList.add('collapse');
+                collapseDiv.setAttribute('aria-labelledby', `faqhead${index}`);
+                collapseDiv.setAttribute('data-parent', '#permissionsAccordion');
+    
+                const cardBody = document.createElement('div');
+                cardBody.classList.add('card-body');
+    
+                for (let key in module) {
+                    if (key !== 'module_name') {
+                        const permissionCheckboxWrapper = document.createElement('div');
+                        permissionCheckboxWrapper.classList.add('form-check', 'form-check-inline');
+    
+                        const permissionCheckbox = document.createElement('input');
+                        permissionCheckbox.type = 'checkbox';
+                        permissionCheckbox.classList.add('form-check-input');
+                        permissionCheckbox.id = `${module.module_name}_${key}`;
+                        permissionCheckbox.checked = module[key];
+    
+                        const permissionLabel = document.createElement('label');
+                        permissionLabel.classList.add('form-check-label');
+                        permissionLabel.setAttribute('for', `${module.module_name}_${key}`);
+                        permissionLabel.innerText = key.replace(/_/g, ' ');
+    
+                        permissionCheckboxWrapper.appendChild(permissionCheckbox);
+                        permissionCheckboxWrapper.appendChild(permissionLabel);
+    
+                        cardBody.appendChild(permissionCheckboxWrapper);
+                    }
+                }
+    
+                collapseDiv.appendChild(cardBody);
+                card.appendChild(cardHeader);
+                card.appendChild(collapseDiv);
+    
+                accordionContainer.appendChild(card);
+    
+                mainCheckbox.addEventListener('change', function () {
+                    const checkboxes = collapseDiv.querySelectorAll('.form-check-input');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = mainCheckbox.checked;
+                    });
+                });
+            });
+        }
+    
+        function populateRoleNames(data) {
+            roleNameSelect.innerHTML = '';
+            data.forEach(role => {
+                const option = document.createElement('option');
+                option.value = role.id;
+                option.text = role.name;
+                roleNameSelect.appendChild(option);
+            });
+    
+            if (roleNameSelect.options.length > 0) {
+                roleNameSelect.value = data[0].id; 
+            }
+        }
+    });
+    </script>
+     -->
+
+
+
+
+     {% block javascript %}
+
+<script>
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Retrieve userId from the query params
+const userId = getQueryParam('userId');
+console.log("userId:", userId);
+
+document.addEventListener('DOMContentLoaded', function () {
+    const roleTypeSelect = document.getElementById('roleType');
+    const roleNameSelect = document.getElementById('roleName');
+    const customRoleNameInput = document.getElementById('customRoleName');
+    const permissionsAccordion = document.getElementById('permissionsAccordion');
+    const preLoader = document.getElementById('preLoader');
+
+    let permissionsData = []; // To store permissions data
+
+    function togglePermissionsAccordion() {
+        if (roleTypeSelect.value === 'custom_role') {
+            permissionsAccordion.style.display = 'block';
+            fetchPermissions();
+        } else {
+            permissionsAccordion.style.display = 'none';
+        }
+    }
+
+    function initializePage() {
+        roleTypeSelect.value = 'default_role';
+        fetchRoleNames();
+        togglePermissionsAccordion();
+        if (userId) {
+            fetchUserData();
+        }
+    }
+
+    roleTypeSelect.addEventListener('change', function () {
+        if (roleTypeSelect.value === 'custom_role') {
+            customRoleNameInput.style.display = 'block';
+            roleNameSelect.style.display = 'none';
+            roleNameSelect.removeAttribute('required');
+            customRoleNameInput.setAttribute('required', 'true');
+        } else {
+            customRoleNameInput.style.display = 'none';
+            roleNameSelect.style.display = 'block';
+            customRoleNameInput.removeAttribute('required');
+            roleNameSelect.setAttribute('required', 'true');
+            fetchRoleNames();
+        }
+        togglePermissionsAccordion();
+    });
+
+    function fetchPermissions() {
+        preLoader.style.display = 'flex';
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8000/Permissions/permissions/', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            preLoader.style.display = 'none';
+            if (xhr.status === 200) {
+                const response_data = JSON.parse(xhr.responseText);
+                console.log('Permissions:', response_data);
+
+                if (response_data.success && response_data.data.length > 0) {
+                    permissionsData = response_data.data; // Store permissions data
+                    populatePermissions(permissionsData);
+                }
+            } else {
+                console.error('Error fetching permissions:', xhr.statusText);
+                alert('Failed to fetch permissions.');
+            }
+        };
+
+        xhr.onerror = function () {
+            preLoader.style.display = 'none';
+            console.error('Request failed');
+            alert('Request failed.');
+        };
+
+        xhr.send();
+    }
+
+    function fetchRoleNames() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://127.0.0.1:8000/Permissions/userrolelist/', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response_data = JSON.parse(xhr.responseText);
+                console.log('Role Names:', response_data);
+
+                if (response_data.success && response_data.data.length > 0) {
+                    populateRoleNames(response_data.data);
+                }
+            } else {
+                console.error('Error fetching role names:', xhr.statusText);
+                alert('Failed to fetch role names.');
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Request failed');
+            alert('Request failed.');
+        };
+
+        xhr.send();
+    }
+    
+    function fetchUserData() {
+        preLoader.style.display = 'flex';
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `http://127.0.0.1:8000/Permissions/users/${userId}/Permissions/`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            preLoader.style.display = 'none';
+            if (xhr.status === 200) {
+                const response_data = JSON.parse(xhr.responseText);
+                console.log('User Data:', response_data);
+
+                if (response_data.success) {
+                    populateUserData(response_data.data);
+                } else {
+                    console.error('Failed to fetch user data:', response_data.message);
+                }
+            } else {
+                console.error('Error fetching user data:', xhr.statusText);
+                alert('Failed to fetch user data.');
+            }
+        };
+
+        xhr.onerror = function () {
+            preLoader.style.display = 'none';
+            console.error('Request failed');
+            alert('Request failed.');
+        };
+
+        xhr.send();
+    }
+
+    function populatePermissions(data) {
+        const accordionContainer = document.getElementById('permissionsAccordion');
+        accordionContainer.innerHTML = '';
+
+        data.forEach((module, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            const cardHeader = document.createElement('div');
+            cardHeader.classList.add('card-header', 'd-flex', 'justify-content-between', 'align-items-center');
+            cardHeader.id = `faqhead${index}`;
+
+            const mainCheckboxWrapper = document.createElement('div');
+            mainCheckboxWrapper.classList.add('form-check', 'form-check-inline');
+
+            const mainCheckbox = document.createElement('input');
+            mainCheckbox.type = 'checkbox';
+            mainCheckbox.classList.add('form-check-input');
+            mainCheckbox.id = `mainCheckbox_${index}`;
+            mainCheckbox.checked = module.can_access;
+
+            const mainCheckboxLabel = document.createElement('label');
+            mainCheckboxLabel.classList.add('form-check-label');
+            mainCheckboxLabel.setAttribute('for', `mainCheckbox_${index}`);
+            mainCheckboxLabel.innerText = module.module_name;
+
+            mainCheckboxWrapper.appendChild(mainCheckbox);
+            mainCheckboxWrapper.appendChild(mainCheckboxLabel);
+
+            const toggleIcon = document.createElement('i');
+            toggleIcon.classList.add('fa', 'fa-angle-down');
+            toggleIcon.setAttribute('aria-hidden', 'true');
+
+            const toggleLink = document.createElement('a');
+            toggleLink.href = '#';
+            toggleLink.classList.add('btn', 'collapsed');
+            toggleLink.setAttribute('data-toggle', 'collapse');
+            toggleLink.setAttribute('data-target', `#faq${index}`);
+            toggleLink.setAttribute('aria-expanded', 'false');
+            toggleLink.setAttribute('aria-controls', `faq${index}`);
+
+            toggleLink.appendChild(toggleIcon);
+
+            cardHeader.appendChild(mainCheckboxWrapper);
+            cardHeader.appendChild(toggleLink);
+
+            const collapseDiv = document.createElement('div');
+            collapseDiv.id = `faq${index}`;
+            collapseDiv.classList.add('collapse');
+            collapseDiv.setAttribute('aria-labelledby', `faqhead${index}`);
+            collapseDiv.setAttribute('data-parent', '#permissionsAccordion');
+
+            const cardBody = document.createElement('div');
+            cardBody.classList.add('card-body');
+
+            for (let key in module) {
+                if (key !== 'module_name') {
+                    const permissionCheckboxWrapper = document.createElement('div');
+                    permissionCheckboxWrapper.classList.add('form-check', 'form-check-inline');
+
+                    const permissionCheckbox = document.createElement('input');
+                    permissionCheckbox.type = 'checkbox';
+                    permissionCheckbox.classList.add('form-check-input');
+                    permissionCheckbox.id = `${module.module_name}_${key}`;
+                    permissionCheckbox.checked = module[key];
+
+                    const permissionLabel = document.createElement('label');
+                    permissionLabel.classList.add('form-check-label');
+                    permissionLabel.setAttribute('for', `${module.module_name}_${key}`);
+                    permissionLabel.innerText = key.replace(/_/g, ' ');
+
+                    permissionCheckboxWrapper.appendChild(permissionCheckbox);
+                    permissionCheckboxWrapper.appendChild(permissionLabel);
+
+                    cardBody.appendChild(permissionCheckboxWrapper);
+                }
+            }
+
+            collapseDiv.appendChild(cardBody);
+            card.appendChild(cardHeader);
+            card.appendChild(collapseDiv);
+
+            accordionContainer.appendChild(card);
+
+            mainCheckbox.addEventListener('change', function () {
+                const checkboxes = collapseDiv.querySelectorAll('.form-check-input');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = mainCheckbox.checked;
+                });
+            });
+        });
+    }
+
+    function populateRoleNames(data) {
+        roleNameSelect.innerHTML = '';
+        data.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id;
+            option.text = role.name;
+            roleNameSelect.appendChild(option);
+        });
+
+        if (roleNameSelect.options.length > 0) {
+            roleNameSelect.value = ''
+        }
+    }
+
+    function populateUserData(data) {
+        document.getElementById('firstName').value = data.first_name || '';
+        document.getElementById('lastName').value = data.last_name || '';
+        document.getElementById('email').value = data.email || '';
+        document.getElementById('city').value = data.city || '';
+        document.getElementById('state').value = data.state || '';
+        document.getElementById('zip').value = data.zip || '';
+        document.getElementById('birthdate').value = data.birthdate || '';
+        
+        if (data.default_role) {
+            roleTypeSelect.value = 'default_role';
+            roleNameSelect.value = data.default_role.id;
+        } else {
+            roleTypeSelect.value = 'custom_role';
+            customRoleNameInput.value = data.custom_role_name || '';
+        }
+        togglePermissionsAccordion();
+    }
+
+    initializePage();
+});
+</script>
+
+{% endblock %}

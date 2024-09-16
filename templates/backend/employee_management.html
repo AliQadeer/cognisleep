@@ -108,7 +108,7 @@ div#statusPopup .modal-content {
                          <button  style=" margin-top: -2px; margin-bottom: 10px !important;" type="button" class="btn btn-primary mb-2 backbtn" onclick="javascript:history.back()" id="btn_search"><i class="fa fa-angle-left"
                                         aria-hidden="true"></i>Back</button>
                         <div class="page-title">
-                            <h1>Employee Management</h1>
+                            <h1>All Employees</h1>
                                {% if messages %}
                                 {% for message in messages %}
                                     <div style="color:white;font-width: bold;" class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -214,63 +214,55 @@ div#statusPopup .modal-content {
     </div>
 </div>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary d-none"  id="modalBtn" data-toggle="modal" data-target="#statusPopup">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="statusPopup" tabindex="1" role="dialog" aria-labelledby="statusPopupTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-<!--      <div class="modal-header">-->
-<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--          <span aria-hidden="true">&times;</span>-->
-<!--        </button>-->
-<!--      </div>-->
-      <div class="modal-body">
-            User is successfully <span class="modalStatus text-capitalise"></span>.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+<!-- Modal HTML -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteUserModalLabel">Delete Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this user? This action cannot be undone.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal for changing user role -->
+<div class="modal fade" id="changeRoleModal" tabindex="-1" role="dialog" aria-labelledby="changeRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changeRoleModalLabel">Change Role</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="titleInput">Title</label>
+                <input type="text" id="userFullName"  name="userFullName" class="form-control" disabled>
+            </div>
+          <div class="form-group">
+            <label for="roleSelect">Role Name</label>
+            <select class="form-control" id="roleSelect"></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="updateRoleBtn">Update</button>
+        </div>
+      </div>
+    </div>
 </div>
 
-<div class="modal fade" id="confirmUser" role="dialog" style="">
-                        <div class="modal-dialog modal-md modal-dialog-centered">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Administration Credentials</h5>
-                                    <button type="button" class="close" data-dismiss="modal">×</button>
-
-                                </div>
-                                <div class="modal-body">
-                                    <div class="btn-group col-md-12">
-                                     <div class="provider_registeration" style="width: 100%; ">
-                        <p>Please provide admin credentials to view normal patient</p>
-                    <div id="div_id_email" class="form-group"> <label for="id_email" class="col-form-label  requiredField">
-                Email<span class="asteriskField">*</span> </label> <div class=""> <input type="email" name="email" class="emailinput form-control" required="" id="id_email"> </div> </div> <div id="div_id_password" class="form-group"> <label for="id_password" class="col-form-label  requiredField">
-                Password<span class="asteriskField">*</span> </label> <div class=""> <input type="password" name="password" class="passinput textInput form-control" required="" id="id_password"> </div> </div>
-
-                                <div class="create_account_button" align="center">
-                                 <div class="error" style="display: none;color: red;">All fields are required!</div>
-                                    <button type="button" class="btn btn-md btn-primary col-sm-6 providerVerification" data-id="" >Verify
-                                        </button>
-                                </div>
-
-                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
 
 {% endblock %}
 
@@ -280,141 +272,131 @@ div#statusPopup .modal-content {
 
 <script>
 
-   jQuery('select[name="status"]').change(function(){
-   jQuery(this).find('option').attr('selected', false);
-   var selectedValue =  jQuery(this).val();
-    jQuery(this).removeAttr('class');
-    jQuery(this).addClass(selectedValue);
-    jQuery(this).find('option:selected').attr('selected', true);
-    localStorage.setItem('status', selectedValue);
-    var hid = jQuery(this).parents('tr').find('.hiddenFeild').text();
-    localStorage.setItem('id', hid);
-    if(selectedValue != 'pending') {
-        jQuery('button[data-target="#statusPopup"]').trigger('click');
-    }
-    if(selectedValue == 'cancal') {
-        jQuery(this).attr('disabled', 'true');
-        jQuery(this).parents('tr').find('.subscription_btn').hide();
-    } else {
-        jQuery(this).removeAttr('disabled');
-        jQuery(this).parents('tr').find('.subscription_btn').show();
-    }
+let selectedUserId; // To store the selected user's ID
 
-});
+// Event listener for the "Change Role" button
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('changeUserRoleBtn')) {
+        // Get the user data from the clicked row
+        const row = e.target.closest('tr');
+        const userId = row.querySelector('.deleteUserBtn').getAttribute('data-id');
+        const userName = `${row.cells[1].textContent}`; // Assuming first and last names are in the second cell
+        const currentRole = row.cells[2].textContent; // Assuming role is in the third cell
 
+        // Set global variable for userId
+        selectedUserId = userId;
 
- jQuery('select[name="status"]').each(function(){
-   var status =  jQuery(this).find('option[selected="selected"]').val();
-    if(status == 'active') {
-        jQuery(this).addClass('active');
-        jQuery(this).removeAttr('disabled');
-        jQuery(this).parents('tr').find('.subscription_btn').show();
-    }
-    if(status == 'cancel') {
-         jQuery(this).addClass('cancel');
-         jQuery(this).attr('disabled', 'true');
-         jQuery(this).parents('tr').find('.subscription_btn').hide();
-    }
-     if(status == 'pending') {
-         jQuery(this).addClass('pending');
-         jQuery(this).removeAttr('disabled');
-         jQuery(this).parents('tr').find('.subscription_btn').show();
-    }
-})
+        // Set the title in the modal
+        document.getElementById('userFullName').value = userName;
 
+        // Fetch the roles from the API and populate the select dropdown
+        fetch("http://127.0.0.1:8000/Permissions/userrolelist/")
+            .then(response => response.json())
+            .then(data => {
+                const roleSelect = document.getElementById('roleSelect');
+                roleSelect.innerHTML = ''; // Clear any previous options
 
-
-
-
-jQuery('button[data-target="#statusPopup"]').click(function(){
-    var getStatus = localStorage.getItem('status');
-    var getId = localStorage.getItem('id');
-    jQuery('.modalStatus').text(getStatus);
-     if(getStatus == 'cancel') {
-     window.location.href = "{{ base_url }}/payments/cancelled/"+getId+"";
-     }
-})
-
-jQuery('button[data-dismiss="modal"]').click(function(){
-    jQuery('#chat-widget-container').nextAll('div').remove();
-});
-
-    $(document).ready(function (){
-        $("body").delegate("a.viewPatient","click",function (e) {
-            e.preventDefault();
-            $("#confirmUser").modal('show');
-            $(".emailinput").val("");
-            $(".passinput").val("");
-            $(".providerVerification").attr('data-id',$(this).data('id'));
-
-        });
-        $("body").delegate("button.providerVerification","click",function (e) {
-            e.preventDefault();
-            var email = $(".emailinput").val();
-            var pass = $(".passinput").val();
-            var user_id = $(this).data("id");
-            if(!email || !pass){
-               $("div.error").html("All fields are required!");
-                $("div.error").show();
-            }else{
-              $("div.error").hide();
-               const endpoint = '/backend/providers_verify/';
-               $.ajax({
-                    method: 'POST',
-                    data: {"email": email,"pass": pass,'user_id':user_id},
-                    url: endpoint,
-                    success: function (response_data) {
-                        console.log(response_data)
-                        var response_data = response_data;
-                        if(response_data.status){
-                           $("div.error").html("<span style='color:green !important;'>Login Successfully</span>");
-                            $("div.error").show();
-                            setTimeout(function (){
-                                window.location.href = response_data.url
-                            },2000);
-                        }else{
-                            $("div.error").html("Wrong credentials");
-                              $("div.error").show();
-                        }
-
+                // Populate the select dropdown with the role options
+                data.data.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.id;
+                    option.text = role.name;
+                    if (role.name === currentRole) {
+                        option.selected = true; // Set the current role as the selected option
                     }
+                    roleSelect.appendChild(option);
                 });
-            }
-          //  $("#confirmUser").modal('show');
-            //$(".providerVerification").attr('data-id',$(this).data('id'));
+            })
+            .catch(error => console.error('Error fetching roles:', error));
 
-        });
-    });
-
-
-    // Attach the function to modal close events
-    $(document).ready(function() {
-        // When the modal is closed, remove the backdrop
-        $('#addEmployeeModal').on('hidden.bs.modal', function () {
-            removeModalBackdrop();
-        });
-
-        $('#addEmployeeModal').on('hide.bs.modal', function () {
-            removeModalBackdrop();
-        });
-
-        // Optionally, you can attach this to the cancel button if needed
-        $('.btn-cancel').on('click', function () {
-            removeModalBackdrop();
-        });
-    });
-
-
-<!--    function loadModel(id) {-->
-<!--        $("#pid").val(id);-->
-<!--        $("#myModal").modal('show');-->
-
-<!--    }-->
-
-    function del_p() {
-        var id = $("#pid").val();
-        window.location.href = "/delete_patient/" + id + "/current_active_patient";
+        // Show the modal
+        $('#changeRoleModal').modal('show');
     }
+});
+
+// Event listener for the "Update" button in the modal
+document.getElementById('updateRoleBtn').addEventListener('click', function () {
+    const selectedRoleId = document.getElementById('roleSelect').value;
+    const selectedRoleName = document.getElementById('roleSelect').selectedOptions[0].text;
+
+    // Prepare the PATCH request body
+    const requestBody = {
+        id: selectedRoleId,
+        name: selectedRoleName,
+        actual_roles: true // Assuming this should always be true as per your example
+    };
+
+    // Send the PATCH request to update the role
+    fetch(`http://127.0.0.1:8000/Permissions/api/users/${selectedUserId}/update_role/`, {
+        method: 'PATCH',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Django CSRF token for security
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Role updated successfully.');
+
+            // You can update the table row to reflect the new role
+            document.querySelector(`.deleteUserBtn[data-id='${selectedUserId}']`).closest('tr').cells[2].textContent = selectedRoleName;
+
+            $('#changeRoleModal').modal('hide'); // Hide the modal
+        } else {
+            alert('Failed to update role.');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating role:', error);
+    });
+});
+
+
+let userIdToDelete; // Store the user ID to delete
+
+// Event listener for the delete button
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('deleteUserBtn')) {
+        userIdToDelete = e.target.getAttribute('data-id');
+        // Show the modal when delete button is clicked
+        $('#deleteUserModal').modal('show');
+    }
+});
+
+// Event listener for the confirm delete button
+document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+    // Call the function to delete the user
+    deleteUser(userIdToDelete);
+    $('#deleteUserModal').modal('hide'); // Hide the modal
+});
+
+// Function to handle the deletion
+function deleteUser(userId) {
+    // Perform an AJAX request to delete the user
+    fetch(`http://127.0.0.1:8000/Permissions/delete/user/${userId}`, {
+        method: "DELETE",
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', 
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Remove the user row from the table
+            document.querySelector(`.deleteUserBtn[data-id='${userId}']`).closest('tr').remove();
+            alert('User deleted successfully.');
+
+        } else {
+            alert('Failed to delete user.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
     document.getElementById('searchForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
@@ -470,21 +452,15 @@ jQuery('button[data-dismiss="modal"]').click(function(){
                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                             </button>
                             <div class="dropdown-menu px-3 py-2 tableActions" aria-labelledby="dropdownMenuButton">
-                                <div class="actionBtns d-flex flex-column">
-                                    ${user.subscription_type !== "zero_coupon" ? `
-                                    <a href="/payments/subscription_detail/${user.id}" class="subscription_btn">
-                                        <i class="fa fa-file" aria-hidden="true"></i> Subscription
-                                    </a>` : ''}
-                                    
-                                    <a class="viewPatient" href="/backend/provider_detail/${user.id}"
-                                        title="View" aria-label="View" data-pjax="0" data-id="${user.id}">
-                                        <i class="fa fa-eye" aria-hidden="true"></i> View
+                                <div class="actionBtns d-flex flex-column">  
+                                     <a class="changeUserRoleBtn">
+                                        <i class="fa fa-edit" aria-hidden="true"></i> Change Role
                                     </a>
-                                    <a href="/delete_user/${user.id}" class="deleteUserBtn" data-id="${user.id}">
+                                      <a class="editUserInfoBtn">
+                                        <i class="fa fa-edit" aria-hidden="true"></i> Edit User Info
+                                    </a>
+                                    <a class="deleteUserBtn" data-id="${user.id}">
                                         <i class="fa fa-trash" aria-hidden="true"></i> Delete
-                                    </a>
-                                    <a href="${user.signing_link_1}" target="_blank" class="deleteUserBtn" data-id="${user.id}">
-                                        <i class="fa fa-eye" aria-hidden="true"></i> View Agreement
                                     </a>
                                 </div>
                             </div>
@@ -495,6 +471,16 @@ jQuery('button[data-dismiss="modal"]').click(function(){
             usersTable.append(userRow);
         });
     }
+
+// Event listener for the view button
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('editUserInfoBtn')) {
+        const userId = e.target.closest('tr').querySelector('.deleteUserBtn').getAttribute('data-id');  // Get user ID
+        
+        // Redirect to the edit role page with both user ID and user name as query params
+        window.location.href = `/backend/edit_employee?userId=${encodeURIComponent(userId)}`;
+    }
+});
 
 
 

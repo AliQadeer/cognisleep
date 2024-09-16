@@ -75,6 +75,7 @@ class User(AbstractBaseUser):
     staff = models.BooleanField(default=False)
     role_id = models.IntegerField(default=False)
     role = models.CharField(max_length=60, null=True, blank=True)
+    user_role = models.ForeignKey('Permissions.UserRole', on_delete=models.SET_NULL, null=True,blank=True)  # 'permissions' is your app name
     city = models.CharField(max_length=60, null=True, blank=True)
     state = models.CharField(max_length=60, null=True, blank=True)
     zip = models.CharField(max_length=60, null=True, blank=True)

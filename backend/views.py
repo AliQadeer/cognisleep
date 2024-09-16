@@ -1406,3 +1406,12 @@ def add_new_employee(request):
 
 def role_management(request):
     return render(request, "backend/role_management.html")
+
+def add_new_role(request):
+    return render(request, "backend/add_new_role.html")
+
+def edit_role(request):
+    return render(request, "backend/edit_role.html")
+
+def edit_employee(request):
+    return render(request, "backend/edit_employee.html")
