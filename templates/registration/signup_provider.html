@@ -166,19 +166,20 @@
                 </div>
               </div>
 
-                          <div class="form-group">
-              <div class="custom-control custom-checkbox ">
-                <input type="checkbox" class="custom-control-input d-none" id="signup_with_coupon">
-                <label class="custom-control-label" for="signup_with_coupon">Signup with user Coupon</label>
+              <div class="form-group d-flex justify-content-between">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input d-none" id="signup_with_coupon">
+                  <label class="custom-control-label" for="signup_with_coupon">Invitation Code</label>
+                </div>
+                <span id="couponMessage" style="display: none; color: green;">Code verified</span>
               </div>
-            </div>
 
             <!-- Modal -->
 <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="couponModalLabel">Signup with user Coupon</h5>
+        <h5 class="modal-title" id="couponModalLabel">Invitation Code</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -464,7 +465,7 @@ $(document).ready(function(){
     $('.custom-checkbox').click(function(){
         $('#couponModal').modal('show');
         $('#signup_with_coupon').prop('checked', false);
-
+        $('#couponMessage').hide();  // Ensure the span is hidden initially
     });
 
     // Apply coupon button click event
@@ -479,12 +480,16 @@ $(document).ready(function(){
                 if(response === true) {
                     $('#signup_with_coupon').prop('checked', true);
                     $('#couponModal').modal('hide');
+                    $('#couponMessage').text('Code verified').css('color', 'green').show();  // Show the message in green
+                    $('#couponError').text('');
                 } else {
                     $('#couponError').text('Invalid coupon. Please try again.');
+                    $('#couponMessage').hide();  // Hide the span if the code is invalid
                 }
             },
             error: function(){
                 $('#couponError').text('Error occurred while processing. Please try again later.');
+                $('#couponMessage').hide();  // Hide the span in case of an error
             }
         });
     });

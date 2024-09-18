@@ -3,8 +3,9 @@ import traceback
 from django.shortcuts import render, redirect, reverse
 from rest_framework.views import APIView
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from rest_framework import permissions, status, generics
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,10 +16,11 @@ from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from urllib.request import urlretrieve
 from cogni.views import email_records
+from rest_framework.authtoken.models import Token
 from payments.views import isPaymentSuccess
 from .models import User as U, PatientPaymentDetails, Add_provider, Invitation, Patient, RefPatient, Provider, \
     Provider_Verification, Provider_type
-from .serializer import LoginSerializer, RefpatientSerializer, CreateUserSerializer, LoginFormSerializer, \
+from .serializer import LoginSerializer,UserSerializer, RefpatientSerializer, CreateUserSerializer, LoginFormSerializer, \
     PasswordChangeSerializer, \
     LoginFormProviderSerializer, SignupProviderSerializer, ProviderTypeSerializer, UserDetailSerializer, \
     ProviderRegSerializer
@@ -76,6 +78,7 @@ MESSAGE_TAGS = {
 
 
 class ValidateEmail(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         email_id = request.data.get('id_email')
@@ -250,6 +253,56 @@ def LoginPatient(request):
         return redirect('/')
 
 
+class LoginPatientAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            if request.user.is_authenticated:
+                return Response({
+                    "detail": "Already authenticated.",
+                    "user": UserSerializer(request.user).data
+                }, status=status.HTTP_200_OK)
+
+            serializer = LoginSerializer(data=request.data)
+            if serializer.is_valid():
+                email = serializer.validated_data['email']
+                password = serializer.validated_data['password']
+                user = authenticate(email=email, password=password)
+
+                if user:
+                    new_user_patient = User.objects.get(id=user.id)
+                    print("active patient", new_user_patient.active_patient)
+
+                    if not new_user_patient.active_patient:
+                        return Response({"detail": "Your account has been blocked by the provider, contact your provider!"}, status=status.HTTP_403_FORBIDDEN)
+
+                    if user.is_admin or user.is_provider:
+                        return Response({"detail": "Patient Login required."}, status=status.HTTP_403_FORBIDDEN)
+
+                    if not user.isverified:
+                        return Response({"detail": "Please verify your account"}, status=status.HTTP_403_FORBIDDEN)
+
+                    if user.is_active:
+                        login(request, user)
+                        token, created = Token.objects.get_or_create(user=user)
+                        user_data = UserSerializer(user, context={"request": request}).data
+                        user_data["token"] = token.key
+                        return Response({
+                            "detail": "Login successful",
+                            "user": user_data
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({"detail": "Inactive account"}, status=status.HTTP_403_FORBIDDEN)
+                else:
+                    return Response({"detail": "Invalid email or password. Try again."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response({"detail": "An error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 def pro_logout(request):
     auth.logout(request)
     return redirect('/accounts/provider_login')
@@ -411,24 +464,24 @@ def UserRegterForm(request):
                 # email verify code
                 try:
                     pass
-                    subject = 'Cogni Verification Code'
-                    to = request.POST['email']
-
-                    html_message = loader.render_to_string(
-                        'email_temp/verify_email_code.html',
-                        {
-                            'unique_id_patient': unique_id_patient,
-                        }
-                    )
-                    email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
-                    send_mail(
-                        subject,
-                        'Cogni Verification Code',
-                        settings.EMAIL_FROM,
-                        [to],
-                        html_message=html_message
-                        ,
-                    )
+                    # subject = 'Cogni Verification Code'
+                    # to = request.POST['email']
+                    #
+                    # html_message = loader.render_to_string(
+                    #     'email_temp/verify_email_code.html',
+                    #     {
+                    #         'unique_id_patient': unique_id_patient,
+                    #     }
+                    # )
+                    # email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
+                    # send_mail(
+                    #     subject,
+                    #     'Cogni Verification Code',
+                    #     settings.EMAIL_FROM,
+                    #     [to],
+                    #     html_message=html_message
+                    #     ,
+                    # )
                 except Exception as e:
                     print(e)
                 new_user_patient.save()
@@ -583,24 +636,24 @@ def UserRegterNForm(request, pid):
                 # email verify code.
                 try:
                     pass
-                    subject = 'Cogni Verification Code'
-                    to = request.POST['email']
-
-                    html_message = loader.render_to_string(
-                        'email_temp/verify_email_code.html',
-                        {
-                            'unique_id_patient': unique_id_patient,
-                        }
-                    )
-                    email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
-                    send_mail(
-                        subject,
-                        'Cogni Verification Code',
-                        settings.EMAIL_FROM,
-                        [to],
-                        html_message=html_message
-                        ,
-                    )
+                    # subject = 'Cogni Verification Code'
+                    # to = request.POST['email']
+                    #
+                    # html_message = loader.render_to_string(
+                    #     'email_temp/verify_email_code.html',
+                    #     {
+                    #         'unique_id_patient': unique_id_patient,
+                    #     }
+                    # )
+                    # email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
+                    # send_mail(
+                    #     subject,
+                    #     'Cogni Verification Code',
+                    #     settings.EMAIL_FROM,
+                    #     [to],
+                    #     html_message=html_message
+                    #     ,
+                    # )
 
                 except Exception as e:
                     print(e)
@@ -701,6 +754,7 @@ def payment(request):
 
 
 def validate_email(request):
+    permission_classes = [AllowAny]
     try:
         print("Yes in validate email")
         useremail = request.GET.get('id_email', None)
@@ -790,24 +844,24 @@ def Signup_Provider(request, email=None, pid=0):
                 try:
                     pass
 
-                    subject = 'Cogni Verification Code'
-                    to = request.POST['email']
-
-                    html_message = loader.render_to_string(
-                        'email_temp/verify_email_code.html',
-                        {
-                            'unique_id_patient': unique_id,
-                        }
-                    )
-                    email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
-                    send_mail(
-                        subject,
-                        'Cogni Verification Code',
-                        settings.EMAIL_FROM,
-                        [to],
-                        html_message=html_message
-                        ,
-                    )
+                    # subject = 'Cogni Verification Code'
+                    # to = request.POST['email']
+                    #
+                    # html_message = loader.render_to_string(
+                    #     'email_temp/verify_email_code.html',
+                    #     {
+                    #         'unique_id_patient': unique_id,
+                    #     }
+                    # )
+                    # email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
+                    # send_mail(
+                    #     subject,
+                    #     'Cogni Verification Code',
+                    #     settings.EMAIL_FROM,
+                    #     [to],
+                    #     html_message=html_message
+                    #     ,
+                    # )
                 except Exception as e:
                     print(e)
                 return redirect(url)
@@ -1173,6 +1227,41 @@ def Change_password(request):
         print(e)
         return redirect('/')
 
+
+class APIChangePassword(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordChangeSerializer(data=request.data)
+        if serializer.is_valid():
+            new_password = serializer.validated_data.get('password1')
+            new_password2 = serializer.validated_data.get('password2')
+            useremail = serializer.validated_data.get('email')
+            role_id = serializer.validated_data.get('role_id')
+
+            if new_password != new_password2:
+                return Response({"error": "Passwords did not match"}, status=status.HTTP_400_BAD_REQUEST)
+            if new_password == "":
+                return Response({"error": "Password is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                loggedUser = User.objects.get(email=useremail)
+                if loggedUser.role_id == role_id:
+                    loggedUser.set_password(new_password)
+                    # request.user.passwordstr = new_password
+                    loggedUser.save()
+                    update_session_auth_hash(request, request.user)
+                    return Response({"success": "Password updated successfully"}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error": "User role mismatch"}, status=status.HTTP_403_FORBIDDEN)
+            except User.DoesNotExist:
+                return Response({"error": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @login_required
 def Change_details(request):
     try:
@@ -1349,6 +1438,82 @@ def Change_details(request):
         return redirect('/')
 
 
+# class ChangeDetailsView(APIView):
+#     permission_classes = [AllowAny]
+#
+#     def post(self, request, *args, **kwargs):
+#         try:
+#             # user = request.user
+#             data = request.data
+#             role_id = int(data['pid'])
+#             user = User.objects.get(id=role_id)
+#
+#
+#             filepath = os.path.join(BASE_DIR, 'media')
+#
+#
+#             if user.role_id == 1:
+#                 provider = Provider.objects.get(user=user)
+#                 serializer = ProviderSerializer(provider, data=data, partial=True)
+#
+#                 if serializer.is_valid():
+#                     if 'driving_license_front_img' in request.FILES:
+#                         front_img = request.FILES['driving_license_front_img']
+#                         fs = FileSystemStorage()
+#                         filename = fs.save(front_img.name, front_img)
+#                         serializer.validated_data['driving_license_front_img'] = "/media/" + filename
+#
+#                     if 'driving_license_back_img' in request.FILES:
+#                         back_img = request.FILES['driving_license_back_img']
+#                         fs = FileSystemStorage()
+#                         filename_back = fs.save(back_img.name, back_img)
+#                         serializer.validated_data['driving_license_back_img'] = "/media/" + filename_back
+#
+#                     if 'provider_image' in request.FILES:
+#                         provider_image = request.FILES['provider_image']
+#                         fs = FileSystemStorage()
+#                         provider_image_name = fs.save(provider_image.name, provider_image)
+#                         serializer.validated_data['provider_image'] = "/media/" + provider_image_name
+#
+#                     if 'medical_license_image' in request.FILES:
+#                         medical_image = request.FILES['medical_license_image']
+#                         fs = FileSystemStorage()
+#                         medical_image_name = fs.save(medical_image.name, medical_image)
+#                         serializer.validated_data['medical_license_image'] = "/media/" + medical_image_name
+#
+#                     serializer.save()
+#                     return Response({"success": "Provider details updated successfully"}, status=status.HTTP_200_OK)
+#                 else:
+#                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#             elif user.role_id == 2:
+#                 ref_patient = RefPatient.objects.get(user=user)
+#                 serializer = RefPatientSerializers(ref_patient, data=data, partial=True)
+#
+#                 if serializer.is_valid():
+#                     if 'driving_license_front_img' in request.FILES:
+#                         front_img = request.FILES['driving_license_front_img']
+#                         fs = FileSystemStorage()
+#                         filename = fs.save(front_img.name, front_img)
+#                         serializer.validated_data['driving_license_front_img'] = "/media/" + filename
+#
+#                     if 'driving_license_back_img' in request.FILES:
+#                         back_img = request.FILES['driving_license_back_img']
+#                         fs = FileSystemStorage()
+#                         filename_back = fs.save(back_img.name, back_img)
+#                         serializer.validated_data['driving_license_back_img'] = "/media/" + filename_back
+#
+#                     serializer.save()
+#                     return Response({"success": "RefPatient details updated successfully"}, status=status.HTTP_200_OK)
+#                 else:
+#                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#             else:
+#                 return Response({"error": "Invalid user role"}, status=status.HTTP_403_FORBIDDEN)
+#
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 def forgetlink(request, pid=0):
     try:
         if request.method == 'POST':
@@ -1416,24 +1581,24 @@ def forgot_password(request):
                     # email verify code
                     try:
                         pass
-                        subject = 'CogniSleep Password Reset'
-                        to = request.POST['user_email']
-
-                        html_message = loader.render_to_string(
-                            'email_temp/forgot_password.html',
-                            {
-                                'reset_link': link,
-                            }
-                        )
-                        email_records(request, to, settings.EMAIL_FROM, 'CogniSleep Password Reset')
-                        send_mail(
-                            subject,
-                            'CogniSleep Password Reset',
-                            settings.EMAIL_FROM,
-                            [to],
-                            html_message=html_message
-                            ,
-                        )
+                        # subject = 'CogniSleep Password Reset'
+                        # to = request.POST['user_email']
+                        #
+                        # html_message = loader.render_to_string(
+                        #     'email_temp/forgot_password.html',
+                        #     {
+                        #         'reset_link': link,
+                        #     }
+                        # )
+                        # email_records(request, to, settings.EMAIL_FROM, 'CogniSleep Password Reset')
+                        # send_mail(
+                        #     subject,
+                        #     'CogniSleep Password Reset',
+                        #     settings.EMAIL_FROM,
+                        #     [to],
+                        #     html_message=html_message
+                        #     ,
+                        # )
                         context = {'found': found,
                                    }
                         return render(request, 'registration/forgot_password.html', context)
@@ -1500,22 +1665,22 @@ def disapproved(request):
             reason = request.POST.get('reason')
             email = request.POST.get('email')
             if reason == '1':
-                subject = 'Unable to read submitted documents'
-                to = email
-
-                html_message = loader.render_to_string(
-                    'email_temp/not_approved.html',
-                    {}
-                )
-                email_records(request, to, settings.EMAIL_FROM, 'Unable to read submitted documents')
-                send_mail(
-                    subject,
-                    'Unable to read submitted documents',
-                    settings.EMAIL_FROM,
-                    [to],
-                    html_message=html_message
-                    ,
-                )
+                # subject = 'Unable to read submitted documents'
+                # to = email
+                #
+                # html_message = loader.render_to_string(
+                #     'email_temp/not_approved.html',
+                #     {}
+                # )
+                # email_records(request, to, settings.EMAIL_FROM, 'Unable to read submitted documents')
+                # send_mail(
+                #     subject,
+                #     'Unable to read submitted documents',
+                #     settings.EMAIL_FROM,
+                #     [to],
+                #     html_message=html_message
+                #     ,
+                # )
                 all_current_active_patients = User.objects.raw(
                     "SELECT providers.first_name,providers.last_name,providers.provider_ref,providers.practice_name,providers.package_type,providers.primary_care_doctor_id,providers.flag,providers.total_patients,providers.subscription_status,accounts_user.email,accounts_user.username, accounts_user.id,provider_verification.user_position, providers.user_id, providers.contact_no,DATE(providers.timestamp) as date,TIME(providers.timestamp) as time  FROM  accounts_user inner join providers on accounts_user.id = providers.user_id inner join provider_verification on provider_verification.user_id = accounts_user.id where accounts_user.role_id = 1 and  accounts_user.active=1 and provider_verification.user_position = 3  order by accounts_user.id desc")
                 paginator = Paginator(all_current_active_patients, 25)
@@ -1535,22 +1700,22 @@ def disapproved(request):
                 return render(request, "backend/non_verified_provider.html", context)
             if reason == '2':
                 # inactive/lapsed
-                subject = 'inactive/lapsed'
-                to = email
-
-                html_message = loader.render_to_string(
-                    'email_temp/inactive_lapsed.html',
-                    {}
-                )
-                email_records(request, to, settings.EMAIL_FROM, 'inactive/lapsed')
-                send_mail(
-                    subject,
-                    'inactive/lapsed',
-                    settings.EMAIL_FROM,
-                    [to],
-                    html_message=html_message
-                    ,
-                )
+                # subject = 'inactive/lapsed'
+                # to = email
+                #
+                # html_message = loader.render_to_string(
+                #     'email_temp/inactive_lapsed.html',
+                #     {}
+                # )
+                # email_records(request, to, settings.EMAIL_FROM, 'inactive/lapsed')
+                # send_mail(
+                #     subject,
+                #     'inactive/lapsed',
+                #     settings.EMAIL_FROM,
+                #     [to],
+                #     html_message=html_message
+                #     ,
+                # )
                 all_current_active_patients = User.objects.raw(
                     "SELECT providers.first_name,providers.last_name,providers.provider_ref,providers.practice_name,providers.package_type,providers.primary_care_doctor_id,providers.flag,providers.total_patients,providers.subscription_status,accounts_user.email,accounts_user.username, accounts_user.id,provider_verification.user_position, providers.user_id, providers.contact_no,DATE(providers.timestamp) as date,TIME(providers.timestamp) as time  FROM  accounts_user inner join providers on accounts_user.id = providers.user_id inner join provider_verification on provider_verification.user_id = accounts_user.id where accounts_user.role_id = 1 and  accounts_user.active=1 and provider_verification.user_position = 3  order by accounts_user.id desc")
                 paginator = Paginator(all_current_active_patients, 25)
@@ -2231,27 +2396,27 @@ def Send_Provider_Ma_Invitatiton(request, pid=None, email=None, type=None):
             try:
                 print("INSIDE EMAIL")
                 sub = Provider_name +' has invited you'
-                subject = sub
-                to = email
-
-                html_message = loader.render_to_string(
-                    'email_temp/ma_invitation.html',
-                    {
-                        'register_link': link,
-                        'type': type,
-                        'exist': 'no',
-                        'providername': Provider_name,
-                    }
-                )
-                email_records(request, to, settings.EMAIL_FROM, sub)
-                send_mail(
-                    subject,
-                    sub,
-                    settings.EMAIL_FROM,
-                    [to],
-                    html_message=html_message
-                    ,
-                )
+                # subject = sub
+                # to = email
+                #
+                # html_message = loader.render_to_string(
+                #     'email_temp/ma_invitation.html',
+                #     {
+                #         'register_link': link,
+                #         'type': type,
+                #         'exist': 'no',
+                #         'providername': Provider_name,
+                #     }
+                # )
+                # email_records(request, to, settings.EMAIL_FROM, sub)
+                # send_mail(
+                #     subject,
+                #     sub,
+                #     settings.EMAIL_FROM,
+                #     [to],
+                #     html_message=html_message
+                #     ,
+                # )
                 print("Email SENT SUCCESSFULLY")
                 return Response("True", status=status.HTTP_200_OK)
 
@@ -2280,27 +2445,27 @@ def Send_Provider_Ma_Invitatiton(request, pid=None, email=None, type=None):
                     # email verify code
                     try:
                         sub = Provider_name + ' has invited you'
-                        subject = sub
-                        to = email
-
-                        html_message = loader.render_to_string(
-                            'email_temp/ma_invitation.html',
-                            {
-                                'accept_link': link,
-                                'exist':'yes',
-                                'type': type,
-                                'providername':Provider_name,
-                            }
-                        )
-                        email_records(request, to, settings.EMAIL_FROM, sub)
-                        send_mail(
-                            subject,
-                            sub,
-                            settings.EMAIL_FROM,
-                            [to],
-                            html_message=html_message
-                            ,
-                        )
+                        # subject = sub
+                        # to = email
+                        #
+                        # html_message = loader.render_to_string(
+                        #     'email_temp/ma_invitation.html',
+                        #     {
+                        #         'accept_link': link,
+                        #         'exist':'yes',
+                        #         'type': type,
+                        #         'providername':Provider_name,
+                        #     }
+                        # )
+                        # email_records(request, to, settings.EMAIL_FROM, sub)
+                        # send_mail(
+                        #     subject,
+                        #     sub,
+                        #     settings.EMAIL_FROM,
+                        #     [to],
+                        #     html_message=html_message
+                        #     ,
+                        # )
                         print("Email SENT SUCCESSFULLY")
                         return Response("True", status=status.HTTP_200_OK)
 
@@ -2336,27 +2501,27 @@ def Send_Provider_Ma_Invitatiton(request, pid=None, email=None, type=None):
             try:
                 print("INSIDE EMAIL")
                 sub = Provider_name + ' has invited you'
-                subject = sub
-                to = email
-
-                html_message = loader.render_to_string(
-                    'email_temp/ma_invitation.html',
-                    {
-                        'register_link': link,
-                        'type': type,
-                        'exist': 'no',
-                        'providername': Provider_name,
-                    }
-                )
-                email_records(request, to, settings.EMAIL_FROM, sub)
-                send_mail(
-                    subject,
-                    sub,
-                    settings.EMAIL_FROM,
-                    [to],
-                    html_message=html_message
-                    ,
-                )
+                # subject = sub
+                # to = email
+                #
+                # html_message = loader.render_to_string(
+                #     'email_temp/ma_invitation.html',
+                #     {
+                #         'register_link': link,
+                #         'type': type,
+                #         'exist': 'no',
+                #         'providername': Provider_name,
+                #     }
+                # )
+                # email_records(request, to, settings.EMAIL_FROM, sub)
+                # send_mail(
+                #     subject,
+                #     sub,
+                #     settings.EMAIL_FROM,
+                #     [to],
+                #     html_message=html_message
+                #     ,
+                # )
                 print("Email SENT SUCCESSFULLY")
                 return Response("True", status=status.HTTP_200_OK)
 
@@ -2386,27 +2551,27 @@ def Send_Provider_Ma_Invitatiton(request, pid=None, email=None, type=None):
                     try:
                         pass
                         sub = Provider_name + ' has invited you'
-                        subject = sub
-                        to = email
-
-                        html_message = loader.render_to_string(
-                            'email_temp/ma_invitation.html',
-                            {
-                                'accept_link': link,
-                                'exist': 'yes',
-                                'type': type,
-                                'providername': Provider_name,
-                            }
-                        )
-                        email_records(request, to, settings.EMAIL_FROM, sub)
-                        send_mail(
-                            subject,
-                            sub,
-                            settings.EMAIL_FROM,
-                            [to],
-                            html_message=html_message
-                            ,
-                        )
+                        # subject = sub
+                        # to = email
+                        #
+                        # html_message = loader.render_to_string(
+                        #     'email_temp/ma_invitation.html',
+                        #     {
+                        #         'accept_link': link,
+                        #         'exist': 'yes',
+                        #         'type': type,
+                        #         'providername': Provider_name,
+                        #     }
+                        # )
+                        # email_records(request, to, settings.EMAIL_FROM, sub)
+                        # send_mail(
+                        #     subject,
+                        #     sub,
+                        #     settings.EMAIL_FROM,
+                        #     [to],
+                        #     html_message=html_message
+                        #     ,
+                        # )
                         print("Email SENT SUCCESSFULLY")
                         return Response("True", status=status.HTTP_200_OK)
 
@@ -2421,6 +2586,7 @@ def Send_Provider_Ma_Invitatiton(request, pid=None, email=None, type=None):
 #############################MA change ref id MA #############################
 
 class ma_Referedbypro(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         doctor_refnumber = request.data.get('ref_name')
@@ -2486,11 +2652,17 @@ class ma_Referedbypro(APIView):
                 # provider_ids = first_name + last_name + provider_id
                 # Check if RefPatient exists for the user
                 ma_provider = Provider.objects.filter(user=user).first()
+                ref_provider = Provider.objects.get(provider_ref=provider_id)
+                pro_user_id = ref_provider.user_id
 
                 if ma_provider:
                     # Update provider_id
+                    add = Add_provider(mid=user.id, pid=ma_provider.id)
+                    add.pid = pro_user_id
+                    # add = Add_provider(mid=pid, pid=spid)
                     ma_provider.primary_care_doctor_id = provider_id
                     ma_provider.save()
+                    add.save()
 
                     return Response({
                         'success': True,
@@ -2511,8 +2683,6 @@ class ma_Referedbypro(APIView):
                 'success': False,
                 'message': 'An error occurred while updating the Provider ID.'
             })
-
-
 
 
 def ma_signup(request, pid=0, iid=0):
@@ -2570,24 +2740,24 @@ def ma_signup(request, pid=0, iid=0):
                     try:
                         pass
 
-                        subject = 'Cogni Verification Code'
-                        to = request.POST['email']
-
-                        html_message = loader.render_to_string(
-                            'email_temp/verify_email_code.html',
-                            {
-                                'unique_id_patient': unique_id,
-                            }
-                        )
-                        email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
-                        send_mail(
-                            subject,
-                            'Cogni Verification Code',
-                            settings.EMAIL_FROM,
-                            [to],
-                            html_message=html_message
-                            ,
-                        )
+                        # subject = 'Cogni Verification Code'
+                        # to = request.POST['email']
+                        #
+                        # html_message = loader.render_to_string(
+                        #     'email_temp/verify_email_code.html',
+                        #     {
+                        #         'unique_id_patient': unique_id,
+                        #     }
+                        # )
+                        # email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
+                        # send_mail(
+                        #     subject,
+                        #     'Cogni Verification Code',
+                        #     settings.EMAIL_FROM,
+                        #     [to],
+                        #     html_message=html_message
+                        #     ,
+                        # )
                     except Exception as e:
                         print(e)
                     return redirect('/accounts/provider_verification/')
@@ -2649,6 +2819,7 @@ def Ma_provider_patients(request, pid=None):
 
 
 class SignupProviderAPIView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         if request.user.id is not None:
             return redirect('/dashboard/')
@@ -2672,24 +2843,24 @@ class SignupProviderAPIView(APIView):
             new_user.save()
 
 
-            subject = 'Cogni Verification Code'
-            to = request_body['email']
-
-            html_message = loader.render_to_string(
-                'email_temp/verify_email_code.html',
-                {
-                    'unique_id_patient': unique_id,
-                }
-            )
-            email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
-            send_mail(
-                subject,
-                'Cogni Verification Code',
-                settings.EMAIL_FROM,
-                [to],
-                html_message=html_message
-                ,
-            )
+            # subject = 'Cogni Verification Code'
+            # to = request_body['email']
+            #
+            # html_message = loader.render_to_string(
+            #     'email_temp/verify_email_code.html',
+            #     {
+            #         'unique_id_patient': unique_id,
+            #     }
+            # )
+            # email_records(request, to, settings.EMAIL_FROM, 'Cogni Verification Code')
+            # send_mail(
+            #     subject,
+            #     'Cogni Verification Code',
+            #     settings.EMAIL_FROM,
+            #     [to],
+            #     html_message=html_message
+            #     ,
+            # )
         except Exception as e:
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
@@ -2720,7 +2891,7 @@ class SignupProviderAPIView(APIView):
             if code:
                 if coupon_exists:
                     # Check if coupon exists and its price is '0'
-                    subscription_type = "zero_coupon"
+                    subscription_type = "coupon"
                     coupon_code = code
                     zero_coupon = True  # Set flag to True if price is 0
                 elif coupon_exists1:
@@ -2772,6 +2943,7 @@ class SignupProviderAPIView(APIView):
         return Response(response_data, status=status.HTTP_200_OK)
 
 def baa_signature(request, pid):
+    permission_classes(AllowAny)
     return render(request, "BAA_agreement_sign.html", context={"user_id": pid})
 
 

@@ -16,6 +16,8 @@ from accounts.models import Provider, Provider_Verification, RefPatient
 from backend.models import StripeCustomer
 from payments.models import PaymentRecord, Product_detail
 import json
+
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import GetCouponssSerializer  # Import your serializer
@@ -961,6 +963,8 @@ def isPaymentSuccess(user_email):
 
 
 class CouponAPI(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, id=None):
         # coupon_code = request.GET.get('code', None)
         try:
@@ -973,7 +977,7 @@ class CouponAPI(APIView):
             serializer = GetCouponssSerializer(coupon, many=True)
             count = len(coupon)
 
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
             print(e)
@@ -993,8 +997,9 @@ class CouponAPI(APIView):
                 if add_coupon.is_valid():
                     print("print 3")
                     try:
-                        product_price_cent = request.data['price'].replace(".", "")
-                        price_in_dollars = float(product_price_cent)
+                        product_price_str = request.data['price']
+                        price_in_dollars = float(product_price_str)
+                        price_in_cents = int(price_in_dollars * 100)
 
                         if price_in_dollars == 0:
                             # Save coupon details directly without involving Stripe
@@ -1027,8 +1032,7 @@ class CouponAPI(APIView):
                         price = stripe.Price.create(
                             product=product.id,
                             nickname=request.data['title'],
-                            # unit_amount=int(request.data['price'] * 100),
-                            unit_amount=int(price_in_dollars * 100),  # amount in cents
+                            unit_amount=price_in_cents,  # amount in cents
                             currency="usd",
                             recurring={"interval": "month"},
                         )
@@ -1039,14 +1043,14 @@ class CouponAPI(APIView):
                             code=code,
                             product_name=product.name,
                             product_description=product.description + " and code is " + code,
-                            price=int(request.data['price']))
-                        print(int(request.data['price']))
+                            price=price_in_dollars
+                        )
+                        print(price_in_dollars)
                         coupon_product_detail_instance.save()
 
                         print("print 7")
                     except Exception as e:
                         print("print 3", e)
-                        count = None
                         return Response({'exception': str(e)}, status=status.HTTP_400_BAD_REQUEST)
                     print("print 8")
                     coupons_detail = add_coupon.save()
@@ -1055,24 +1059,22 @@ class CouponAPI(APIView):
                     print("print 10")
                     coupon_product_detail_instance.save()
                     print("print 11")
-                    count = None
 
                     return Response(GetCouponssSerializer(coupons_detail).data, status=status.HTTP_200_OK)
                 else:
                     print("print 2.1")
-                    count = None
                     return Response('coupon with this code already exists', status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 print("print 3", e)
-                count = None
                 return Response('exception_message', status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:  # Added this line for the missing except block
             print("print 4", e)
-            count = None
             return Response('exception_message', status=status.HTTP_400_BAD_REQUEST)
 
+
 class CouponsDeleteAPI(APIView):
+    permission_classes = [AllowAny]
     def delete(self, request,product_id, *args, **kwargs):
         try:
 
@@ -1093,6 +1095,7 @@ class CouponsDeleteAPI(APIView):
 
 
 class VerifyCouponCode(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         try:
             code = request.data.get("code")  # Use request.data to access POST data in DRF

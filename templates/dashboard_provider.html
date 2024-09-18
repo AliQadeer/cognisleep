@@ -313,7 +313,7 @@ textarea {
 
                             <li class="" style=""><a data-toggle="tab" href="#home4">Patient Instructions</a>
                     </li>
-                              <li class="" style=""><a data-toggle="tab" href="#menu2">MA / PROVIDER Record</a>
+                              <li class="" style=""><a data-toggle="tab" href="#menu2">MA/PROVIDER Record</a>
                     </li>
                             <li class="" style=""><a data-toggle="tab" href="#menu3">Colleague Dashboard</a>
                     </li>
@@ -743,7 +743,7 @@ textarea {
                             </table>
                                     <div style="text-align: center;margin-top: 100px;">
 
-                                                    <p>Your Ma / Provider will appear here when they register.</p>
+                                                    <p>Your MA/Provider will appear here when they register.</p>
 
                                     </div>
                                     {% endif %}
@@ -887,77 +887,81 @@ textarea {
 
 
 
-                        <div id="home4" class="table_mode tab-pane fade">
+    <div id="home4" class="table_mode tab-pane fade">
       <div class="container" id="doctorcard-container">
-           <div class="notshow">
+        <div class="notshow">
                         <h6 align="center">
                             Tip: Scroll down to add additional notes (optional). This print to provide a copy of the instructions to your patients.
                         </h6>
-                    </div>
- <div style="text-align:center;">
+        </div>
+                <div style="text-align:center;">
                 <hr style="height:30px; background-color: darkblue;">
                 <img src="{% static "assets/images/logo-1.svg" %}" data-original="{% static "assets/images/logo-1.svg" %}" data-fixed="{% static "assets/images/logo-trimmed.png" %}" alt="" style="width: 35%;">
                 <hr style="background-color: darkblue; height:3px">
             </div>
-            <div class="row align-items-md-center pb-4 mb-4">
-
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p class="text-blue">Doctor Name: </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="text-blue text-secondary">{{ userdata.first_name }} {{ userdata.last_name }} </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p class="text-blue">Referral ID: </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="text-blue text-secondary">{{ userdata.provider_ref }} </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p class="text-blue">Referral Contact: </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="text-blue text-secondary">{{ userdata.contact_no }} </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p class="text-blue">Medical Practice: </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="text-blue text-secondary">{{ userdata.practice_name }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <p class="text-blue">Address: </p>
-                        </div>
-                        <div class="col-md-4">
-                            <p class="text-blue text-secondary" >{{ userdata.practice_address }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-image">
-                        <img src="{{ userdata.provider_image }}" class="mw-100" alt="" draggable="false">
-                    </div>
-                </div>
-                <hr style="background-color: darkblue; height:3px">
+            <div class="row">
+            <table class="pb-4" width="100%">
+                <tbody>
+                    <tr>
+                        <td width="75%">
+                            <table width="75%">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <p class="text-blue">Doctor Name:</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-blue text-secondary">{{ userdata.first_name }} {{ userdata.last_name }} </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-blue">Referral ID:</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-blue text-secondary">{{ userdata.provider_ref }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-blue">Referral Contact:</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-blue text-secondary">{{ userdata.contact_no }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-blue">Medical Practice:</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-blue text-secondary">{{ userdata.practice_name }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-blue">Address:</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-blue text-secondary">1234 main lhr</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="24%" style="padding-right: 38px;">
+                            <div class="card-image">
+                                <img src={{ userdata.provider_image }} class="mw-100" alt="" draggable="false">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr style="background-color: darkblue; height: 3px">
             </div>
-
             {% comment %} instruction section  {% endcomment %}
 
-           <div class="row ">
+           <div class="row">
                 <div class="col-md-12">
                     <h4 class="head-blue">Instructions:</h4>
                     <ul class="instruction_points">
